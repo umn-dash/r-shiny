@@ -610,13 +610,13 @@ ready for mapping (spatial data are complicated!). Add the following to
 your `global.R` file at the end *verbatim*. Don't worry about what it
 does, though!
 
-```{r, massaging global file, eval = F}
+```{r massaging global file, eval = F}
 ###MASSAGE DATA SET FOR MAKING MAPS
 gap$country = as.character(gap$country)
 gap$continent = as.character(gap$continent)
 
 gap$ID = countrycode(gap$country, "country.name", "iso3c")
-world = read_sf("files/TM_WORLD_BORDERS_SIMPL-0.3.shp") #<--THIS FILE CAN BE DOWNLOADED VIA <https://drive.google.com/file/d/1Ta0GSnoJPyEMFjjbpzE3Z8RD0Mq18RL7/view?usp=sharing>. MAKE SURE TO UNZIP IT AND MOVE IT AND ALL ITS COMPANION FILES INTO YOUR R PROJECT FOLDER!
+world = read_sf("TM_WORLD_BORDERS_SIMPL-0.3.shp") #<--THIS FILE CAN BE DOWNLOADED VIA <https://drive.google.com/file/d/1Ta0GSnoJPyEMFjjbpzE3Z8RD0Mq18RL7/view?usp=sharing>. MAKE SURE TO UNZIP IT AND MOVE IT AND ALL ITS COMPANION FILES INTO YOUR R PROJECT FOLDER!
 
 world2 = world %>% select(ISO3, geometry)
 gap_map = left_join(gap, world2, by = c("ID" = "ISO3"))
@@ -928,7 +928,7 @@ that appear and disappear on mouse click. Inside these, we'll put the
 name of the country being clicked on, in case users don't know their
 countries well:
 
-```{r, popups 1, eval = F}
+```{r popups 1, eval = F}
 ##This code should be **swapped for** the renderLeaflet({}) code provided previously, inside of your server function!
 
  ##... other server code...
@@ -970,7 +970,7 @@ approaches we could take, but one using "Normal R's" versatile
 `paste0()` function plus the HTML line break element (`<br>`) is
 straightforward:
 
-```{r, popups 2, eval = F}
+```{r popups 2, eval = F}
 ##This code should be **swapped for** the renderLeaflet({}) code provided previously, inside of your server function!
 
  ##... other server code...
@@ -1175,7 +1175,7 @@ as with `DT`:
 3.  Inside the observer, we use a proxy built using `leafletProxy()`,
     which is analogous to `dataTableProxy()`, to update our map:
 
-```{r server changes for leafletProxy}
+```{r server changes for leafletProxy, eval=F}
 ##This code should be **swapped for** the renderLeaflet({}) code provided previously, inside of your server function!
 
  ##... other server code...
@@ -1651,7 +1651,7 @@ This is a multi-step process:
 3.  Lastly, let's use `style()` to make the contents of our tooltips
     *only* the custom text we've cooked up:
 
-```{r, better tooltips, eval = F}
+```{r better tooltips, eval = F}
 ##This code should **replace** the previous plotly-related code in your global.R file!
 
  ##... other global code...

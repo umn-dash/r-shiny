@@ -62,7 +62,7 @@ episodes:
 - shiny_1.Rmd
 - shiny_2.Rmd
 - shiny_3.Rmd
-#- shiny_4.Rmd
+- shiny_4.Rmd
 
 # Information for Learners
 learners:
