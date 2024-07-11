@@ -277,6 +277,18 @@
 </div>
 <!--/div.accordion-flush-->
 
+<div class="accordion accordion-flush" id="accordionFlush5">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading5">
+        <a href="shiny_4.html">4. DTs and Leaflets and Plotlys, Oh my!</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
                 </div>
               </div>
             </div>
@@ -420,6 +432,30 @@ expression trigger only the second expression to re-run.</li>
 <code>tabPanel()</code> and <code>tabsetPanel()</code> allow you to
 create a “tabular layout,” allowing you to divide up one space in your
 UI into several, only one of which can be seen at one time.</li>
+</ul></section><section id="shiny_4"><h2 class="section-heading"><a href="shiny_4.html">DTs and Leaflets and Plotlys, Oh my!</a></h2>
+<hr class="half-width">
+<ul>
+<li>The <code>DT</code>, <code>leaflet</code>, and <code>plotly</code>
+packages can be used to produce web-ready, interactive tables, maps, and
+graphs, respectively, for incorporation into Shiny apps.</li>
+<li>Each of the graphics created by these packages come with tons of
+interactive functionality out of the box. Because some of this
+functionality might be confusing or unnecessary for all users, it’s
+valuable to know you can adjust or disable any or all of these
+features.</li>
+<li>Any aesthetic component of these graphics can be adjusted or
+customized, but the specifics of how to do this (and how easy or
+intuitive it will be) will vary quite widely between packages and
+aesthetics.</li>
+<li>We should strive to update graphics, changing only the aspects that
+need changing, rather than remaking graphics from scratch wherever
+possible. This often means handling events using observers and proxies
+rather than using <code>render*({})</code> functions.</li>
+<li>Like with other widgets, user interactions with these graphics can
+be tracked by the UI and passed to the server for handling. This passing
+happens with the <code>input</code> object for <code>DT</code> and
+<code>leaflet</code>, but an equivalent system must be used for
+<code>plotly</code>.</li>
 </ul></section>
 </div>
     </main>

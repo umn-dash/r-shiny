@@ -10,6 +10,12 @@
     <loc>https://carpentries.github.io/r_shiny_workshop/LICENSE.html</loc>
   </url>
   <url>
+    <loc>https://carpentries.github.io/r_shiny_workshop/aio.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries.github.io/r_shiny_workshop/images.html</loc>
+  </url>
+  <url>
     <loc>https://carpentries.github.io/r_shiny_workshop/index.html</loc>
   </url>
   <url>
@@ -22,7 +28,19 @@
     <loc>https://carpentries.github.io/r_shiny_workshop/instructor/LICENSE.html</loc>
   </url>
   <url>
+    <loc>https://carpentries.github.io/r_shiny_workshop/instructor/aio.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries.github.io/r_shiny_workshop/instructor/images.html</loc>
+  </url>
+  <url>
     <loc>https://carpentries.github.io/r_shiny_workshop/instructor/index.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries.github.io/r_shiny_workshop/instructor/instructor-notes.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries.github.io/r_shiny_workshop/instructor/key-points.html</loc>
   </url>
   <url>
     <loc>https://carpentries.github.io/r_shiny_workshop/instructor/profiles.html</loc>
@@ -40,6 +58,15 @@
     <loc>https://carpentries.github.io/r_shiny_workshop/instructor/shiny_3.html</loc>
   </url>
   <url>
+    <loc>https://carpentries.github.io/r_shiny_workshop/instructor/shiny_4.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries.github.io/r_shiny_workshop/instructor-notes.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries.github.io/r_shiny_workshop/key-points.html</loc>
+  </url>
+  <url>
     <loc>https://carpentries.github.io/r_shiny_workshop/profiles.html</loc>
   </url>
   <url>
@@ -53,5 +80,8 @@
   </url>
   <url>
     <loc>https://carpentries.github.io/r_shiny_workshop/shiny_3.html</loc>
+  </url>
+  <url>
+    <loc>https://carpentries.github.io/r_shiny_workshop/shiny_4.html</loc>
   </url>
 </urlset>
