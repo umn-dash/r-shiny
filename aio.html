@@ -344,7 +344,7 @@
         
 <section id="aio-shiny_1"><p>Content from <a href="shiny_1.html">Web development 101</a></p>
 <hr>
-<p>Last updated on 2024-07-11 |
+<p>Last updated on 2024-07-12 |
 
         <a href="https://github.com/carpentries/r_shiny_workshop/edit/main/episodes/shiny_1.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -361,9 +361,8 @@
 <li>How is a website built?</li>
 <li>How is building a website using R Shiny similar to/different from
 doing so the “usual” way?</li>
-<li>What does a website “look like,” under the hood? What’s one made up
-of?</li>
-<li>What are the most common website “building blocks?”</li>
+<li>What does a website “look like,” under the hood? What are the most
+common website “building blocks?”</li>
 </ul>
 </div>
 </div>
@@ -378,6 +377,7 @@ of?</li>
 languages.</li>
 <li>Picture a typical website’s structure.</li>
 <li>List components of a typical website.</li>
+<li>Develop a foundational understanding of HTML and CSS.</li>
 </ul>
 </div>
 </div>
@@ -387,23 +387,21 @@ languages.</li>
 <p><strong>Important</strong>: This course assumes you have working
 knowledge of the R programming language and the RStudio Integrated
 Development Environment (IDE). If either is new to you, you could
-struggle with this course (although the R code we’ll be writing is
-generally basic). You should consider an Intro R course before this one,
-in that case.</p>
-<p>By contrast, this course assumes you have <strong>no</strong>
-previous web development experience at all. If you do, this course may
-be too introductory or simplified to capture your full attention,
-although you may still find it an interesting overview of the R Shiny
-framework.</p>
+struggle with this course (although the “normal R code” we’ll write will
+generally be basic). You may consider taking an Intro R course before
+this one.</p>
+<p>By contrast, this course assumes <strong>no</strong> web development
+experience. If you have some, this course may be too introductory or
+simplified to capture your full attention, though you may still find it
+interesting as an overview of the R Shiny framework.</p>
 <section><h2 class="section-heading" id="the-webs-languages">The web’s languages<a class="anchor" aria-label="anchor" href="#the-webs-languages"></a>
 <a class="anchor" aria-label="anchor" href="#the-webs-languages"></a>
 </h2>
 <hr class="half-width">
-<p>R is a <strong>programming language.</strong> That’s a fancy way of
-saying that it’s a system with which we can direct a computer to do
-things for us.</p>
-<p>Like a human language, R makes a computer do stuff for us through a
-combination of:</p>
+<p>R is a <strong>programming language,</strong> a fancy way of saying
+<em>it’s a system with which we can direct a computer to do things for
+us</em>.</p>
+<p>Just like a human language, R possesses:</p>
 <ul>
 <li><p>” nouns” (<strong>objects</strong>),</p></li>
 <li><p>“verbs” (<strong>functions</strong>),</p></li>
@@ -415,41 +413,41 @@ and <code>%&gt;%</code>),</p></li>
 being an unacceptable object name but <code>a1</code> being
 valid).</p></li>
 </ul>
-<p>To have R direct our computer to do things for us, we must form valid
-and complete R “sentences” (<strong>commands</strong>) and “paragraphs”
+<p>To have a successful “R conversation,” we must form valid and
+complete R “sentences” (<strong>commands</strong>) and “paragraphs”
 (<strong>code blocks</strong>) in which we create nouns, subject them to
 verbs, and follow all the rules, just as we would for a human
 language.</p>
 <p>R Shiny, meanwhile, is <em>not</em> a <strong>programming
-language.</strong> Instead, it’s what a web developer might call a
-<strong>framework</strong>; it’s a set of tools you can use to build a
-complete, <em>interactive</em> website. Specifically, it leverages R and
-its coding conventions to accomplish that task (as opposed to other,
-comparable tools a web developer could use instead).</p>
+language.</strong> Instead, it (in combination with R) is what a web
+developer might call a <strong>framework</strong>: a set of tools used
+to build a complete website. Specifically, it leverages R and its
+conventions/grammar/syntax to accomplish that task (as opposed to using
+other, comparable tools).</p>
 <p>To appreciate how R Shiny is distinct as a web development framework,
-and to understand how to use it well, we need to understand a few basic
-things about “normal” web development:</p>
+and to understand how to use it <em>well</em>, we need to understand a
+few basic things about “normal” web development. These are:</p>
 <ol style="list-style-type: decimal">
-<li><p>What <em>languages</em> are typically used to build websites that
-R Shiny is <em>sort of</em> replacing, what each is for, and how each
-generally works,</p></li>
+<li><p>What <em>languages</em> are typically used to build websites,
+what each is for, and how each works at a basic level,</p></li>
 <li><p>The <em>structure</em> of a typical website (the “wheres”),
 and</p></li>
 <li><p>The typical <em>components</em> (the “whats”) of a
 website.</p></li>
 </ol>
 <p>Those will be this first lesson’s topics.</p>
-<div class="section level4">
-<h4 id="how-the-web-is-woven">How the web is woven<a class="anchor" aria-label="anchor" href="#how-the-web-is-woven"></a>
-</h4>
+</section><section><h2 class="section-heading" id="how-the-web-is-woven">How the web is woven<a class="anchor" aria-label="anchor" href="#how-the-web-is-woven"></a>
+<a class="anchor" aria-label="anchor" href="#how-the-web-is-woven"></a>
+</h2>
+<hr class="half-width">
 <p>To generalize, a website is constructed using several languages, each
 to accomplish discrete objectives. The most notable of these are
 <strong>HTML</strong>, <strong>CSS</strong>, and
-<strong>JavaScript</strong> (JS for short):</p>
+<strong>JavaScript</strong> (<strong>JS</strong> for short):</p>
 <ul>
 <li><p><strong>HTML</strong> is used to <em>structure</em> a website.
 It’s how a web developer specifies <strong>what</strong> elements a user
-can see should go <strong>where</strong> on the page.</p></li>
+can see and <strong>where</strong> these should go on the page.</p></li>
 <li><p><strong>CSS</strong> is used to <em>design</em> a website. It’s
 how a web developer specifies <strong>how</strong> each element should
 <strong>look</strong> (its colors, size, <em>etc.</em>).</p></li>
@@ -457,36 +455,57 @@ how a web developer specifies <strong>how</strong> each element should
 <p><strong>JavaScript</strong> is used to code a website’s
 <em>behaviors</em>. A website is largely just an application running
 inside of your browser (<em>e.g.</em>, Edge or Safari). While it runs,
-any changes to the website that occur due to your actions are coded
-using JavaScript.</p>
+any changes to the website are likely coded using JavaScript.</p>
 <ul>
-<li>For example, if an app contains a button, and if the button
+<li>For example, if a webpage contains a button, and if the button
 disappears when pressed (a shift in the site’s HTML), the page turns
 green (a shift in the site’s CSS), and some data you provided are sent
-to a central database (a shift in the app’s relationship with the wider
+to a database (a shift in the app’s relationship with the wider
 internet), JS is likely dictating those shifts.</li>
 </ul>
 </li>
 </ul>
-<p>Together, HTML, CSS, and JS make up what’s called the “<em>front
-end</em>,” “<em>user interface</em>,” or “<em>client side</em>” of a
-website. A website’s <strong>user interface</strong> (UI for short) is
-what they see and interact with, and it’s based on code running on their
-computer inside their browser.</p>
-<p>Because it may be unintuitive that a significant part of the “work”
-of websites happens on your computer rather than “in the cloud,” it’s
-worth spelling out how a website actually works:</p>
+<p>Together, HTML, CSS, and JS make up the languages commonly used to
+assemble the “<em>front end</em>,” “<em>user interface</em>,” or
+“<em>client side</em>” of a website. A website’s <strong>user
+interface</strong> (UI for short) is what a user sees and interacts
+with.</p>
+<p>As far as most users are concerned, the UI that they see <em>is</em>
+the website; most assume a website is just the “one thing” and that it
+lives somewhere “out there,” on the internet.</p>
+<p>However, there is <em>always</em> a second “half” to a website.
+Somewhere in the world, a <em>server</em> (a computer, basically, but
+more automated than a personal computer) acts as a website’s
+<strong>host</strong>, receiving requests for information, sending that
+information out to users, and handling new data collection.</p>
+<p>A server might also need to store private data, such as passwords, or
+do complex operations that would be awkward to have a user’s computer
+do. It also may perform security checks to ensure users aren’t
+trafficking malware or spam.</p>
+<p>For all these purposes and more, websites have “back ends” or “server
+sides” that run on their servers. Here, SQL might be used to carefully
+store or read data from large databases, and a whole host of other
+programming languages might be used for complex operations and other
+tasks, including JS again but also PHP, Python, Ruby on Rails, and C#,
+just to name a few!</p>
+<p>When a web developer talks about a framework, they are referring to
+the <em>entire</em> set of tools and languages needed to build both
+halves of a website. So, for example, HTML + CSS + JS (front end) + PHP
++ SQL (back end) is a popular framework.</p>
+<p>To recap, here’s how a website actually works:</p>
 <ol style="list-style-type: decimal">
-<li><p>When a user visits a website, a server hosting that website sends
-a packet of files (including a bunch of HTML, CSS, and JS files) to the
-user’s computer.</p></li>
-<li><p>These are then opened by that user’s browser and
-deciphered.</p></li>
-<li><p>The browser then builds the website the user sees using those
-instructions. The web is “alive” on your computer!</p></li>
+<li><p>When you visit a website, a server hosting that website gets a
+request from your browser to “see the website.”</p></li>
+<li><p>The server responds by sending your browser a packet of files
+(including a bunch of HTML, CSS, and JS files, usually).</p></li>
+<li><p>These are opened by your browser and deciphered (it’s fluent in
+all these languages).</p></li>
+<li><p>Your browser then builds the website you can then see and
+interact with per the instructions the server sent. The website is not
+“out there somewhere;” it’s “alive” on <em>your</em> computer!</p></li>
 <li><p>When the website needs “further instructions” of how to behave or
-what content to show, a “dialogue” is opened with the server and new
-files are sent/received and deciphered.</p></li>
+what content to show, the “dialogue” you’ve started with the server
+continues, and new files are sent, received, and deciphered.</p></li>
 </ol>
 <div id="discussion1" class="callout discussion">
 <div class="callout-square">
@@ -496,47 +515,28 @@ files are sent/received and deciphered.</p></li>
 <h3 class="callout-title">Discussion<a class="anchor" aria-label="anchor" href="#discussion1"></a>
 </h3>
 <div class="callout-content">
-<p>Have you ever had to clear your browser’s <strong>cache</strong>
-(files associated with your browsing activities)? What do you think
-makes up the bulk of the files that get deleted when you clear your
-cache?</p>
+<p>Have you ever had to clear your browser’s <strong>cache</strong>?
+What do you think gets deleted when you do that?</p>
 <div id="accordionSolution1" class="accordion challenge-accordion accordion-flush">
 <div class="accordion-item">
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
-<p>A good portion of your cache, in terms of numbers of files anyway,
+<p>A good portion of your cache (in terms of numbers of files, anyway)
 will be HTML, CSS, and JS files sent to you by servers to build the
-websites you’re visiting! However, there will be some additional files,
-including image and video files (which can be very bulky), files for
-special fonts that a website may want to use, and JSON files (text files
-that can store data), among others.</p>
+websites you’ve been visiting! However, there will be additional files,
+including image and video files (which can be <em>very</em> bulky),
+files for special fonts that website want you to use (perhaps because
+their logo uses them), and JSON files (text files that can store data),
+among others.</p>
 </div>
 </div>
 </div>
 </div>
 </div>
 </div>
-</div>
-<p>However, as implied by the 4th point above, there is <em>always</em>
-a second “half” to a website. Somewhere, a <em>server</em> (a computer,
-basically, but more automated than a personal computer) must be the
-website’s “host,” receiving requests for information and sending that
-information out and handling new data being collected.</p>
-<p>A server might also need to store private data, such as passwords, or
-do complex operations that would be awkward to do in a user’s browser
-(especially if their computer isn’t powerful!). It also may perform
-security checks to ensure users aren’t trafficking malware or spam!</p>
-<p>For all these purposes and more, websites have “back ends” or “server
-sides.” Here, the language SQL might be used to carefully store or read
-data from large databases, and a whole host of other programming
-languages might be used for complex operations and other tasks,
-including JS, PHP, Python, Ruby, and C#, just to name a few!</p>
-<p>When a web developer talks about a framework, they are referring to
-the entire complement of tools needed to build both halves of a website.
-So, “HTML, CSS, JS, PHP, and SQL” is a popular framework.</p>
 </div>
 <div class="section level4">
 <h4 id="where-r-shiny-fits-in">Where R Shiny fits in<a class="anchor" aria-label="anchor" href="#where-r-shiny-fits-in"></a>
@@ -548,25 +548,25 @@ of code (for the most part):</p>
 <li><p>“R-like,” or “R Shiny” code.</p></li>
 </ul>
 <p>The latter will <em>look</em> a lot like R code to you (that’s the
-point!). However, this code is <em>really</em> destined to become HTML,
-CSS, and JS code—when a Shiny app is compiled and run, R will translate
-your R Shiny code into the equivalent HTML, CSS, and JS code that a
-browser can understand. This allows us to build the <em>entire</em> UI
-of a website <em>without</em> needing to know much, if any, HTML, CSS,
-or JS!</p>
-<p>The “normal” R code you’re writing, meanwhile, will largely operate
-within your website’s “back end’ (or”server side”), where it may
-manipulate data sets, store values, send data to storage locations, or
-keep track of user actions. You know—“typical R stuff!” This means that
-we can build the entire server side of a website without needing to know
-much, if any, JS, PHP, Ruby on Rails, Python, SQL, etc.!</p>
-<p>So, R + R Shiny enable you to build both halves of a fully
-interactive, complex website without necessarily requiring you to know
-<em>any</em> other web development languages or frameworks! In
-particular, R admirably takes the place of other, general programming
-languages typically used for handling server-side tasks, such as Python
-or PHP, <em>especially</em> when those task revolve around data
-manipulation, management, or display.</p>
+point!). However, when a Shiny app is compiled, your R Shiny code will
+be translated into the equivalent HTML, CSS, and JS code so a browser
+can understand it. This means we can build the <em>entire</em> UI of a
+website <em>without</em> needing to know much, if any*, HTML, CSS, or JS
+(*sort of)!</p>
+<p>The “normal” R code you’ll write into your app, meanwhile, will
+largely operate within your website’s “back end’ (or”server side”),
+where it may manipulate data sets, send data to storage locations, keep
+track of user actions, etc. This means we can build the entire server
+side of a website without needing to know much, if any*, JS, PHP, Ruby
+on Rails, Python, SQL, etc. (*unless we want to)!</p>
+<p>So, the R + R Shiny framework enables us to build both halves of a
+fully interactive, complex website without necessarily knowing
+<em>any</em> other web development languages or frameworks!</p>
+<p>In particular, R admirably takes the place of other, general
+programming languages typically used for handling server-side tasks,
+such as Python or PHP, <em>especially</em> when those tasks revolve
+around data manipulation, management, or display—R excels at all things
+“data!”</p>
 <div id="discussion2" class="callout discussion">
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
@@ -583,25 +583,30 @@ using R Shiny, then?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <p>A few things are different about building a website using R Shiny,
 but I think the two most important differences are:</p>
 <ol style="list-style-type: decimal">
 <li><p>Whereas writing “pure” HTML, CSS, and JS is often necessary to
-build a website, deep knowledge of these languages is not required to
-build a website with R Shiny. Instead, you will write R code + R Shiny
-code and these will get “translated” into the equivalent HTML, CSS, and
-JS code for you.</p></li>
+build a website’s UI, (deep) knowledge of these languages is
+<strong>not</strong> required to build a website using R Shiny. Instead,
+you will write R code + R Shiny code, and these will get “translated”
+into the equivalent HTML, CSS, and JS code for you.<br><br>
+Granted, this means you <em>still</em> need to learn how to write “R
+Shiny code,” and you may or may not find this code much more familiar
+than the code it’s replacing (though you <em>probably</em> will). More
+on that in a sec…</p></li>
 <li><p>Normally, to construct the “back end” of a website, a general
 programming language like PHP or Python is used. These languages are
 quite different from JS, so designing a conventional website often
 requires programming in (at least) two <em>different</em> general
-programming languages, at least one of which you may have never
-encountered before if you’re not a programmer (JS and PHP are not widely
-used for other purposes). With R Shiny, you can code both the front and
-back ends of a website using a single general programming language
-(R).</p></li>
+programming languages (<em>e.g.</em>, JS and PHP), at least one of which
+you may never have encountered before (JS and PHP are not widely used
+for other purposes).<br><br>
+With R Shiny, you can code <em>both</em> the front and back ends of a
+website using the “look and feel,” at least, of just <em>one</em>
+general programming language (R).</p></li>
 </ol>
 </div>
 </div>
@@ -615,20 +620,29 @@ back ends of a website using a single general programming language
 <a class="anchor" aria-label="anchor" href="#lets-meet-html-and-css"></a>
 </h2>
 <hr class="half-width">
-<p>While R Shiny ensures you don’t <em>need</em> to learn HTML and CSS
-to build a website, it is still translating your R Shiny code into HTML
-and CSS to do so, which means it’s beholden to these languages in some
-key ways. As such, to build a <em>really</em> nice Shiny app, it’s
-helpful to understand the very basics of both languages. Knowing a
-little will make the R Shiny code we have to write make a lot more sense
-than going in blind!</p>
-<p>If learning R was difficult for you, <strong>don’t panic</strong>!
-Compared to learning the basics of R, learning the basics of HTML and
-CSS is <strong>much</strong> easier because the latter
-<strong>aren’t</strong> <em>general</em> <em>programming</em> languages;
-because their purposes are much narrower, they need a lot fewer “words”
-and “rules” to do their jobs than R does. Knowing even a little about
-these two languages will go a long way.</p>
+<p>I said above that R Shiny ensures you don’t <em>need</em> to learn
+HTML and CSS to build a website. That statement is no lie!</p>
+<p>…However, because some of your R Shiny code must be <em>translated
+into</em> HTML/CSS code, there is a forced similarity between the two
+systems such that, much of the time, you’ll <em>really</em> be writing
+more or less thinly veiled HTML/CSS code, even when you’re writing
+“Shiny code.”</p>
+<p>This code may <em>look</em> “R-like,” but it won’t always
+<em>feel</em> “R-like,” and some of the Shiny code you’ll be asked to
+write will seem downright foreign because of all the ways it will be
+beholden to these other two languages.</p>
+<p>As such, to build a <em>really</em> nice Shiny app, and to feel like
+you know not just <em>what</em> your code is doing but <em>why</em> it
+looks the way it does, it’s helpful to understand the very basics of
+HTML and CSS.</p>
+<p>If the prospect of learning two more languages sounds daunting,
+perhaps because learning R was difficult, <em>don’t panic</em>! Compared
+to learning R, learning the basics of HTML and CSS is <em>much</em>
+easier because these languages aren’t <em>general</em>
+<em>programming</em> languages like R is. They have much narrower
+purposes, so they need a lot fewer “words” and “rules” to do their jobs
+than R does. Knowing even a <em>little</em> about these two languages
+will go a <em>long</em> way, I promise!</p>
 <div class="section level3">
 <h3 id="html-101">HTML 101<a class="anchor" aria-label="anchor" href="#html-101"></a>
 </h3>
@@ -636,47 +650,47 @@ these two languages will go a long way.</p>
 much everything an R Shiny developer <strong>really</strong> needs to
 understand about HTML can be collapsed into four key concepts:</p>
 <div class="section level4">
-<h4 id="key-concept-1-all-websites-are-boxes-within-boxes">Key concept #1: All websites are “boxes within boxes”<a class="anchor" aria-label="anchor" href="#key-concept-1-all-websites-are-boxes-within-boxes"></a>
+<h4 id="key-concept-1-all-websites-are-just-boxes-within-boxes">Key concept #1: All websites are just “boxes within boxes”<a class="anchor" aria-label="anchor" href="#key-concept-1-all-websites-are-just-boxes-within-boxes"></a>
 </h4>
-<p>At its core, every website is just a box containing one or more other
-boxes, each of which might contain yet more boxes, and so on all the way
-down. By “box” here, I mean “a container that holds stuff,” not “a
+<p>At its core, every website is just a box containing one or more
+additional boxes, each of which might contain <em>yet more</em> boxes,
+and so on all the way down.</p>
+<p>By “box” here, I mean “a container that holds stuff,” not “a
 rectangle” (though a lot of website boxes <em>are</em> rectangles).</p>
-<p>Really, HTML is just the web language used to specify which boxes go
-inside which other boxes and what those inner boxes should hold. Besides
-other boxes, HTML boxes can hold blocks of text, pictures, links, menus,
-lists, and much more.</p>
+<p>All HTML does is tell your browser which boxes go inside which other
+boxes and what every box should contain. Besides other boxes, HTML boxes
+can hold blocks of text, pictures, links, menus, lists, and much
+more—all the stuff we associate with the websites we visit.</p>
 <p>In terms of raw code, every HTML box looks <em>something</em> like
 this:</p>
 <div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">HTML<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode html" tabindex="0"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> id</span><span class="op">=</span><span class="st">"my box"</span><span class="dt">&gt;</span>My box's contents<span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span></code></pre>
+<pre class="sourceCode html" tabindex="0"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> id </span><span class="op">=</span> <span class="st">"my_box"</span><span class="dt">&gt;</span>My box's contents<span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span></code></pre>
 </div>
 <p>That means (almost) every HTML box has:</p>
 <ul>
 <li><p>An <strong>opening tag</strong> (<em>e.g.</em>,
-<code>&lt;div...&gt;</code>), which tells the browser when the box
+<code>&lt;div...&gt;</code>), which tells the browser where the box
 “starts.”</p></li>
 <li><p>A <strong>closing tag</strong> (<em>e.g.</em>,
-<code>&lt;/div&gt;</code>), which tells the browser when a box has
+<code>&lt;/div&gt;</code>), which tells the browser where a box has
 “ended.”</p></li>
-<li><p>A space for <em>contents</em> between the two tags (here, that’s
-the text <code>My box's contents</code> and is found between the opening
-tag’s <code>&gt;</code> and the closing tag’s <code>&lt;</code>), which
-could include other boxes!</p></li>
+<li><p>Space for <em>contents</em> (here, that’s the text
+<code>My box's contents</code>), found between the opening tag’s
+<code>&gt;</code> and the closing tag’s <code>&lt;</code>.</p></li>
 <li>
-<p>Space inside the opening tag for <em>attributes</em>, which make
-our boxes “special.” Here, we gave our box a unique <code>id</code>
-using <code>attribute = "value"</code> format.</p>
+<p>Space inside the opening tag for <em>attributes</em>, which are
+things that make boxes “special.”</p>
 <ul>
-<li>So, if the boxes themselves are the “nouns,” attributes inside the
-opening tag are “adjectives.”</li>
+<li>Here, we gave our box a unique <code>id</code> attribute called
+<code>"my_box"</code> using <code>attribute = "value"</code>
+format.</li>
 </ul>
 </li>
 </ul>
-<p>In R Shiny, you can build the exact same box, but you’ll use “R-like
-code” to do it:</p>
+<p>In R Shiny, you can build the exact same box but using “R-like
+code:”</p>
 <div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -684,10 +698,11 @@ code” to do it:</p>
 <code class="sourceCode R"><span><span class="fu">div</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"my box"</span>,</span>
 <span>    <span class="st">"My box's contents"</span><span class="op">)</span></span></code></pre>
 </div>
-<p>So, we’ve replaced HTML’s tag system involving <code>&lt;&gt;</code>s
-with R’s function system and its <code>( )</code>s and specify
-attributes and box contents using R’s traditional function
-<em>argument</em> system.</p>
+<p>Here, we’ve replaced HTML’s <strong>tag notation system</strong>
+involving <code>&lt;&gt;</code>s with R’s <strong>function notation
+system</strong> and its <code>( )</code>s, and we specify attributes and
+box contents using R’s traditional <strong>function argument
+system</strong>.</p>
 </div>
 <div class="section level4">
 <h4 id="key-concept-2-websites-have-heads-and-bodies">Key concept #2: Websites have heads and bodies<a class="anchor" aria-label="anchor" href="#key-concept-2-websites-have-heads-and-bodies"></a>
@@ -696,80 +711,93 @@ attributes and box contents using R’s traditional function
 (<code>&lt;HTML&gt;...&lt;/HTML&gt;</code>) containing two smaller
 boxes: a “head” (<code>&lt;head&gt;...&lt;/head&gt;</code>) and a “body”
 (<code>&lt;body&gt;...&lt;/body&gt;</code>).</p>
-<p>The head’s contents are (mostly) invisible to a website’s users;
-instead, the head contains instructions for <em>how</em> the browser
-should go about constructing the website—we’ll discuss the head box more
-later.</p>
+<p>The head’s contents are (mostly) invisible to a user; instead, the
+head contains further instructions for <em>how</em> the browser should
+construct the website.</p>
 <p>The body box, meanwhile, contains everything the user can see and
 interact with.</p>
-<p>In R Shiny, we don’t need to build the HTML, head, or body boxes—R
-Shiny will make these for us. Instead, we will spend most of our time
-building the stuff that goes into the body box.</p>
-<p>However, we can still put things into the head box if we want to by
-using the <code>tags$head()</code> function:</p>
+<p>In R Shiny, we don’t need to build the HTML, head, or body
+boxes—those will be made for us. Instead, we will spend most of our time
+just specifying the stuff that will go inside the body box.</p>
+<p>However, we can (and sometimes will need to) put things in the head
+box. This is done using the <code>tags$head()</code> function:</p>
 <div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>tags<span class="sc">$</span><span class="fu">head</span>(<span class="co">#Put contents here...)</span></span></code></pre>
+<pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>tags<span class="sc">$</span><span class="fu">head</span>(<span class="co">#...)</span></span></code></pre>
 </div>
-<p>And, in a few instances, we will need to do this, so it’s good to
-know it’s an option.</p>
 </div>
 <div class="section level4">
 <h4 id="key-concept-3-inline-vs--block-elements">Key concept #3: Inline vs. block elements<a class="anchor" aria-label="anchor" href="#key-concept-3-inline-vs--block-elements"></a>
 </h4>
 <p>Broadly speaking, there are two kinds of body HTML boxes:
 <strong>inline</strong> boxes and <strong>block</strong> boxes. The
-difference between these two types is how they are displayed when a
-website is built.</p>
-<p>A <em>block element</em> takes up the <em>entire</em> horizontal
-“row” it is played on. In other words, it’ll occupy the <em>entire</em>
-width of the browser window (if allowed), and it’ll force the next item
-to go below it rather than next to it, as though the browser was forced
-to hit the “Enter” key after building it.</p>
+difference is how each type is displayed when a website is built.</p>
+<p>A <strong>block element</strong> takes up the <em>entire</em>
+horizontal “row” it is played on. In other words, it’ll occupy the
+<em>entire</em> width of the browser window (if allowed), and it’ll
+force the next item to go <em>below</em> it rather than <em>next</em> to
+it, as though the browser was forced to hit the “Enter” key after
+building it.</p>
 <p>For example, the <code>&lt;p&gt;...&lt;/p&gt;</code> element (created
 in Shiny using <code>p()</code>) creates “paragraph” boxes (or, more
-accurately, boxes for blocks of text which can be more or less than a
-paragraph). If you put several consecutive paragraph boxes inside your
-body box, they would be displayed in a column, with the first one at the
-top and the last one at the bottom, and each would occupy the full width
-of the screen available to them:</p>
-<figure><img src="fig/clipboard-3243983914.png" class="figure mx-auto d-block"></figure><p><em>Inline elements</em>, meanwhile, only take up as much horizontal
-space as they have to (by default) and thus can go next to each other on
-the same line, and they don’t force new lines after them.</p>
+accurately, boxes for text blocks, which can be more or less than one
+paragraph in size). If you put several consecutive paragraph boxes
+inside your body box, they would display in a column, with the first one
+at the top and the last one at the bottom, and each would occupy the
+full width of the screen available to them:</p>
+<figure><img src="fig/clipboard-3243983914.png" class="figure mx-auto d-block"></figure><p><strong>Inline elements</strong>, meanwhile, only take up as much
+horizontal space as they have to (by default) to accommodate the size of
+their contents, and thus they can go next to each other on the same line
+(if there’s room); they don’t <em>force</em> new lines after them.</p>
 <p>For example, the <code>&lt;a&gt;...&lt;/a&gt;</code> element (made in
 R using <code>a()</code>) is a box that holds a link. You could use
 several such boxes within a single paragraph box without creating a new
 line after each one.</p>
-<p>Web users typically expect certain kinds of elements to “stand alone”
-or “stand apart” from others and be treated as their “own thing,” such
-as headings and navigation bars. These will generally be block elements.
-Other elements are expected to “fit together,” such as links within
-blocks of text. These will generally be inline elements.</p>
+<p>Certain kinds of website elements “stand alone” or “stand apart” from
+others, such as headings and navigation bars. These will generally be
+block elements. Other elements “fit together,” such as links and images.
+These will generally be inline elements.</p>
 </div>
 <div class="section level4">
 <h4 id="key-concept-4-the-flow">Key concept #4: The Flow<a class="anchor" aria-label="anchor" href="#key-concept-4-the-flow"></a>
 </h4>
-<p>This one is a <em>little</em> hard to explain. These days, a user
-might view a website on a very large screen (like that of a projector)
-or a very small screen (like that of a cell phone or even a smart
+<p>These days, a user might view your website on a very <em>wide</em>
+screen (like that of a projector) or a very <em>narrow</em> small screen
+(like that of a cell phone in portrait mode, or even a smart
 watch!).</p>
-<p>How much horizontal space your website has available will vary from
-user to user, then. This means how your site gets displayed on a wide vs
-narrow screen will also vary, and it’s something we should consider and
-design for with intentionality.</p>
-<p>As discussed above, block and inline elements would respond to
-different screen widths differently:</p>
+<p>If your website has, say, five elements to display, it may not make
+sense to <em>arrange</em> those five elements the same way on a narrow
+screen as you would on a wide screen, just as you probably wouldn’t
+arrange the same furniture in a tiny room the same as you would in a
+huge room.</p>
+<p>Careless arrangement of elements is often obvious to even casual
+users. On narrow screens, elements that are too big “spill” visibly out
+of the containers meant to hold them, and when too many elements are
+stacked side by side, tedious scroll bars may be the only way of seeing
+elements that are otherwise “off-screen.”</p>
+<p>On wide screens, meanwhile, small elements (especially small block
+elements) may look silly without constraints, such as when a single
+sentence spans the entire width of the screen. As another example, font
+sizes that feel appropriate on a small screen might be unacceptable when
+viewed on a computer monitor.</p>
+<p>It’s hard <em>enough</em> to craft <em>one</em> great website,
+though—it’d be a <em>nightmare</em> having to design a different-looking
+website for <em>every</em> <em>possible</em> screen size your users
+might have!</p>
+<p>Thankfully, then, most websites are designed to “flow,” or
+automatically reorganize their contents according to the size of the
+user’s screen. For example:</p>
 <ul>
-<li><p>By default, block elements will <em>always</em> take up the full
-width of the box they are in (which may or may not be the same as the
-width of the screen), and they may stretch or squash their contents to
-do so. If the screen isn’t wide enough to hold their full widths, they
-may “spill” out of a user’s field of view or force scroll bars to appear
-to be fully visible.</p></li>
-<li><p>By default, inline elements will run horizontally until they hit
-the edge of their container or screen, and then they will wrap to the
-next line and continue until they are finished.</p></li>
+<li><p>Elements that could sit side by side on a large screen may shift
+to being stacked vertically.</p></li>
+<li><p>Elements that might be large on wide screens (such as images) may
+be shrunk to fit comfortably inside their boxes on narrow
+screens.</p></li>
+<li><p>Some elements may even “teleport” to new locations on the page as
+a screen narrows so that, if all elements are now arranged vertically,
+their order is more logical to a user encountering them that
+way.</p></li>
 </ul>
 <div id="challenge1" class="callout challenge">
 <div class="callout-square">
@@ -779,9 +807,9 @@ next line and continue until they are finished.</p></li>
 <h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#challenge1"></a>
 </h3>
 <div class="callout-content">
-<p>Try it: Go to any website (such as <a href="www.dictionary.com" title='A link to dictionary.com, a good site for demonstrating the HTML concept of the "flow."'>dictionary.com</a>)
-and vary the width of your browser window. What changes as you do
-that?</p>
+<p>Try it: Go to <a href="www.dictionary.com" title='A link to dictionary.com, a good site for demonstrating the HTML concept of the "flow."'>dictionary.com</a>
+and vary the width of your browser window by pulling its edges inward.
+How does this website “flow?”</p>
 </div>
 </div>
 </div>
@@ -790,62 +818,42 @@ that?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <p>For me, I saw a number of changes as I shrunk my browser screen: The
-menu at the top became a collapsed “hamburger” menu (where you get a
-button of three lines, or a “hamburger,” that opens to reveal the
-options), the links slid below the search bar, the word of the day box
-shrank, and the games sidebar vanished, instead appearing much further
-down on the page.</p>
+menu at the top became a collapsed “hamburger” menu (a button with three
+lines that opens to reveal options), the links slid below the search
+bar, the word of the day box shrank, and the games sidebar teleported to
+much further down on the page.</p>
 </div>
 </div>
 </div>
 </div>
-<p>So, it’s important to remember that <em>you are never really
-designing one website but a bunch: one version for each potential screen
-size your users will use to view it</em>. Much of this designing will be
-“automatic,” but we have to choose and place items carefully for that
-automatic adjustment to work well.</p>
-<p>There are a number of web development techniques/paradigms for coping
-with this variable-screen-width challenge:</p>
-<ul>
-<li><p>Flexbox: HTML boxes can be made into “flexboxes,” which grow and
-shrink according to the size of their contents. They also force their
-contents to either stack next to each other or on top of each other as
-needed to fit the designer’s goals and the user’s screen width.</p></li>
-<li><p>CSS Grid: HTML boxes can also be arranged into CSS grids, which
-make the arrangement of a website more like filling the cells of a
-spreadsheet, with columns and rows that can grow or shrink depending on
-screen size.</p></li>
-<li><p>Media Queries: Media queries are CSS commands that change how the
-website looks (<em>e.g.</em>, the size of an image) based on the screen
-size of the user.</p></li>
-</ul>
-<p>By default, R Shiny uses an approach that is a hybrid of the first
-two techniques above. Many of Shiny’s boxes are “fluid,” meaning their
-size is flexible and changes according to the size of their contents.
-Additionally, they can be divided into rows whose contents may flow
-horizontally if there’s room or vertically if there’s not.</p>
-<figure><img src="fig/clipboard-3147076736.png" class="figure mx-auto d-block"></figure><p>As we’ll discuss later, the first step of building any R Shiny app is
-to design the <em>layout</em> of your app. What needs to go where?
-Remembering that your app may not be able to look the same for every
-user because of the device they access it on is the first step to
-designing a great app!</p>
+<p>R Shiny comes with some custom HTML boxes that are “fluid,” meaning
+their size is flexible and changes automatically according to the size
+of their contents. Like inline elements, these boxes will only take up
+as much space as necessary. However, their contents will automatically
+stack vertically if the screen becomes too narrow. Additionally, they
+can be divided into “rows” and “columns” so that elements can be
+arranged in a grid-like fashion on wide-enough screens:</p>
+<figure><img src="fig/clipboard-3147076736.png" class="figure mx-auto d-block"></figure><p>The first step of building a great Shiny app is to design your app’s
+<em>layout</em>. What elements should exist, and where should they go?
+How big does each need to be? What kinds of devices will your users use?
+It’s important to remember that your app may not look the same for every
+user and to design it with that in mind!</p>
 </div>
 </div>
 <div class="section level3">
 <h3 id="css-101">CSS 101<a class="anchor" aria-label="anchor" href="#css-101"></a>
 </h3>
-<p>Compared to HTML, CSS is an even easier language to understand (at
-least, that’s my opinion!). HTML is the language that tells a browser
-<strong>what</strong> to display and <strong>where</strong> to display
-it; CSS is the language that tells a browser <strong>how</strong> to
-display it.</p>
-<p>CSS code consists of functional units called <strong>rules</strong>.
-Each rule consists of a <strong>selector</strong> and a list of one or
-more <strong>properties</strong> paired with
-<strong>values</strong>:</p>
+<p>If HTML is the language that tells a browser <strong>what</strong> to
+display and <strong>where</strong> to display it, then CSS is the
+language that tells a browser <strong>how</strong> to display it.</p>
+<p>Compared to HTML, CSS is even easier to learn (at least, that’s my
+opinion!). CSS code consists of functional units called
+<strong>rules</strong>. Each rule consists of a
+<strong>selector</strong> and a list of one or more
+<strong>properties</strong> paired with <strong>values</strong>:</p>
 <ul>
 <li><p>The <strong>selector</strong> is the part that tells a browser
 which box(es) to adjust the appearance of.</p></li>
@@ -854,7 +862,7 @@ characteristics of those boxes to change.</p></li>
 <li><p>The list of <strong>values</strong> tells the browser the new
 values to set for each of those characteristics.</p></li>
 </ul>
-<p>Here is what a <em>CSS rule</em> might look like:</p>
+<p>Here is what a <strong>CSS rule</strong> might look like:</p>
 <div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">CSS<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -863,46 +871,42 @@ values to set for each of those characteristics.</p></li>
 <span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="kw">font-size</span><span class="ch">:</span> <span class="dv">large</span><span class="op">;</span></span>
 <span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>} </span></code></pre>
 </div>
-<p>On the first line, we have two element types we’re targeting in our
-selector with our rule, separated from each other by a comma:</p>
-<ul>
+<p>On the first line, we have our selector, which is targeting two
+different groups of entities simultaneously, with the two targets
+separated by a comma:</p>
+<ol style="list-style-type: decimal">
 <li><p>The first target is paragraph boxes (<code>p()</code>s), but
-specifically only those given the <code>intro</code> class. A
-<strong>class</strong> is an <em>attribute</em> that HTML boxes can have
-that allows them to be controlled and styled as a group, and a period
-<strong>operator</strong> is used to connect an HTML element type with a
-<strong>class</strong> in a selector (<em>e.g.</em>,
-<code>p.intro</code>).</p></li>
+<em>only</em> those with the <code>intro</code> class attribute. A
+<strong>class</strong> is an HTML <strong><em>attribute</em></strong>
+that allows many boxes to be controlled and styled as one. A period is
+used to connect an HTML element type with a <strong>class</strong> in a
+CSS selector (<em>e.g.</em>, <code>p.intro</code>).</p></li>
 <li>
-<p>Our second target is <code>div</code>s (short for “dividers,” a
-generic kind of HTML box), but specifically only those with the
-<strong>id</strong> <code>firstintro</code>. As we saw earlier,
-<code>id</code>s are also attributes that HTML boxes can have, and they
-allow us to specificially control or style just a single element. A
-hashtag <strong>operator</strong> connects an HTML element type with an
-<code>id</code> in a selector (<em>e.g.</em>,
+<p>Our second target is <code>div</code>s (a generic HTML box), but
+<em>only</em> the one with the <strong>id</strong> attribute
+<code>firstintro</code>. <code>id</code>s allow us to control or style
+just one specific element. A hashtag connects an HTML element type with
+an <code>id</code> in a CSS selector (<em>e.g.</em>,
 <code>div#firstintro</code>).</p>
 <ul>
-<li><p>If you wanted to target all elements of a type (<em>e.g.</em>,
-all <code>div()</code>s), you can just write the element name without
-any periods or hashtags (e.g. <code>div</code>)</p></li>
-<li><p>If multiple different types of elements (such as both divs and
-ps) have been given the same class, you can omit a element type and just
-specific the class (e.g., <code>.intro</code>).</p></li>
+<li><p>To target all elements of a type (<em>e.g.</em>, all
+<code>div()</code>s), write only the element name without any periods or
+hashtags (e.g. <code>div</code>)</p></li>
+<li><p>If multiple different types of elements (such as divs and ps)
+have the same class, you can omit an element type and just specify the
+class (e.g., <code>.intro</code>).</p></li>
 </ul>
 </li>
-</ul>
-<p>Then, inside of our rule’s curly braces, we have a list. Each list
-item is a pairing of a <strong>property name</strong> (<em>e.g.</em>,
+</ol>
+<p>Inside of our rule’s braces, we have a list. Each list item is a
+pairing of a <strong>property name</strong> (<em>e.g.</em>,
 <code>font-style</code>) and a new <strong>value</strong>
 (<em>e.g.</em>, <code>italic</code>). The property and the value are
-separated with a colon <strong>operator</strong>, and the pairing ends
-with a semi-colon <strong>operator</strong>. Pay attention to these
-punctuation rules—CSS is <em>very</em> particular about its
-punctuation!</p>
-<p>CSS rules can get more complex than this example, but they can also
-be much simpler than this example—I’ve tried to provide a single example
-that demonstrates all the key ideas without being too complicated.</p>
+separated with a colon, and the pairing ends with a semi-colon. If you
+get the punctuation or spelling of a CSS rule wrong (easy to do!), it
+won’t work, so watch out!</p>
+<p>CSS rules get more complex than this one, but they can also be much
+simpler, so if this rule makes sense to you, you’re in great shape!</p>
 <div id="challenge2" class="callout challenge">
 <div class="callout-square">
 <i class="callout-icon" data-feather="zap"></i>
@@ -914,9 +918,10 @@ that demonstrates all the key ideas without being too complicated.</p>
 <p>Try it: W3Schools is a <em>fantastic</em> resource for learning HTML
 and CSS. <a href="https://www.w3schools.com/css/default.asp" title="W3Schools is a great resource for learning HTML and CSS; check out their CSS tutorial" class="external-link">Go
 to their CSS page and check out some of the tutorial pages on the
-left-hand side.</a> Using the “CSS Text” tutorial, write a CSS rule that
-would change the font color of all paragraph boxes to red and make all
-their text center-aligned.</p>
+left-hand side.</a></p>
+<p>Using the “CSS Text” tutorial, write a CSS rule that would change the
+font color of all paragraph boxes to red and make all their text
+center-aligned.</p>
 </div>
 </div>
 </div>
@@ -925,7 +930,7 @@ their text center-aligned.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4"> Show me the solution </h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
 <div class="accordion-body">
 <p>Here’s how you’d write this rule:</p>
 <div class="codewrapper sourceCode" id="cb5">
@@ -937,89 +942,75 @@ their text center-aligned.</p>
 <span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>}</span></code></pre>
 </div>
 <p>Notice that we can target all p elements by not specifying any
-classes or ids. Don’t forget your colons or semi-colons! Also, notice
-that, unlike R code, text values in CSS (like “red” and “center”)
-shouldn’t be quoted.</p>
+classes or ids—just our element name. Don’t forget your colons or
+semi-colons! Also, notice that, unlike in R, text values in CSS (like
+“red” and “center”) aren’t quoted.</p>
 </div>
 </div>
 </div>
 </div>
-<p>Why are we bothering to understand CSS? Unfortunately, understanding
-CSS is <strong>essential</strong> for crafting an <em>attractive</em> R
-Shiny app. Without specifying your own CSS, you will need to:</p>
+<p>Why should you bother learning any CSS? Unfortunately, understanding
+some CSS is <strong>essential</strong> to craft an <em>attractive</em> R
+Shiny app. Without specifying your own CSS, you’ll need to:</p>
 <ol style="list-style-type: decimal">
-<li><p>Accept the very basic-looking default style choices set by R
-Shiny, or</p></li>
-<li><p>Use generic themes available in add-on packages such as
-<code>bslib</code> that are used countless places on the web
-already.</p></li>
+<li><p>Accept the <em>very</em> basic default stylingof R Shiny stuff,
+or</p></li>
+<li><p>Use generic themes available from packages such as
+<code>bslib</code> that are used on countless websites already.</p></li>
 </ol>
-<p>These are fine things to do if your apps are simple or have limited
-user bases, but, in my experience, neither is <em>nearly</em> as
-satisfying as learning to style your app yourself using some CSS!</p>
+<p>These are fine options if your apps are simple or have limited or
+indifferent user bases, but, in my experience, neither is
+<em>nearly</em> as satisfying as learning to style your app
+yourself!</p>
 </div>
 </section><section><h2 class="section-heading" id="nothing-is-new-on-the-web">Nothing is new on the web<a class="anchor" aria-label="anchor" href="#nothing-is-new-on-the-web"></a>
 <a class="anchor" aria-label="anchor" href="#nothing-is-new-on-the-web"></a>
 </h2>
 <hr class="half-width">
-<p>We’ve talked about how a website is generally built, and we’ve looked
-at the specific roles that HTML and CSS typically play in that process.
-In particular, we discussed the concept of HTML boxes and how a website
-is just a series of these boxes, stacked inside each other. Then, the
-style of those boxes and their contents is set by CSS.</p>
+<p>We’ve talked about how a website is built, and we’ve looked at the
+specific roles played by HTML and CSS in that process. In particular, we
+discussed the concept of HTML boxes and how a website is just a series
+of these boxes, stacked inside each other. Then, the style of those
+boxes and their contents is customized using CSS.</p>
 <p>But what typically goes <strong><em>inside</em></strong> all those
 boxes?!</p>
 <p>With the internet now over 30 years old, most people have been
-interacting with the web for a <em>long time</em>! We’ve all developed
-many collective expectations for how websites should look and work. As a
-result, most websites are comprised of a set of immediately-recognizable
-components. Some of these include:</p>
+interacting with the web for a <em>long time</em>! We’ve developed many
+collective expectations for how websites should look and feel. As such,
+most websites are comprised of immediately-recognizable components,
+including:</p>
 <ul>
 <li><p>A <strong>header</strong> (a box permanently hooked to the top of
-the screen/page or to the top of a section of the page). This may
-contain a title, a logo, a navigation menu, <em>etc.</em></p></li>
+the screen/page or to the top of a section of the page). This could
+contain elements like a title, a logo, a navigation menu,
+<em>etc.</em></p></li>
 <li><p>A <strong>footer</strong> (similar to a header but at the bottom
-of the screen/page or section). This might contain contact info, legal
+of the screen/page/section). This might contain contact info, legal
 information, links, disclaimers, version information,
 <em>etc.</em></p></li>
-<li>
-<p>A “main content area,” which might be a single rectangle or
-multiple rectangles of equal or unequal size (such as a “sidebar” and a
-“main panel”). The main content area may contain blocks of text, media
-such as videos, links, articles, <em>etc.</em></p>
-<ul>
-<li>Blocks of text may themselves can contain paragraphs, links, quotes,
-articles, lists, headings, and many more sub-boxes!</li>
-</ul>
-</li>
-<li>
-<p><strong>Forms</strong>, <em>i.e.</em>, boxes that contain
-multiple information-gathering <strong>widgets</strong>, which are
-elements a user can interact with and expect some response, such as a
-drop-down menu or a slider.</p>
-<ul>
-<li>Think here about the interactions you have when ordering takeout
-through a restaurant’s website, for example. Many of those interactions
-occur via widgets.</li>
-</ul>
-</li>
-<li><p><strong>Modals</strong>, which you probably know as “pop-ups.”
-These partially or wholly obscure the rest of the webpage and may
-contain additional information, options, or alerts.</p></li>
-<li><p>Backgrounds, which may hold images, solid colors, gradients, or
+<li><p>A “main content area,” which might be a single rectangle or
+multiple rectangles of (un)equal size (such as a smaller “sidebar” and a
+larger “main panel”). This area may contain blocks of text, media such
+as videos, articles, graphics, <em>etc.</em></p></li>
+<li><p>Text blocks, which might contain paragraphs, links, quotes,
+articles, lists, headings, etc.</p></li>
+<li><p>Forms containing information-gathering <strong>widgets</strong>,
+elements a user interact withs and expects a response, such as a
+drop-down menu or a slider.</p></li>
+<li><p><strong>Modals</strong> (which you may know as “pop-ups”), which
+partially or wholly obscure the webpage and may contain additional
+information, options, or alerts.</p></li>
+<li><p>Backgrounds holding images, solid colors, gradients, or
 patterns.</p></li>
 <li><p>Navigation systems, such as buttons, scroll bars, or drop-down
-menus that allow users to move to different pages on the same
-site.</p></li>
+menus that allow users to move around a site.</p></li>
 </ul>
-<p>All of the elements above (and many more!) can be added to the
-websites you design using R Shiny. As such, some of the first and most
-important decisions you’ll make when building a Shiny app (or any
-website) is deciding:</p>
+<p>All these elements (and more!) can be added to the websites you
+design using R Shiny. As such, some of the first, and most important,
+decisions you’ll make when building a Shiny app is deciding:</p>
 <ol style="list-style-type: decimal">
 <li><p><strong>What</strong> elements your app will contain,</p></li>
-<li><p><strong>Where</strong> they will go,</p></li>
-<li><p><strong>How</strong> they will look, and</p></li>
+<li><p><strong>Where</strong> they will go, and</p></li>
 <li><p>What they’ll enable a user to <strong>do</strong>.</p></li>
 </ol>
 <p>While the list above is not exhaustive, it should help you start
@@ -1033,12 +1024,11 @@ making these decisions.</p>
 </h3>
 <div class="callout-content">
 <p>Consider the webpage below:</p>
-<figure><img src="fig/clipboard-1560346890.png" class="figure mx-auto d-block"></figure><p>Like all webpages, this is just a series of “boxes inside of other
-boxes.” Draw a version of the site as just that series of boxes, then
-label what each box seems like it is designed to hold (don’t bother
-drawing every single box, just the “major” or distinctive ones).</p>
-<p>As you do that, list different components inside these boxes that are
-familiar to you from other websites you’ve visited (things like buttons,
+<figure><img src="fig/clipboard-1560346890.png" class="figure mx-auto d-block"></figure><p>Like all webpages, this one is just a series of “boxes inside of
+other boxes.” Draw a version of the site as a series of nested boxes,
+labeling what each box seems designed to hold (don’t bother drawing
+every box, just the “major” ones).</p>
+<p>As you do, list the different components that you recognize (buttons,
 text blocks, etc.).</p>
 </div>
 </div>
@@ -1048,7 +1038,7 @@ text blocks, etc.).</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution5" aria-expanded="false" aria-controls="collapseSolution5">
   <h4 class="accordion-header" id="headingSolution5"> Show me the solution </h4>
 </button>
-<div id="collapseSolution5" class="accordion-collapse collapse" aria-labelledby="headingSolution5" data-bs-parent="#accordionSolution5">
+<div id="collapseSolution5" class="accordion-collapse collapse" data-bs-parent="#accordionSolution5" aria-labelledby="headingSolution5">
 <div class="accordion-body">
 <p>Here’s what I noticed and identified:</p>
 <figure><img src="fig/clipboard-2886539574.png" class="figure mx-auto d-block"></figure><p>You may have noticed more, fewer, or different things—that’s ok!</p>
@@ -1065,33 +1055,33 @@ text blocks, etc.).</p>
 </h3>
 <div class="callout-content">
 <ul>
-<li>Websites are typically built by using HTML, CSS, and JS to construct
+<li>Websites are typically built using HTML, CSS, and JS to construct
 the “client side” of the site, which runs in a user’s browser on their
 computer, and by using SQL plus a general programming language like
 Python to construct the “server side” of the website, which runs
 remotely on a server that communicates back and forth with the user’s
 browser.</li>
-<li>R Shiny allows you to build a website entirely using R + R Shiny
-code such that a deep understanding of other web development languages
-is not required.</li>
+<li>R Shiny allows you to build a website using just R + R Shiny code,
+such that a deep understanding of other web development languages is not
+required.</li>
 <li>However, a <em>little</em> familiarity with HTML and CSS is helpful
-for building a great app as well as for understanding what you are
-really doing when you are writing “R Shiny” code. That’s ok because HTML
-and CSS are much more approachable languages to learn than general
-programming languages.</li>
-<li>HTML is a system for telling a browser what to put where when it
-builds a website. Most websites are just “boxes” that hold stuff,
-including other boxes. Some of these boxes force new lines after them;
-others don’t. How boxes will “flow” on wide versus narrow screens
-depends on how they are set up.</li>
-<li>CSS is a system for telling a browser how to aesthetically display
-each element on a website. It consists of rules applied to specific HTML
-boxes.</li>
-<li>Website design has matured to the point that most websites look and
-feel broadly similar and share many elements, such as buttons, links,
-widgets, articles, media blocks, and so on. R Shiny lets us add these
-same elements to our own websites, so we have many options when deciding
-what elements our app will contain.</li>
+for building a great app as well as for understanding what you are doing
+when you are writing “R Shiny” code.</li>
+<li>That’s ok because HTML and CSS are more approachable languages than
+general programming languages like R.</li>
+<li>HTML is a system for telling a browser what to put where when
+building a website. Websites are just “boxes holding stuff and other
+boxes.” Some of these boxes force new lines after them; others don’t.
+How boxes “flow” on wide versus narrow screens is an important design
+consideration.</li>
+<li>CSS is a system for telling a browser how to display each element on
+a website. It consists of rules applied to specific HTML boxes that
+specify new values for those boxes’ aesthetic properties.</li>
+<li>Website design has matured enough that most websites look and feel
+similar and share many elements, such as buttons, links, widgets,
+articles, media blocks, and so on. R Shiny lets us add these same
+elements to our websites, so we have many options when deciding what
+elements to include.</li>
 </ul>
 </div>
 </div>
@@ -1488,7 +1478,7 @@ looks the way it does so far.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>Besides our title, our app will actually look completely empty! This
 is because we have made several HTML boxes (a footer, a side panel, a
@@ -1523,7 +1513,7 @@ your app to make sure your rule is working.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <p>Here’s what this should look like:</p>
 <div class="codewrapper sourceCode" id="cb7">
@@ -4450,8 +4440,8 @@ any links that you are not going to use.
   "url": "https://carpentries.github.io/r_shiny_workshop/aio.html",
   "identifier": "https://carpentries.github.io/r_shiny_workshop/aio.html",
   "dateCreated": "2024-07-10",
-  "dateModified": "2024-07-11",
-  "datePublished": "2024-07-11"
+  "dateModified": "2024-07-12",
+  "datePublished": "2024-07-12"
 }
 
   </script><script>
