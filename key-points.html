@@ -375,25 +375,29 @@ elements to include.</li>
 </ul></section><section id="shiny_2"><h2 class="section-heading"><a href="shiny_2.html">R Shiny--The Ground Floor</a></h2>
 <hr class="half-width">
 <ul>
-<li>Use the three-file system to organize your app’s code and to benefit
-from R Shiny features built into RStudio.</li>
+<li>Use the three-file system to organize your app’s code to benefit
+from several R Shiny features built into RStudio.</li>
 <li>A <code>global.R</code> file is handy for storing all code needed to
-power app start-up as well as any code that needs to run only once.</li>
+fuel your app’s start-up as well as code that needs to run only
+once.</li>
 <li>A CSS stylesheet for dictating your app’s aesthetics can be linked
 to an app inside of <code>ui.R</code>, specifically using
-<code>tags$head()</code> to put the linkage into our app’s head HTML
+<code>tags$head()</code> to put the linkage into our app’s head
 container.</li>
 <li>UI elements get nested inside one another and must all be placed
 inside the UI’s outermost container (here, a <code>fluidPage()</code>).
 Most UI elements can be given <code>id</code>s and <code>class</code>es
-for styling with CSS and enabling other R Shiny features. Elements must
-be separated from one another with commas.</li>
+for styling with CSS. UI elements must be separated from one another
+with commas.</li>
 <li>
 <code>fluidRow()</code> and <code>column()</code> can be used to
 create a “grid,” within which elements could be arranged next to each
 other on wide screens but which will automatically flow vertically on
 narrow screens, creating a responsive, mobile-first design with little
 fuss.</li>
+<li>CSS styling requires knowing the right selector to use to target the
+right element(s). If you aren’t sure of the right selector to use, you
+can retrieve it using your browser’s developer tools dashboard.</li>
 </ul></section><section id="shiny_3"><h2 class="section-heading"><a href="shiny_3.html">R Shiny--The First Floor (Rendering, Inputs, and Reactivity)</a></h2>
 <hr class="half-width">
 <ul>
@@ -502,8 +506,8 @@ happens with the <code>input</code> object for <code>DT</code> and
   "url": "https://carpentries.github.io/r_shiny_workshop/key-points.html",
   "identifier": "https://carpentries.github.io/r_shiny_workshop/key-points.html",
   "dateCreated": "2024-07-10",
-  "dateModified": "2024-07-12",
-  "datePublished": "2024-07-12"
+  "dateModified": "2024-07-15",
+  "datePublished": "2024-07-15"
 }
 
   </script><script>
