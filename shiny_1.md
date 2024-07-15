@@ -212,7 +212,7 @@ think the two most important differences are:
     a website's UI, (deep) knowledge of these languages is **not**
     required to build a website using R Shiny. Instead, you will write R
     code + R Shiny code, and these will get "translated" into the
-    equivalent HTML, CSS, and JS code for you. \
+    equivalent HTML, CSS, and JS code for you.\
     \
     Granted, this means you *still* need to learn how to write "R Shiny
     code," and you may or may not find this code much more familiar than
@@ -225,7 +225,7 @@ think the two most important differences are:
     requires programming in (at least) two *different* general
     programming languages (*e.g.*, JS and PHP), at least one of which
     you may never have encountered before (JS and PHP are not widely
-    used for other purposes). \
+    used for other purposes).\
     \
     With R Shiny, you can code *both* the front and back ends of a
     website using the "look and feel," at least, of just *one* general
