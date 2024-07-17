@@ -401,39 +401,42 @@ can retrieve it using your browser’s developer tools dashboard.</li>
 </ul></section><section id="shiny_3"><h2 class="section-heading"><a href="shiny_3.html">R Shiny--The First Floor (Rendering, Inputs, and Reactivity)</a></h2>
 <hr class="half-width">
 <ul>
-<li>Complex UI elements, like tables and graphs, will first need to be
-rendered in our server code and then placed within our UI’s structure
-using an <code>*Output()</code> function of some kind.</li>
-<li>Rendered entities that are ready for display are passed from the
-server to the UI via the <code>output</code> object and the
-<code>outputId</code>’s we give these objects when we render them.</li>
-<li>Input widgets are UI elements that allow users to interact with our
-app. The current values of these widgets are being constantly passed
-from the UI to the server via the <code>input</code> object and the
-<code>inputId</code>’s we give these widgets when we create them.</li>
-<li>R knows to be watching reactive objects like those attached to
-<code>input</code> for changes. Any such changes are called events.
-Event handling is the process by which specific responses are coded to
-specific events.</li>
-<li>The primary way R Shiny handles events is by re-running any reactive
-contexts that contain the reactive object that has changed, unless that
-object is wrapped in <code>isolate()</code>.</li>
-<li>In our server code, reactive contexts are triggered to run
-directively (in response to user actions), not imperatively (triggered
-to run by a coder hitting “run”). They might run in any order, or never,
-depending upon what a user does. However, once a reactive context begins
-running, it’s contents are run imperatively through to completion (even
-if they take a long time!), during which time the app will be
-unresponsive.</li>
-<li>Observers (like <code>observeEvent({},{})</code>) build additional
-reactive constructs within which we can handle events. In particular,
-<code>observeEvent({},{})</code> allows for very precise event-handling
-in that only changes to reactive objects provided to its first
-expression trigger only the second expression to re-run.</li>
+<li>Complex UI elements, like tables, first need to be
+<strong>rendered</strong> server-side and then placed within our UI
+using an <code>*Output()</code> function.</li>
+<li>Rendered entities are passed from the server to the UI via the
+<code>output</code> object using the <code>outputId</code>’s we gave
+these entities when we <strong>rendered</strong> them.</li>
 <li>
-<code>tabPanel()</code> and <code>tabsetPanel()</code> allow you to
-create a “tabular layout,” allowing you to divide up one space in your
-UI into several, only one of which can be seen at one time.</li>
+<strong>Input widgets</strong> are UI elements that allow users to
+interact with our app in simple, pre-defined and familiar ways. The
+current values of these widgets are passed from the UI to the server via
+the <code>input</code> object using the <code>inputId</code>’s we gave
+these widgets when we created them.</li>
+<li>R knows to watch <strong>reactive objects</strong> (like those
+attached to <code>input</code>) for changes. Any such changes are
+<strong>events</strong>. <strong>Event handling</strong> is coding how
+the app should respond to an event.</li>
+<li>The primary way Shiny handles events is by re-running any
+<strong>reactive contexts</strong> containing the reactive object(s)
+that changed (unless they’re <code>isolate()</code>d).</li>
+<li>Server-side, reactive contexts are triggered to run
+<strong>directively</strong> (when a precipitating event occurs), not
+<strong>imperatively</strong> (when a coder hits “run”). They might run
+in any order, or never—it all depends on what the user and app do.</li>
+<li>However, <em>once</em> a reactive context begins executing, it’s
+contents are executed imperatively like “normal” R code until they
+complete (even if that takes a long time!), during which time the app
+will be unresponsive.</li>
+<li>
+<strong>Observers</strong> (like <code>observeEvent({},{})</code>)
+allow for more precise event-handling; <code>observeEvent({},{})</code>s
+only rerun their second expression and only when events occur in their
+first expression, so they enable “If X, then Y” event handling.</li>
+<li>
+<code>tabPanel()</code> and <code>tabsetPanel()</code> create a
+“tabular layout,” dividing up one UI space into several, only one of
+which is visible at a time.</li>
 </ul></section><section id="shiny_4"><h2 class="section-heading"><a href="shiny_4.html">DTs and Leaflets and Plotlys, Oh my!</a></h2>
 <hr class="half-width">
 <ul>
@@ -506,8 +509,8 @@ happens with the <code>input</code> object for <code>DT</code> and
   "url": "https://carpentries.github.io/r_shiny_workshop/key-points.html",
   "identifier": "https://carpentries.github.io/r_shiny_workshop/key-points.html",
   "dateCreated": "2024-07-10",
-  "dateModified": "2024-07-16",
-  "datePublished": "2024-07-16"
+  "dateModified": "2024-07-17",
+  "datePublished": "2024-07-17"
 }
 
   </script><script>
