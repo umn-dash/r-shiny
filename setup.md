@@ -14,7 +14,7 @@ RStudio is an application (an integrated development environment, or IDE, to be 
 
 This lesson also takes advantage of several add-on packages for R that do not come bundled with R's default installation. These packages can be installed using the following command within R/RStudio:
 
-```{r installing packages, eval=F}
+``` R
 install.packages("shiny", "dplyr", "ggplot2", "leaflet", "DT", "plotly", "gapminder", "countrycode", "sf")
 ```
 
@@ -24,7 +24,7 @@ For the `leaflet` portion of the lesson, we'll work with **spatial data**. Downl
 
 We'll also use the `gapminder` data set for this lesson, available via the `gapminder` package:
 
-```{r gapminder data, eval=F}
+``` R
 library(gapminder)
 gap = gapminder #<--OR WHATEVER YOU'D PREFER TO CALL IT.
 ```
