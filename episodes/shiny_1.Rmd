@@ -1,6 +1,6 @@
 ---
 title: Welcome to the Web!
-teaching: 30
+teaching: 40
 exercises: 5
 source: Rmd
 editor_options: 
