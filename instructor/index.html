@@ -386,7 +386,12 @@ possible).</p>
 <p>This lesson also takes advantage of several add-on packages for R
 that do not come bundled with R’s default installation. These packages
 can be installed using the following command within R/RStudio:</p>
-<p><code>{r installing packages, eval=F} install.packages("shiny", "dplyr", "ggplot2", "leaflet", "DT", "plotly", "gapminder", "countrycode", "sf")</code></p>
+<div class="codewrapper sourceCode" id="cb1">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">install.packages</span><span class="op">(</span><span class="st">"shiny"</span>, <span class="st">"dplyr"</span>, <span class="st">"ggplot2"</span>, <span class="st">"leaflet"</span>, <span class="st">"DT"</span>, <span class="st">"plotly"</span>, <span class="st">"gapminder"</span>, <span class="st">"countrycode"</span>, <span class="st">"sf"</span><span class="op">)</span></span></code></pre>
+</div>
 </section><section><h2 class="section-heading" id="data-sets">Data Sets<a class="anchor" aria-label="anchor" href="#data-sets"></a>
 <a class="anchor" aria-label="anchor" href="#data-sets"></a></h2>
 <hr class="half-width"><p>For the <code>leaflet</code> portion of the lesson, we’ll work with
@@ -395,7 +400,13 @@ data containing country boundaries</a>. Unzip it and place it on your
 desktop; you’ll move it later in the lessons.</p>
 <p>We’ll also use the <code>gapminder</code> data set for this lesson,
 available via the <code>gapminder</code> package:</p>
-<p><code>{r gapminder data, eval=F} library(gapminder) gap = gapminder #&lt;--OR WHATEVER YOU'D PREFER TO CALL IT.</code></p>
+<div class="codewrapper sourceCode" id="cb2">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">library</span><span class="op">(</span><span class="va">gapminder</span><span class="op">)</span></span>
+<span><span class="va">gap</span> <span class="op">=</span> <span class="va">gapminder</span> <span class="co">#&lt;--OR WHATEVER YOU'D PREFER TO CALL IT.</span></span></code></pre>
+</div>
 <p>I recommend accessing it via the code above, <a href="../data/gapminder.csv">but you may also download it via this
 link</a>.</p>
 </section><section><h2 class="section-heading" id="disclaimers">Disclaimers<a class="anchor" aria-label="anchor" href="#disclaimers"></a>
