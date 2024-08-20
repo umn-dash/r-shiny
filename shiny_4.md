@@ -9,106 +9,105 @@ editor_options:
 ---
 
 ::: objectives
--   Name the essential components of the `DT`, `leaflet` and `plotly`
-    packages.
--   Experiment with the interactive features that come baked into the
-    plots, tables, and maps produced by these packages.
+-   Name essential tools from the `DT`, `leaflet` and `plotly` packages.
+-   Experiment with the interactive features baked into the
+    plots/tables/maps produced by these packages.
 -   Customize the look and feel of these complex interactive graphics.
--   Favor updating complex interactive graphics instead of remaking them
-    whenever possible.
--   Use **proxies** to update only those aspects of a complex
-    interactive graphic that *need* updating.
--   Recognize the event types a user might trigger with respec to these
-    complex interactive graphics and the systems for watching for and
-    handling them.
+-   Update complex interactive graphics instead of remaking them when
+    possible by using **proxies**.
+-   Recognize events a user might trigger with respect to these complex
+    interactive graphics, and know how to watch for and handle them.
 :::
 
 ::: questions
--   How do I add an interactive map, table, or graph to my app?
--   What types of interactivity will these widgets come with?
--   How do I adjust the look and feel of these widgets?
--   How can I modify these widgets in response to user actions without
-    completely "starting over?"
--   What event types related to these widgets can I watch for, and how
-    would I handle them?
+-   How do I add an interactive map/table/graph to my app?
+-   What features do these widgets have?
+-   How do I adjust the aesthetics of these widgets?
+-   How can I modify these widgets to handle user actions without
+    "starting over?"
+-   What events related to these widgets can I watch for, and how would
+    I handle them?
 :::
 
-## Disclaimer
+### Disclaimer
 
-At two points in this lesson, the example code will produce **warnings**
-(not **errors**!) when executed. These can be ignored; the code works as
-intended!
+*At points in this lesson, the example code produces **warnings** (not
+**errors**!) when executed. These can be ignored!*
 
-## Introduction
+### Introduction
 
-While **input widgets** such as sliders, drop-down menus, checkboxes,
-and buttons are powerful ways to give our users control, they aren't
-always interesting or useful *by themselves*. There are *much* more
-powerful widgets!
+While **input widgets** like drop-down menus and buttons are powerful
+ways to give users control, they aren't always transformative *by
+themselves*. There are *much* more powerful widgets out there!
 
-And, since we're building our apps using R—a programming language
-*designed for* working with data—it make senses we'd specifically want
-to include some widgets that put *data* at our users' fingertips in
-interesting and useful ways.
+And, since our app's server side is powered by R—a programming language
+*designed for* data work—it make senses we'd include widgets that put
+*data* at our users' fingertips in interesting ways.
 
-Of all data-centered widgets, few are more familiar than **tables**,
+Of all the data-centered widgets, few are more familiar than **tables**,
 **maps**, and **graphs**. Because these are *so* ubiquitous, it probably
-won't be surprising to learn there are JavaScript-native packages for
-creating web-enabled, interactive versions of these graphics. While
-there are other such packages, here we'll explore `DT` (for tables),
-`leaflet` (for maps), and `plotly` (for graphs), since each has been
-ported into R + R Shiny via packages of the same names.
+won't surprise you that there are JavaScript-native packages for
+creating web-enabled, interactive versions of these graphic types.
 
-Each of these packages could *easily* be a course unto itself! As such,
-we'll look *only* at the basics—greater depth can be found elsewhere
-once you have learned the ropes.
+While there are other such packages, here we'll explore `DT` (for
+tables), `leaflet` (for maps), and `plotly` (for graphs), since each has
+been ported into R + R Shiny via packages of the same names.
 
-Learning `leaflet` and `plotly`, specifically, come with particular
-challenges we'll skirt around:
+Each of these could *easily* be a course unto itself! As such, we'll
+look *only* at the cross-cutting basics—greater depth can be found
+elsewhere once you've learned the ropes.
 
--   `leaflet` is for maps, which depend on **spatial data**. These and
+Learning `leaflet` and `plotly`, specifically, come with challenges
+we'll have to skirt around:
+
+-   `leaflet` builds maps, which represent **spatial data**. These, and
     the packages that work with them (*e.g.*, `sf`), are *complicated*!
-    I'll gloss over all the details to focus just on `leaflet`, but
-    we'll need to borrow tools from `sf` and others to accomplish
-    anything at all.
+    I'll gloss over the details, but we'll still need to occasionally
+    borrow tools from `sf` to accomplish anything at all.
 
--   If you are familiar with `ggplot2` (or another data viz package),
-    you already know that learning to make graphs programmatically
-    demands a new "vocabulary." `plotly` has the same learning curve
-    (perhaps steeper for R users, since it's *very* JavaScript-like
-    whereas `ggplot2` is more R-like). We'll engage with just the
-    minimum of `plotly`, but even that may be a lot for many learners.
+-   If you're familiar with `ggplot2` (or a comparable data viz
+    package), you already know that learning programmatica graph-making
+    has a steep learning curve. `plotly` has the same curve (perhaps
+    even a steeper one for R users, since it's *very* JavaScript-like,
+    whereas `ggplot2` is more R-like). Again, I'll gloss over the
+    details, but even the basics may be a heavy lift for some.
 
-Let's start simple—let's upgrade the table we already have by swapping
-it for a `DT` table. Of the packages we're learning here, `DT` is
-easiest, and it introduces all the key concepts we'll need for `leaflet`
-and `plotly`.
+Let's start simple—let's swap out our functional but drab table for a
+better, `DT` table. Of the packages we're learning here, `DT` is easiest
+(IMHO), and it can introduce us to all the key concepts we'll need to
+tackle `leaflet` and `plotly`.
 
-### Turning the tables
+## Turning the tables
 
-#### Basic table
+### Basic table
 
-Let's start by simply swapping our `renderTable({})` and `tableOutput()`
-calls with the equivalent `renderDT({})` and `dataTableOutput()` calls,
-which work identically but yield a `DT`-style table instead:
+All we have to do to swap our tables is change our `renderTable({})` and
+`tableOutput()` calls into `renderDT({})` and `dataTableOutput()` calls,
+which yield a `DT` table instead:
 
 
 ``` r
-##This code should **replace** the renderTable({}) call contained within your server.R file!
+##This code should **replace** ALL table-related code contained within your server.R file!
 
-###TABLE
-  output$basic_table = renderDT({ #<--CHANGE FUNCTION NAME HERE.
+###BASIC GAPMINDER TABLE
+  output$basic_table = renderDT({ #<--ONLY CHANGES HERE.
+    gap
+  })
+  
+##TABLE OBSERVER (BUTTON)
+  observeEvent(input$go_button, { 
 
-    input$go_button
+    output$basic_table = renderDT({ #<--...AND HERE.
+      gap %>% 
+        arrange(!!sym(input$sorted_column)) 
+    })
     
-    gap %>%
-      arrange(!!sym(isolate(input$sorted_column)))
   })
 ```
 
 
 ``` r
-##This code should **replace** the "main panel" cell's content within the BODY section of your ui.R file!
+##This code should **replace** the content of the "main panel" cell within the BODY section of your ui.R file!
 
 ##... other UI code...
 
@@ -116,14 +115,12 @@ which work identically but yield a `DT`-style table instead:
     column(width = 8, tabsetPanel(
       ###TABLE TAB
       tabPanel(title = "Table", 
-               dataTableOutput("basic_table")), #<--CHANGE FUNCTION NAME HERE.
+               dataTableOutput("basic_table")), #<--ONLY CHANGE HERE
       ###MAP TAB
-      tabPanel(title = "Map",
+      tabPanel(title = "Map"),
       ###GRAPH TAB
-      tabPanel(
-        title = "Graph",
-      )
-    ))
+      tabPanel(title = "Graph")
+    )
    )
 
 ##... other UI code...
@@ -131,62 +128,75 @@ which work identically but yield a `DT`-style table instead:
 
 Once you've made those swaps, restart your app.
 
-You'll *immediately* notice our table looks *very* different:
+When you do, you'll *immediately* notice our table looks *very*
+different:
+
+![The DT table above shows off several of the features that come
+standard, including pagination, searching, row selection, and column
+sorting.](fig/DT%20table%20features.png)
 
 -   It's **paginated**, *i.e.*,"divided into pages." Users flip pages
-    using buttons in the bottom-right. Users also change the page length
+    using buttons in the bottom-right. Users can also change page length
     using a drop-down menu in the top-left. These features allow users
-    to limit the data shown at one time, and they also keeps the table
-    from being long vertically if there are many rows' worth of data.
+    to limit how much data is shown at once, and they also keep the
+    table from being long vertically if there's a lot of data to show.
 
--   It's **searchable**—users can type **strings** (chunks of letters,
-    numbers, and/or symbols) into the search box in the upper-right; the
-    table will filter to only rows containing that string anywhere.
+-   It's **searchable**—users can type **strings** (chunks of
+    letters/numbers/symbols) into the search box in the upper-right; the
+    table will filter to only rows containing that string in any column.
 
--   It's **sortable**—users can click the up/down arrows next to column
-    names to sort the table. You'll note that this functionality makes
-    our drop-down menu widget obsolete (for now)!
+-   It's **sortable**—users can click the up/down arrows next to each
+    column name to sort the table by that column. You'll note this
+    functionality makes our drop-down menu a bit redundant!
 
--   It's (modestly) styled—it's snazzier-looking than our previous Shiny
-    table because it comes with some CSS automatically applied (bold
-    column names and "zebra striping" of rows, as two examples).
+-   It's (modestly) styled—it's snazzier than our previous table because
+    it comes with *some* automatic CSS (bolded column names and row
+    "zebra striping," as two examples).\
+    \
+    [Side-note: Web developers call elements with pre-set CSS
+    **opinionated**. Opinionated elements are nice in that they often
+    require less custom styling, but if you do choose to restyle them,
+    it can be hard to overcome their "opinions."]
 
 -   It's **selectable**—users can click to highlight ("select") rows.
-    This doesn't actually do anything server-side by default, but it
-    could.
+    This **event** doesn't actually do anything by default besides
+    changing the table's appearance, but it could.
 
-Now that we have a `DT` table, there are four things we'll *very*
-commonly want to do with one (or any similarly complex interactive
-graphic): 1) simplify it, 2) restyle it, 3) watch it for **events**, and
-4) update it to **handle** those events.
+Now that we have a `DT` table (a complex interactive graphic), there are
+four things we'll *very* commonly want to do with one (or any similarly
+complex interactive graphic):
 
-Let's start with the first two of these desires.
+1.  Simplify it,
 
-#### More (or less) basic DT
+2.  Restyle it,
 
-As we just saw, `DT` tables come standard with many interactive
-features! However, "more" is not always "better" from a **UX** (user
-experience) standpoint. Some might find certain features confusing,
-especially if they aren't necessary, are poorly explained, or don't do
-anything obvious. Others may find having a lot of features overwhelming,
-even if they understand them all.
+3.  Watch it for **events**, and
 
-The `datatable()` function's `options` input allows us to reel in the
-features included:
+4.  Update it to **handle** those events.
+
+Let's tackle the first two items above first.
+
+### More (or less) basic DT
+
+As we just saw, `DT`s come with many interactive features! However,
+"more" is not always "better" from a **UX** (**user experience**)
+standpoint. Some users might find certain features confusing, especially
+if they aren't necessary, are poorly explained, or don't result in any
+obvious responses. Others may find having a lot of features
+overwhelming, even if they understand them all.
+
+The `datatable()` function's `options` allows us to reel in the features
+our table comes with:
 
 
 ``` r
-##This code should **replace** the renderTable({}) call contained within your server.R file!
+##This code should **replace** ALL table-related code contained within your server.R file!
 
-###TABLE
+###BASIC GAPMINDER TABLE
   output$basic_table = renderDT({
-
-    input$go_button
-    
-    gap %>%
-      arrange(!!sym(isolate(input$sorted_column))) %>%
+    gap %>% 
       datatable(
-        selection = "none", #<--TURNS OFF ROW HIGHLIGHTING
+        selection = "none", #<--TURNS OFF ROW SELECTION
         options = list(
           info = FALSE, #<--NO BOTTOM-LEFT INFO
           ordering = FALSE, #<--NO SORTING
@@ -194,17 +204,40 @@ features included:
         )
       )
   })
+
+  ##TABLE OBSERVER (BUTTON)
+  observeEvent(input$go_button, { 
+    
+    output$basic_table = renderDT({
+      gap %>% 
+        arrange(!!sym(input$sorted_column)) %>% 
+        #SAME AS ABOVE
+        datatable(
+          selection = "none", 
+          options = list(
+            info = FALSE, 
+            ordering = FALSE,
+            searching = FALSE 
+          )
+        )
+    })
+    
+  })
 ```
 
-That's better! This version should be more digestible and intuitive (and
-easier to explain and program!).
+That's better! This version might be more digestible and intuitive for
+most users (and easier for us to explain and program around!).
 
-More broadly, *if a `DT` table or any other complex interactive graphic
-has a feature, you should assume there's a way to turn that feature off
-(you may just have to Google for the specific input needed to do it).*
+![Notice that, in this DT, there are no sorting arrows, no search bar,
+no current page info in the bottom-left, and no row
+selection.](fig/disabled%20DT.png)
 
-Next, let's boost our table's aesthetics a little. Let's make three
-changes:
+More broadly, *if a `DT` table (or any other complex interactive
+graphic) has a feature, you should assume you can turn it off (you may
+just have to Google for the specific input needed).*
+
+Next, let's tinker with our table's aesthetics. Let's make three
+(idosyncratic) changes:
 
 1.  Round the GDP per capita data.
 
@@ -212,287 +245,385 @@ changes:
 
 3.  Highlight in pink all rows with `lifeExp` values \> `70`.
 
-We'll use a functions from the `format*()` and `style*()` families to
-accomplish these goals, specifically `formatRound()`, `formatStyle()`,
-and `styleEqual()`:
+We'll use functions from the `format*()` and `style*()` families for
+this: specifically, `formatRound()`, `formatStyle()`, and
+`styleEqual()`:
 
 
 ``` r
-##This code should **replace** the renderTable({}) call contained within your server.R file!
+##This code should **replace** ALL table-related code contained within your server.R file!
 
-###TABLE
+###BASIC GAPMINDER TABLE
   output$basic_table = renderDT({
-
-    input$go_button
-    
-    gap %>%
-      arrange(!!sym(isolate(input$sorted_column))) %>%
+    gap %>% 
       datatable(
-        selection = "none",
+        selection = "none", #<--TURNS OFF ROW SELECTION
         options = list(
-          info = FALSE,
-          ordering = FALSE,
-          searching = FALSE
+          info = FALSE, #<--NO BOTTOM-LEFT INFO
+          ordering = FALSE, #<--NO SORTING
+          searching = FALSE #<--NO SEARCH BAR
         )
       ) %>%
-      #HERE, WE WRITE 'R-LIKE' CSS. WE USE camelCase FOR PROPERTIES, TEXT STRINGS FOR VALUES, AND = INSTEAD OF : TO SEPARATE THEM (COMPARE TO [text-align: center;]).
+      #IN THESE FUNCTIONS, WE WRITE 'R-LIKE' CSS CODE. WE USE camelCase FOR PROPERTIES, TEXT STRINGS FOR VALUES, AND = INSTEAD OF : TO SEPARATE THEM.
       formatRound(columns = "gdpPercap", digits = 2) %>%
-      formatStyle(columns = "continent", textAlign = "center") %>%
+      formatStyle(columns = "continent", textAlign = "center") %>% #<--COMPARE TO [text-align: center;]
       formatStyle(
-        columns = "lifeExp",
-        target = "row",
+        columns = "lifeExp", #<--wHAT COLUMN WILL WE USE TO CONDITIONALLY FORMAT?
+        target = "row", #<--WILL WE STYLE ROWS OR CELLS?
         backgroundColor = styleEqual(
-          levels = gap$lifeExp,
-          values = ifelse(gap$lifeExp > 70, "lightpink", "white")
+          levels = gap$lifeExp, 
+          values = ifelse(gap$lifeExp > 70, "lightpink", "white") #WHAT RULE WILL WE USE, AND WHAT NEW CSS VALUES WILL WE SET TO EACH POSSIBILITY?
         )
       )
   })
+
+  ##TABLE OBSERVER (BUTTON)
+  observeEvent(input$go_button, { 
+    
+    output$basic_table = renderDT({
+      gap %>% 
+        arrange(!!sym(input$sorted_column)) %>%
+        datatable(
+          selection = "none", 
+          options = list(
+            info = FALSE, 
+            ordering = FALSE,
+            searching = FALSE 
+          )
+        ) %>%
+        #SAME AS ABOVE
+        formatRound(columns = "gdpPercap", digits = 2) %>%
+        formatStyle(columns = "continent", textAlign = "center") %>% 
+        formatStyle(
+          columns = "lifeExp", 
+          target = "row", 
+          backgroundColor = styleEqual(
+            levels = gap$lifeExp, 
+            values = ifelse(gap$lifeExp > 70, "lightpink", "white")
+          )
+        )
+    })
+  })
 ```
 
+![Now, our continent column values are center-aligned instead of
+left-aligned, our GDP data are less unruly (because we've rounded them),
+and any row with a life expectancy value \> 70 is now light pink,
+perhaps helping these rows stand out from all
+others.](fig/SPIFFY%20dt.png)
+
 `format*()` functions ask us to pick 1+ columns to restyle. Then, we
-provide **property** and **value** pairings, just as in CSS, but using
-an "R-like" syntax instead, *e.g.*, `textAlign = center` in R Shiny
-versus `text-align: center;` in CSS.
+provide **property** and **value** pairings as inputs, just as we would
+using CSS code, but using "R-like" syntax instead, *e.g.*,
+`textAlign = center` versus `text-align: center;`.
 
 If we want to format a column **conditionally**, *i.e.*, formatting only
-some rows according to a rule, we use the `style*()` functions. In the
+*some* rows according to a rule, we use the `style*()` functions. In the
 example above, we used `styleEqual()` to apply a light pink background
-to only rows with life expectancy greater than `70`.
+to only rows with life expectancy greater than `70`. This might now
+stand out to users in ways that enable certain workflows.
 
-#### Update, don't remake!
+## Update, don't remake, DT edition!
 
-So far, when user actions have dictated a change to the data in our
-table (*e.g.*, how it's sorted), we've re-rendered the *entire* table to
+So far, when user actions have dictated change to the data in our table
+(*e.g.*, how it's sorted), we've re-rendered the *entire* table to
 **handle** those **events**.
 
-While this works, it's undesirable for (at least) three reasons:
+This works, but it's undesirable for (at least) three reasons:
 
-1.  With large data sets, it could be slow!
+1.  With large data sets, it could be *slow*! Remember that, as R code
+    executes server-side, the app will become completely unresponsive,
+    so your users will have to sit around while your code finishes.
 
 2.  To the user, the table may appear to "flicker" out and in again as
-    it's remade, if the process is fast.
+    it's remade (if that's fast).
 
-    1.  If the process is slow, the table will instead "gray out" and
-        the whole app will freeze while the code needed to remake the
-        table completes.
+    1.  If it's slow, the table will instead "gray out" and the whole
+        app will "freeze" while the code completes.
 
 3.  If the user had customized the table in any way (they've navigated
     to a specific page, *e.g.*), those customizations will be lost if we
-    rebuild the table from scratch.
+    rebuild the table.
 
 If you think about it, if *all* we're doing is changing the data in our
-table, there's no need to remake the *whole* table—we could just
-repopulate the contents of its cells, right? *Whenever possible,* *we
-should update a complex element rather than wholly remake it.*
+table, there's no need to remake the *whole* table—why blow up and
+rebuild all the rows, columns, and cells when we just need to change
+what's *in* the cells? *Whenever possible,* *we should update a complex
+interactive graphic element rather than remake it.*
 
-To update widgets "on the fly," we use something called a **proxy**,
-which is like a telephone that lets R (on the server side) and
-JavaScript (on the client side) talk directly to adjust a widget's
-*contents* without redrawing any aspects of the widget other than just
-those that need to be redrawn.
+To update complex interactive graphic elements"on the fly," we use
+**proxies.** These are like a telephone that lets R (server side) and
+JavaScript (client side) talk directly to adjust a widget without
+refashioning any aspects that don't need adjustment.
 
-`DT`'s function `dataTableProxy()` takes as input the `outputId` of the
-table we're updating. We then pipe that call into the helper function
-`replaceData()`, which specifically allows us to swap out the data being
-shown in a table's cells (and adjusting the number of these as needed).
+`DT`'s `dataTableProxy()` function takes as input the `outputId` of the
+table we're updating. We then pipe it into a helper function such as
+`replaceData()`, which specifically swaps out the data inside the
+table's cells (adjusting cell number as needed).
 
-Before we can use these tools, though, we should create a reason we'd
-need to swap one data set for another! Earlier, I mentioned that `DT`
-tables have a `selection` feature, which allows users to select
-rows/columns/cells. Doing so is an **event** that R Shiny can watch for,
-and although these events are not handled by default, we can change
-that!
+Before that though, we should create a reason we'd *need* to swap data
+sets! Earlier, I mentioned that `DT` tables have a `selection` feature,
+which allows users to select rows/columns/cells, an **event** Shiny can
+watch for. Although these events are not handled by default, we can
+change that!
 
-So, let's set up a system in which a user can click any cell in our
-table to select it. When they do, we'll filter the table to only rows
-sharing that same value in that same column (e.g., clicking a cell
-containing `Asia` will filter to only other rows containing data from
-`Asia`). Meanwhile, when no cell is selected, the table isn't filtered.
+Let's create a system in which users can click any cell to select it.
+When they do, we'll filter the table to only rows sharing that same
+value in that column (*e.g.*, clicking a cell containing `Asia` will
+filter to only rows also containing `Asia` for `continent`).
 
-Sounds complicated? It's actually not too bad! Below, we'll take this
-step by step. For each step, implement the coding change, run the app,
-and make sure you understand any changes you observe in how the app
-behaves.
+Meanwhile, when no cell is selected (or, equivalently, a selected cell
+gets deselected), no filtering is applied.
 
-First, let's use `renderTable({})` and `DTOutput()` to make the "base"
-version of our table, just as we have been. This time, though, the
-"bones" of the table made in this way will *never* change:
+Sounds complicated? Well, yes and no. There are a number of steps
+involved, but none are particularly involved.
+
+So, we'll go one step at a time. For each, implement the coding change,
+run the app, and make sure you understand any changes to the app's
+behaviors.
+
+First, let's turn on `selection` inside `datatable()` by changing the
+input from `"none"` to `list(mode = "single", target = "cell")`, which
+will enable users to select one cell at a time:
 
 
 ``` r
-##This code should **replace** the renderTable({}) call contained within your server.R file!
+##This code should **replace** ALL table-related code contained within your server.R file!
 
 ##... other server code...
 
-###TABLE
+###BASIC GAPMINDER TABLE
   output$basic_table = renderDT({
+    gap %>% 
+      datatable(
+        selection = list(mode = "single", target = "cell"), #<--TURN ON SINGLE-CELL SELECTION
+        options = list(
+          info = FALSE, 
+          ordering = FALSE, 
+          searching = FALSE 
+        )
+      ) %>%
+      formatRound(columns = "gdpPercap", digits = 2) %>%
+      formatStyle(columns = "continent", textAlign = "center") %>% 
+      formatStyle(
+        columns = "lifeExp", 
+        target = "row", 
+        backgroundColor = styleEqual(
+          levels = gap$lifeExp, 
+          values = ifelse(gap$lifeExp > 70, "lightpink", "white") 
+        )
+      )
+  })
+
+  ##TABLE OBSERVER (BUTTON)
+  observeEvent(input$go_button, { 
     
-    ##STEP 1: WE SIMPLIFY OUR renderDT({}) CALL SO IT CONTAINS NO REACTIVE OBJECTS. THIS WILL RUN ONLY ONCE, AS THE APP STARTS. 
-    gap %>%
-      datatable(
-        selection = "none",
-        options = list(
-          info = FALSE,
-          ordering = FALSE,
-          searching = FALSE
+    output$basic_table = renderDT({
+      gap %>% 
+        arrange(!!sym(input$sorted_column)) %>% 
+        datatable(
+          selection = list(mode = "single", target = "cell"), #<--SAME AS ABOVE
+          options = list(
+            info = FALSE, 
+            ordering = FALSE,
+            searching = FALSE 
+          )
+        ) %>%
+        formatRound(columns = "gdpPercap", digits = 2) %>%
+        formatStyle(columns = "continent", textAlign = "center") %>% 
+        formatStyle(
+          columns = "lifeExp", 
+          target = "row", 
+          backgroundColor = styleEqual(
+            levels = gap$lifeExp, 
+            values = ifelse(gap$lifeExp > 70, "lightpink", "white")
+          )
         )
-      ) %>%
-      formatRound(columns = "gdpPercap", digits = 2) %>%
-      formatStyle(columns = "continent", textAlign = "center") %>%
-      formatStyle(
-        columns = "lifeExp",
-        target = "row",
-        backgroundColor = styleEqual(
-          levels = gap$lifeExp,
-          values = ifelse(gap$lifeExp > 70, "lightpink", "white")
-        )
-      )
+    })
+    
   })
 ```
 
-Next, let's turn on `selection` inside `datatable()` by changing the
-input from `"none"` to `list(mode = "single", target = "cell")`, such
-that users can select single cells at a time:
+At this point, our table allows cell selection but doesn't yet respond
+to it. Perhaps more glaringly, though, we're still re-rendering the
+*entire* table every time the "Go!" button is pressed even though the
+"bones" of the table aren't changing. This requires us to duplicate a
+*lot* of code (pretty much all contents of our `renderDT({})`s—that's a
+sign we're being inefficient!
+
+Let's fix that by adjusting our `observeEvent({},{})` so that it uses
+`dataTableProxy()` and `replaceData()` to update, rather than remake,
+the table:
 
 
 ``` r
-##This code should **replace** the renderTable({}) call contained within your server.R file!
+##This code should **replace** the TABLE OBSERVER subsection of your server.R file!
 
 ##... other server code...
 
-###TABLE
-  output$basic_table = renderDT({
-    gap %>%
-      datatable(
-        selection = list(mode = "single", target = "cell"), #<--STEP 2: WE CHANGE SELECTION FROM NONE (NO SELECTION) TO ESSENTIALLY "SELECT UP TO ONE CELL AT A TIME."
-        options = list(
-          info = FALSE,
-          ordering = FALSE,
-          searching = FALSE
-        )
-      ) %>%
-      formatRound(columns = "gdpPercap", digits = 2) %>%
-      formatStyle(columns = "continent", textAlign = "center") %>%
-      formatStyle(
-        columns = "lifeExp",
-        target = "row",
-        backgroundColor = styleEqual(
-          levels = gap$lifeExp,
-          values = ifelse(gap$lifeExp > 70, "lightpink", "white")
-        )
-      )
+##TABLE OBSERVER (BUTTON)
+  observeEvent(input$go_button, { 
+    
+    #SORT THE DATA AS USUAL...
+   gap_sorted = gap %>% 
+      arrange(!!sym(input$sorted_column))
+    
+    #FEED THE SORTED DATA INTO A PROXY...
+    dataTableProxy("basic_table") %>%
+      #THEN, SIMPLY SWAP OUT THE OLD DATA FOR THE NEW (NO RE-RENDERING!). ALSO, KEEP CELL SELECTION AS IT WAS.
+      replaceData(data = gap_sorted, #<--NOTE CHANGE IN DF REFERENCED HERE.
+                  clearSelection = FALSE)
+    
+  })
+  ##IF YOU MAKE THIS CHANGE, THE APP SHOULD WORK AS IT HAS, EXCEPT THE CHANGES TO THE TABLE WHEN HITTING THE GO BUTTON SHOULD BE SUBTLER AND SMOOTHER THAN BEFORE.
+```
+
+This observer is now much cleaner than before. All adjustments to the
+table's features and aesthetics happen up front and then never again in
+the original `renderDT({})` call, whereas the sorting (and *only* the
+sorting) happens in the observer. We also don't re-render the table;
+instead, we use a proxy to swap in new data.
+
+...Of course, we still need to also watch for changes in cell selection.
+But how?
+
+Like others widget, *`DT`s pass information from the UI to the server
+using the `input` object*,and we can access that information server-side
+using `input$outputId_*` format.
+
+In this case, the `*` will be `cells_selected` because that's the
+**event type** of interest:
+
+
+``` r
+##This code should be **added to** your server.R file, below all previous code but within your server function!
+
+##... other server code...
+
+##TABLE OBSERVER (CELL SELECTION)
+  observeEvent(input$basic_table_cells_selected, {
+    
+    print(input$basic_table_cells_selected) #<--PRINT TO THE R CONSOLE THE CONTENTS OF THIS OBJECT EVERY TIME THIS EXPRESSION EXECUTES.
+
   })
 ```
 
-At this point, our table no longer responds to our drop-down menu or
-button because we're removed the corresponding `input` subobjects from
-the `renderDT({})` code block.
-
-It also doesn't yet respond to cell selection. Let's fix that by
-introducing an '`observeEvent({},{})` that watches for the "Go!" button
-and arranges the data according to our selection in our drop-down menu.
-This time, though, we'll use `dataTableProxy()` and `replaceData()` to
-update, rather than remake, the table:
-
-
-``` r
-##This code should be **added to** your server.R file inside your server function and preferrably below your renderTable({}) call!
-
-##... other server code...
-
-###TABLE OBSERVER (CELL SELECTION)
-##STEP 3: ADD AN OBSERVER WATCHING OUR BUTTON. WHEN IT'S PRESSED, SORT OUR DATA. 
-observeEvent(input$go_button, {
-
-   gap_sorted = gap %>% 
-      arrange(!!sym(input$sorted_column))
-
-   #FEED THE SORTED DATA INTO A PROXY TO UPDATE JUST THE CONTENTS OF OUR TABLE'S CELLS. 
-    dataTableProxy("basic_table") %>%
-    replaceData(data = gap_sorted, 
-                clearSelection = FALSE) #<-BUT KEEP ANY NEWLY SELECTED CELLS SELECTED!
- })
-```
-
-This observer restores the original functionality of our button and
-drop-down menu, but it *doesn't* yet handle cell selection. We need this
-observer to also watch for changes in cell selections too. But how?
-
-Like others widget, *`DT` tables pass information from the UI to the
-server constantly using the `input` object.* We can access that
-information server-side using `input$outputId_*` format.
-
-In this case, the `*` here will be `cells_selected` because that's the
-event type we're interested in. By making our first expression to
-`observeEvent({},{})` into a list, we can have our observer watch more
-than one input for changes:
-
-
-``` r
-##This code should **replace** the observeEvent({},{}) we introduced in the previous example!
-
-##... other server code...
-
-###TABLE OBSERVER (CELL SELECTION)
-##STEP 4: EXTEND THE FIRST EXPRESSION IN OUR OBSERVE TO A LIST INCLUDING BOTH THE GO BUTTON AND THE REACTIVE OBJECT FOR TABLE CELL CLICKS.
-observeEvent(list(input$go_button,
-                  input$basic_table_cells_selected), {
-                    
-  ##THIS LINE WILL PRINT TO THE R CONSOLE THE INFO SENT TO THE SERVER WHEN A CELL IS CLICKED. YOU'LL SEE IT'S A MATRIX WITH 1 ROW AND 2 COLUMNS CONTAINING THE ROW AND COLUMN NUMBERS OF THE CELL SELECTED.
-  print(input$basic_table_cells_selected)
-
-   gap_sorted = gap %>% 
-      arrange(!!sym(input$sorted_column))
-   
-    dataTableProxy("basic_table") %>%
-    replaceData(data = gap_sorted, 
-                clearSelection = FALSE) 
- })
-```
+Here, we learn a little trick: R's `print()` function can be used to
+show the current value of a **reactive object** at specific time points.
+This is useful for seeing what reactive objects look like, as in this
+case. It can also be useful for debugging (*e.g.*, to see when an
+observer detects (or fails to detect) an event).
 
 If you run the app now and start selecting cells, you'll observe that
 `input$basic_table_cells_selected` returns a matrix when accessed.
-Either this matrix has no rows (when no cell is selected) or one row
-with two values: a row number and a column number for the cell selected.
+Either this matrix has no rows (when no cell is selected, such as on
+start-up) or one row with two values: row and column numbers for the
+selected cell.
 
-We'll use that info to find the value in the cell selected as well as
-the name of the corresponding column. We can then filter our data set
-accordingly (all this requires some good-old "R" data wrangling!):
+![By using print(), we can see when our observer executes its second
+expression and also what our cell selection reactive object looks like
+when that happens.](fig/cell%20selection.gif)
+
+We can use that info being tracked to find the value in the selected
+cell plus the name of the column of the selected cell. We can then
+filter our data set accordingly (this just requires some good,
+old-fashioned "R" data wrangling! If the R code here is too much for
+you, just copy-paste it and don't worry too much about what exactly it
+does):
 
 
 ``` r
-##This code should **replace** the observeEvent({},{}) we introduced in the previous example!
+##This code should **replace** the TABLE OBSERVER subsection of your server.R file!
 
 ##... other server code...
 
-  ###TABLE OBSERVER (CELL SELECTION)
-  observeEvent(list(input$go_button, input$basic_table_cells_selected), {
+##TABLE OBSERVER (CELL SELECTION)
+  observeEvent(input$basic_table_cells_selected, {
+    
+    req(input$basic_table_cells_selected) #<--THE req() FUNCTION WORKS A BIT LIKE IF--IF THE CONTENTS DON'T EXIST, NOTHING ELSE BELOW req() WILL RUN.
+    
+    #WHAT WAS THE VALUE IN THE SELECTED CELL?
+    val2match = gap[input$basic_table_cells_selected[1],
+                    input$basic_table_cells_selected[2],
+                    drop = T] #<--PRODUCE A VECTOR, NOT A DATA FRAME
+    
+    #WHAT WAS THE NAME OF THE COLUMN OF THE SELECTED CELL?
+    col2match = names(gap)[input$basic_table_cells_selected[2]]
+    
+    #FILTER THE DATA SET BY THAT COLUMN TO ONLY CELLS WITH THAT SAME VALUE.
+    gap_filtered = gap[gap[, col2match] == val2match, ]
+    
+    dataTableProxy("basic_table") %>%
+      replaceData(data = gap_filtered, #<--REFERENCE gap_filtered HERE. 
+                  clearSelection = FALSE)
 
-    ##STEP 5: WE GET THE VALUE IN THE CELL SELECTED...
-      val2match = gap[input$basic_table_cells_selected[1], input$basic_table_cells_selected[2], drop = T]
-      
-    #...AND THE NAME OF THE COLUMN SELECTED...
-      col2match = names(gap)[input$basic_table_cells_selected[2]]
-      
-    #...AND FILTER TO ONLY ROWS MATCHING THAT VALUE.
-      gap_filtered = gap[gap[, col2match] == val2match, ]
-      
-      #WE ARRANGE AS NORMAL...
-      gap_sorted = gap_filtered %>% #<-BUT UPDATE TO gap_filtered here.
-        arrange(!!sym(input$sorted_column))
-      
-      dataTableProxy("basic_table") %>%
-        replaceData(data = gap_sorted,
-                    clearSelection = FALSE)
-      
   })
 ```
 
-If the "normal R" code in this example looks stressful, don't worry
-about the specifics—just read my comments to know what we're trying to
-accomplish.
+Here, we meet another handy tool: `req()`. `req()` checks to make sure
+its contents exist (*i.e.*, aren't `NULL`, `NA`, blank, etc.). If they
+don't, all remaining code beneath `req()` won't run.
 
-Our observer now works great! Try it and see for yourself.
+We need it here because `input$basic_table_cells_selected` won't exist
+sometimes (like on start-up and when no cells are selected). In those
+instances, the rest of our code in this observer would break.
+
+Our observer works! ...Or does it? Try it and see:
+
+![The filtering doesn't work the way it ought to--when we click on an
+'Asia' cell, we get back 'Africa' results. What
+gives?](fig/bad%20filtering.gif)
+
+On the first click, we get the behavior we expect—if we click a cell
+containing `Asia`, we get back *only* other results from `Asia`.
+However, depending upon where we click next, we might get back the wrong
+results. Can you guess why?
+
+The issue is this command:
+
+
+``` r
+val2match = gap[input$basic_table_cells_selected[1], 
+                input$basic_table_cells_selected[2], 
+                drop = T]
+```
+
+We use the row and column numbers in `input$basic_table_cells_selected`
+to find the value inside the cell selected by finding that same cell in
+`gap`.
+
+This works great...the *first* time. However, the *second* time,
+`input$basic_table_cells_selected` contains row and column numbers based
+on a *filtered* version of `gap`, but we still try to use those row and
+column numbers to pull a value out of the *original* version of `gap`.
+They probably won't line up!
+
+It seems we need to track the data set so that we're always referencing
+the one users can actually see, especially if they've already filtered
+one or more times.
+
+This looks like a job for a **reactive value**! Like `input` and
+`output`, a reactive value is a "changeable object" that R knows to
+watch for events. Unlike `input` and `output`, though, we create
+reactive values ourselves and can code exactly when and how they change.
+We create a reactive value using `reactiveVal()`, placing the starting
+value inside the parentheses:
+
+
+``` r
+##This code should **added to** your server.R file anywhere inside your server function but outside any reactive contexts!
+
+##... other server code...
+
+current_data = reactiveVal(gap) #<--WHEN THE APP STARTS, WE STORE gap AS THE STARTING DATA SET.
+```
+
+From then on, if we want to access the reactive value's current value,
+we use its name like a function, *e.g.*, `current_data()`. If we want to
+*change* the reactive value's current value, we can put the new value
+inside the parentheses, *e.g.*, `current_data(new)`.
+
+Let's enhance both our observers so that they reference
 
 ...Except there's no "undo." Once we select a cell, we filter out all
 rows that don't match, and those rows are "lost" to the user because

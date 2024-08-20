@@ -149,7 +149,7 @@ If you run your app at this point, you should get something that looks
 like this:
 
 ![Our Shiny app with our basic HTML table of the gapminder data
-set.](fig/basic table.png)
+set.](fig/basic%20table.png)
 
 Which is cool! But not *terribly* exciting...it looks a little drab, and
 users can't actually **do** anything with this table except look at it.
@@ -210,7 +210,7 @@ like `selectInput()`, so it's a good first example.
 
 Now, our app should look like this:
 
-![Our new select input widget.](fig/select input.png)
+![Our new select input widget.](fig/select%20input.png)
 
 Very nice!
 
@@ -259,7 +259,7 @@ better!
 
 ![Now our choices look much more human-readable for our users, but the
 original column names are preserved for work behind the scenes
-too.](fig/prettier choices.png)
+too.](fig/prettier%20choices.png)
 
 ...Except that fiddling with the drop-down still doesn't *do*
 anything...*yet*. We've created something a user can interact with,
@@ -291,7 +291,7 @@ drop-down menu, the table *automatically* rebuilds, sorted by the column
 you've picked:
 
 ![Now, when a user selects a new column using our drop-down widget, the
-table re-sorts by that column.](fig/sorting by column.gif)
+table re-sorts by that column.](fig/sorting%20by%20column.gif)
 
 Earlier, we met the `output` object, which passes rendered elements from
 the server to the UI where they can be seen. Here, we finally meet
@@ -459,7 +459,7 @@ bottom, as quickly as possible as soon as that context is triggered to
 :::
 :::
 
-### Buttoning this up
+## Buttoning this up
 
 By this point, R now knows that:
 
@@ -527,7 +527,7 @@ pressed yet) will be passed from the UI to the server via
 `input$go_button`.
 
 ![A new "Go" button has been added to the app's sidebar
-panel.](fig/go button.png)
+panel.](fig/go%20button.png)
 
 Now, we need to tell R how to **handle** presses of our button (until
 then, pressing it won't do anything!).
@@ -576,9 +576,9 @@ guidance.
 
 ![Thanks to isolate(), our table only re-renders when the "Go" button is
 pressed, but the drop-down menu's current value is still used in that
-process.](fig/go button works.gif)
+process.](fig/go%20button%20works.gif)
 
-### Being observant
+## Being observant
 
 This *works*, but it can get unwieldy if you have *many* inputs that
 would need isolating. For those situations in which you want the app to
@@ -632,7 +632,7 @@ apps—they make an app's behaviors far more predictable. [However, if you
 have a lot of events to handle, this may be a verbose way to handle
 them. Check out `observe({})` as a potential alternative.]
 
-### Totally tabular
+## Totally tabular
 
 We now have all the conceptual tools needed to build a really cool app!
 In the next lesson, we'll replace this table with a cooler one, and
@@ -670,8 +670,8 @@ Now, if we look at our app, we'll see we have three tabs in our main
 panel area, with `title`s as specified in our code.
 
 ![We've split our "main panel" into three tab panels inside a tabset
-panel, with one tab per fancy widget we will eventually have.
-](fig/new tabset .png)
+panel, with one tab per fancy widget we will eventually
+have.](fig/new%20tabset%20.png)
 
 We can swap between tabs using each tab panel's tab (yes, the
 terminology here is awkward), just like in a browser. The second and
