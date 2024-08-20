@@ -178,6 +178,9 @@ library(countrycode)
 
 ### LOAD DATA SETS 
 gap = gapminder
+#THESE TWO LINES WILL HELP US LATER.
+gap$country = as.character(gap$country)
+gap$continent = as.character(gap$continent)
 ```
 
 By having a `global.R` file, we can place things like `library()` calls
@@ -450,7 +453,7 @@ sub-menu:
 ![The developer tools dashboard is one of the most powerful tools in a
 web developer's toolbox. For example, it can be used to grab the
 selector for any element you wish to style using
-CSS.](fig/copy selector.png)
+CSS.](fig/copy%20selector.png)
 
 Doing this would put `#header` into your clipboard, in this case.
 
