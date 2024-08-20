@@ -206,7 +206,7 @@
 <div class="accordion accordion-flush" id="accordionFlush2">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading2">
-        <a href="shiny_1.html">1. Web development 101</a>
+        <a href="shiny_1.html">1. Welcome to the Web!</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -243,8 +243,8 @@
 
     <div id="flush-collapsecurrent" class="accordion-collapse collapse show" aria-labelledby="flush-headingcurrent" data-bs-parent="#accordionFlushcurrent">
       <div class="accordion-body">
-        <ul><li><a href="#disclaimer">Disclaimer</a></li>
-<li><a href="#introduction">Introduction</a></li>
+        <ul><li><a href="#turning-the-tables">Turning the tables</a></li>
+<li><a href="#update-dont-remake-dt-edition">Update, don’t remake, DT edition!</a></li>
 <li><a href="#getting-graphic">Getting graphic</a></li>
         </ul></div><!--/div.accordion-body-->
     </div><!--/div.accordion-collapse-->
@@ -310,7 +310,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>DTs and Leaflets and Plotlys, Oh my!</h1>
-        <p>Last updated on 2024-07-11 |
+        <p>Last updated on 2024-08-20 |
 
         <a href="https://github.com/carpentries/r_shiny_workshop/edit/main/episodes/shiny_4.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -329,13 +329,13 @@
 <div class="card-body">
 <div class="inner">
 <h3 class="card-title">Questions</h3>
-<ul><li>How do I add an interactive map, table, or graph to my app?</li>
-<li>What types of interactivity will these widgets come with?</li>
-<li>How do I adjust the look and feel of these widgets?</li>
-<li>How can I modify these widgets in response to user actions without
-completely “starting over?”</li>
-<li>What event types related to these widgets can I watch for, and how
-would I handle them?</li>
+<ul><li>How do I add an interactive map/table/graph to my app?</li>
+<li>What features do these widgets have?</li>
+<li>How do I adjust the aesthetics of these widgets?</li>
+<li>How can I modify these widgets to handle user actions without
+“starting over?”</li>
+<li>What events related to these widgets can I watch for, and how would
+I handle them?</li>
 </ul></div>
 </div>
 </div>
@@ -343,99 +343,104 @@ would I handle them?</li>
 <div class="card-body">
 <div class="inner bordered">
 <h3 class="card-title">Objectives</h3>
-<ul><li>Name the essential components of the <code>DT</code>,
-<code>leaflet</code> and <code>plotly</code> packages.</li>
-<li>Experiment with the interactive features that come baked into the
-plots, tables, and maps produced by these packages.</li>
+<ul><li>Name essential tools from the <code>DT</code>, <code>leaflet</code>
+and <code>plotly</code> packages.</li>
+<li>Experiment with the interactive features baked into the
+plots/tables/maps produced by these packages.</li>
 <li>Customize the look and feel of these complex interactive
 graphics.</li>
-<li>Favor updating complex interactive graphics instead of remaking them
-whenever possible.</li>
-<li>Use <strong>proxies</strong> to update only those aspects of a
-complex interactive graphic that <em>need</em> updating.</li>
-<li>Recognize the event types a user might trigger with respec to these
-complex interactive graphics and the systems for watching for and
-handling them.</li>
+<li>Update complex interactive graphics instead of remaking them when
+possible by using <strong>proxies</strong>.</li>
+<li>Recognize events a user might trigger with respect to these complex
+interactive graphics, and know how to watch for and handle them.</li>
 </ul></div>
 </div>
 </div>
 </div>
 </div>
-<section><h2 class="section-heading" id="disclaimer">Disclaimer<a class="anchor" aria-label="anchor" href="#disclaimer"></a>
-<a class="anchor" aria-label="anchor" href="#disclaimer"></a></h2>
-<hr class="half-width"><p>At two points in this lesson, the example code will produce
+<div class="section level3">
+<h3 id="disclaimer">Disclaimer<a class="anchor" aria-label="anchor" href="#disclaimer"></a></h3>
+<p><em>At points in this lesson, the example code produces
 <strong>warnings</strong> (not <strong>errors</strong>!) when executed.
-These can be ignored; the code works as intended!</p>
-</section><section><h2 class="section-heading" id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
-<a class="anchor" aria-label="anchor" href="#introduction"></a></h2>
-<hr class="half-width"><p>While <strong>input widgets</strong> such as sliders, drop-down
-menus, checkboxes, and buttons are powerful ways to give our users
-control, they aren’t always interesting or useful <em>by
-themselves</em>. There are <em>much</em> more powerful widgets!</p>
-<p>And, since we’re building our apps using R—a programming language
-<em>designed for</em> working with data—it make senses we’d specifically
-want to include some widgets that put <em>data</em> at our users’
-fingertips in interesting and useful ways.</p>
-<p>Of all data-centered widgets, few are more familiar than
+These can be ignored!</em></p>
+</div>
+<div class="section level3">
+<h3 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a></h3>
+<p>While <strong>input widgets</strong> like drop-down menus and buttons
+are powerful ways to give users control, they aren’t always
+transformative <em>by themselves</em>. There are <em>much</em> more
+powerful widgets out there!</p>
+<p>And, since our app’s server side is powered by R—a programming
+language <em>designed for</em> data work—it make senses we’d include
+widgets that put <em>data</em> at our users’ fingertips in interesting
+ways.</p>
+<p>Of all the data-centered widgets, few are more familiar than
 <strong>tables</strong>, <strong>maps</strong>, and
 <strong>graphs</strong>. Because these are <em>so</em> ubiquitous, it
-probably won’t be surprising to learn there are JavaScript-native
-packages for creating web-enabled, interactive versions of these
-graphics. While there are other such packages, here we’ll explore
+probably won’t surprise you that there are JavaScript-native packages
+for creating web-enabled, interactive versions of these graphic
+types.</p>
+<p>While there are other such packages, here we’ll explore
 <code>DT</code> (for tables), <code>leaflet</code> (for maps), and
 <code>plotly</code> (for graphs), since each has been ported into R + R
 Shiny via packages of the same names.</p>
-<p>Each of these packages could <em>easily</em> be a course unto itself!
-As such, we’ll look <em>only</em> at the basics—greater depth can be
-found elsewhere once you have learned the ropes.</p>
+<p>Each of these could <em>easily</em> be a course unto itself! As such,
+we’ll look <em>only</em> at the cross-cutting basics—greater depth can
+be found elsewhere once you’ve learned the ropes.</p>
 <p>Learning <code>leaflet</code> and <code>plotly</code>, specifically,
-come with particular challenges we’ll skirt around:</p>
-<ul><li><p><code>leaflet</code> is for maps, which depend on <strong>spatial
-data</strong>. These and the packages that work with them
+come with challenges we’ll have to skirt around:</p>
+<ul><li><p><code>leaflet</code> builds maps, which represent <strong>spatial
+data</strong>. These, and the packages that work with them
 (<em>e.g.</em>, <code>sf</code>), are <em>complicated</em>! I’ll gloss
-over all the details to focus just on <code>leaflet</code>, but we’ll
-need to borrow tools from <code>sf</code> and others to accomplish
-anything at all.</p></li>
-<li><p>If you are familiar with <code>ggplot2</code> (or another data
-viz package), you already know that learning to make graphs
-programmatically demands a new “vocabulary.” <code>plotly</code> has the
-same learning curve (perhaps steeper for R users, since it’s
-<em>very</em> JavaScript-like whereas <code>ggplot2</code> is more
-R-like). We’ll engage with just the minimum of <code>plotly</code>, but
-even that may be a lot for many learners.</p></li>
-</ul><p>Let’s start simple—let’s upgrade the table we already have by
-swapping it for a <code>DT</code> table. Of the packages we’re learning
-here, <code>DT</code> is easiest, and it introduces all the key concepts
-we’ll need for <code>leaflet</code> and <code>plotly</code>.</p>
-<div class="section level3">
-<h3 id="turning-the-tables">Turning the tables<a class="anchor" aria-label="anchor" href="#turning-the-tables"></a></h3>
-<div class="section level4">
-<h4 id="basic-table">Basic table<a class="anchor" aria-label="anchor" href="#basic-table"></a></h4>
-<p>Let’s start by simply swapping our <code>renderTable({})</code> and
-<code>tableOutput()</code> calls with the equivalent
+over the details, but we’ll still need to occasionally borrow tools from
+<code>sf</code> to accomplish anything at all.</p></li>
+<li><p>If you’re familiar with <code>ggplot2</code> (or a comparable
+data viz package), you already know that learning programmatica
+graph-making has a steep learning curve. <code>plotly</code> has the
+same curve (perhaps even a steeper one for R users, since it’s
+<em>very</em> JavaScript-like, whereas <code>ggplot2</code> is more
+R-like). Again, I’ll gloss over the details, but even the basics may be
+a heavy lift for some.</p></li>
+</ul><p>Let’s start simple—let’s swap out our functional but drab table for a
+better, <code>DT</code> table. Of the packages we’re learning here,
+<code>DT</code> is easiest (IMHO), and it can introduce us to all the
+key concepts we’ll need to tackle <code>leaflet</code> and
+<code>plotly</code>.</p>
+</div>
+<section><h2 class="section-heading" id="turning-the-tables">Turning the tables<a class="anchor" aria-label="anchor" href="#turning-the-tables"></a>
+<a class="anchor" aria-label="anchor" href="#turning-the-tables"></a></h2>
+<hr class="half-width"><div class="section level3">
+<h3 id="basic-table">Basic table<a class="anchor" aria-label="anchor" href="#basic-table"></a></h3>
+<p>All we have to do to swap our tables is change our
+<code>renderTable({})</code> and <code>tableOutput()</code> calls into
 <code>renderDT({})</code> and <code>dataTableOutput()</code> calls,
-which work identically but yield a <code>DT</code>-style table
-instead:</p>
+which yield a <code>DT</code> table instead:</p>
 <div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">##This code should **replace** the renderTable({}) call contained within your server.R file!</span></span>
+<code class="sourceCode R"><span><span class="co">##This code should **replace** ALL table-related code contained within your server.R file!</span></span>
 <span></span>
-<span><span class="co">###TABLE</span></span>
-<span>  <span class="va">output</span><span class="op">$</span><span class="va">basic_table</span> <span class="op">=</span> <span class="fu">renderDT</span><span class="op">(</span><span class="op">{</span> <span class="co">#&lt;--CHANGE FUNCTION NAME HERE.</span></span>
+<span><span class="co">###BASIC GAPMINDER TABLE</span></span>
+<span>  <span class="va">output</span><span class="op">$</span><span class="va">basic_table</span> <span class="op">=</span> <span class="fu">renderDT</span><span class="op">(</span><span class="op">{</span> <span class="co">#&lt;--ONLY CHANGES HERE.</span></span>
+<span>    <span class="va">gap</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span>  </span>
+<span><span class="co">##TABLE OBSERVER (BUTTON)</span></span>
+<span>  <span class="fu">observeEvent</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">go_button</span>, <span class="op">{</span> </span>
 <span></span>
-<span>    <span class="va">input</span><span class="op">$</span><span class="va">go_button</span></span>
+<span>    <span class="va">output</span><span class="op">$</span><span class="va">basic_table</span> <span class="op">=</span> <span class="fu">renderDT</span><span class="op">(</span><span class="op">{</span> <span class="co">#&lt;--...AND HERE.</span></span>
+<span>      <span class="va">gap</span> <span class="op">%&gt;%</span> </span>
+<span>        <span class="fu">arrange</span><span class="op">(</span><span class="op">!</span><span class="op">!</span><span class="fu">sym</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">sorted_column</span><span class="op">)</span><span class="op">)</span> </span>
+<span>    <span class="op">}</span><span class="op">)</span></span>
 <span>    </span>
-<span>    <span class="va">gap</span> <span class="op">%&gt;%</span></span>
-<span>      <span class="fu">arrange</span><span class="op">(</span><span class="op">!</span><span class="op">!</span><span class="fu">sym</span><span class="op">(</span><span class="fu">isolate</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">sorted_column</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="op">}</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">##This code should **replace** the "main panel" cell's content within the BODY section of your ui.R file!</span></span>
+<code class="sourceCode R"><span><span class="co">##This code should **replace** the content of the "main panel" cell within the BODY section of your ui.R file!</span></span>
 <span></span>
 <span><span class="co">##... other UI code...</span></span>
 <span></span>
@@ -443,372 +448,487 @@ instead:</p>
 <span>    <span class="fu">column</span><span class="op">(</span>width <span class="op">=</span> <span class="fl">8</span>, <span class="fu">tabsetPanel</span><span class="op">(</span></span>
 <span>      <span class="co">###TABLE TAB</span></span>
 <span>      <span class="fu">tabPanel</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Table"</span>, </span>
-<span>               <span class="fu">dataTableOutput</span><span class="op">(</span><span class="st">"basic_table"</span><span class="op">)</span><span class="op">)</span>, <span class="co">#&lt;--CHANGE FUNCTION NAME HERE.</span></span>
+<span>               <span class="fu">dataTableOutput</span><span class="op">(</span><span class="st">"basic_table"</span><span class="op">)</span><span class="op">)</span>, <span class="co">#&lt;--ONLY CHANGE HERE</span></span>
 <span>      <span class="co">###MAP TAB</span></span>
-<span>      <span class="fu">tabPanel</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Map"</span>,</span>
+<span>      <span class="fu">tabPanel</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Map"</span><span class="op">)</span>,</span>
 <span>      <span class="co">###GRAPH TAB</span></span>
-<span>      <span class="fu">tabPanel</span><span class="op">(</span></span>
-<span>        title <span class="op">=</span> <span class="st">"Graph"</span>,</span>
-<span>      <span class="op">)</span></span>
-<span>    <span class="op">)</span><span class="op">)</span></span>
+<span>      <span class="fu">tabPanel</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Graph"</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
 <span>   <span class="op">)</span></span>
 <span></span>
 <span><span class="co">##... other UI code...</span></span></code></pre>
 </div>
 <p>Once you’ve made those swaps, restart your app.</p>
-<p>You’ll <em>immediately</em> notice our table looks <em>very</em>
-different:</p>
-<ul><li><p>It’s <strong>paginated</strong>, <em>i.e.</em>,“divided into
-pages.” Users flip pages using buttons in the bottom-right. Users also
-change the page length using a drop-down menu in the top-left. These
-features allow users to limit the data shown at one time, and they also
-keeps the table from being long vertically if there are many rows’ worth
-of data.</p></li>
+<p>When you do, you’ll <em>immediately</em> notice our table looks
+<em>very</em> different:</p>
+<figure><img src="fig/DT%20table%20features.png" alt="The DT table above shows off several of the features that come standard, including pagination, searching, row selection, and column sorting." class="figure mx-auto d-block"><div class="figcaption">The DT table above shows off several of the
+features that come standard, including pagination, searching, row
+selection, and column sorting.</div>
+</figure><ul><li><p>It’s <strong>paginated</strong>, <em>i.e.</em>,“divided into
+pages.” Users flip pages using buttons in the bottom-right. Users can
+also change page length using a drop-down menu in the top-left. These
+features allow users to limit how much data is shown at once, and they
+also keep the table from being long vertically if there’s a lot of data
+to show.</p></li>
 <li><p>It’s <strong>searchable</strong>—users can type
-<strong>strings</strong> (chunks of letters, numbers, and/or symbols)
-into the search box in the upper-right; the table will filter to only
-rows containing that string anywhere.</p></li>
+<strong>strings</strong> (chunks of letters/numbers/symbols) into the
+search box in the upper-right; the table will filter to only rows
+containing that string in any column.</p></li>
 <li><p>It’s <strong>sortable</strong>—users can click the up/down arrows
-next to column names to sort the table. You’ll note that this
-functionality makes our drop-down menu widget obsolete (for
-now)!</p></li>
-<li><p>It’s (modestly) styled—it’s snazzier-looking than our previous
-Shiny table because it comes with some CSS automatically applied (bold
-column names and “zebra striping” of rows, as two examples).</p></li>
+next to each column name to sort the table by that column. You’ll note
+this functionality makes our drop-down menu a bit redundant!</p></li>
+<li><p>It’s (modestly) styled—it’s snazzier than our previous table
+because it comes with <em>some</em> automatic CSS (bolded column names
+and row “zebra striping,” as two examples).<br><br>
+[Side-note: Web developers call elements with pre-set CSS
+<strong>opinionated</strong>. Opinionated elements are nice in that they
+often require less custom styling, but if you do choose to restyle them,
+it can be hard to overcome their “opinions.”]</p></li>
 <li><p>It’s <strong>selectable</strong>—users can click to highlight
-(“select”) rows. This doesn’t actually do anything server-side by
-default, but it could.</p></li>
-</ul><p>Now that we have a <code>DT</code> table, there are four things we’ll
-<em>very</em> commonly want to do with one (or any similarly complex
-interactive graphic): 1) simplify it, 2) restyle it, 3) watch it for
-<strong>events</strong>, and 4) update it to <strong>handle</strong>
-those events.</p>
-<p>Let’s start with the first two of these desires.</p>
+(“select”) rows. This <strong>event</strong> doesn’t actually do
+anything by default besides changing the table’s appearance, but it
+could.</p></li>
+</ul><p>Now that we have a <code>DT</code> table (a complex interactive
+graphic), there are four things we’ll <em>very</em> commonly want to do
+with one (or any similarly complex interactive graphic):</p>
+<ol style="list-style-type: decimal"><li><p>Simplify it,</p></li>
+<li><p>Restyle it,</p></li>
+<li><p>Watch it for <strong>events</strong>, and</p></li>
+<li><p>Update it to <strong>handle</strong> those events.</p></li>
+</ol><p>Let’s tackle the first two items above first.</p>
 </div>
-<div class="section level4">
-<h4 id="more-or-less-basic-dt">More (or less) basic DT<a class="anchor" aria-label="anchor" href="#more-or-less-basic-dt"></a></h4>
-<p>As we just saw, <code>DT</code> tables come standard with many
-interactive features! However, “more” is not always “better” from a
-<strong>UX</strong> (user experience) standpoint. Some might find
+<div class="section level3">
+<h3 id="more-or-less-basic-dt">More (or less) basic DT<a class="anchor" aria-label="anchor" href="#more-or-less-basic-dt"></a></h3>
+<p>As we just saw, <code>DT</code>s come with many interactive features!
+However, “more” is not always “better” from a <strong>UX</strong>
+(<strong>user experience</strong>) standpoint. Some users might find
 certain features confusing, especially if they aren’t necessary, are
-poorly explained, or don’t do anything obvious. Others may find having a
-lot of features overwhelming, even if they understand them all.</p>
-<p>The <code>datatable()</code> function’s <code>options</code> input
-allows us to reel in the features included:</p>
+poorly explained, or don’t result in any obvious responses. Others may
+find having a lot of features overwhelming, even if they understand them
+all.</p>
+<p>The <code>datatable()</code> function’s <code>options</code> allows
+us to reel in the features our table comes with:</p>
 <div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">##This code should **replace** the renderTable({}) call contained within your server.R file!</span></span>
+<code class="sourceCode R"><span><span class="co">##This code should **replace** ALL table-related code contained within your server.R file!</span></span>
 <span></span>
-<span><span class="co">###TABLE</span></span>
+<span><span class="co">###BASIC GAPMINDER TABLE</span></span>
 <span>  <span class="va">output</span><span class="op">$</span><span class="va">basic_table</span> <span class="op">=</span> <span class="fu">renderDT</span><span class="op">(</span><span class="op">{</span></span>
-<span></span>
-<span>    <span class="va">input</span><span class="op">$</span><span class="va">go_button</span></span>
-<span>    </span>
-<span>    <span class="va">gap</span> <span class="op">%&gt;%</span></span>
-<span>      <span class="fu">arrange</span><span class="op">(</span><span class="op">!</span><span class="op">!</span><span class="fu">sym</span><span class="op">(</span><span class="fu">isolate</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">sorted_column</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="va">gap</span> <span class="op">%&gt;%</span> </span>
 <span>      <span class="fu">datatable</span><span class="op">(</span></span>
-<span>        selection <span class="op">=</span> <span class="st">"none"</span>, <span class="co">#&lt;--TURNS OFF ROW HIGHLIGHTING</span></span>
+<span>        selection <span class="op">=</span> <span class="st">"none"</span>, <span class="co">#&lt;--TURNS OFF ROW SELECTION</span></span>
 <span>        options <span class="op">=</span> <span class="fu">list</span><span class="op">(</span></span>
 <span>          info <span class="op">=</span> <span class="cn">FALSE</span>, <span class="co">#&lt;--NO BOTTOM-LEFT INFO</span></span>
 <span>          ordering <span class="op">=</span> <span class="cn">FALSE</span>, <span class="co">#&lt;--NO SORTING</span></span>
 <span>          searching <span class="op">=</span> <span class="cn">FALSE</span> <span class="co">#&lt;--NO SEARCH BAR</span></span>
 <span>        <span class="op">)</span></span>
 <span>      <span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co">##TABLE OBSERVER (BUTTON)</span></span>
+<span>  <span class="fu">observeEvent</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">go_button</span>, <span class="op">{</span> </span>
+<span>    </span>
+<span>    <span class="va">output</span><span class="op">$</span><span class="va">basic_table</span> <span class="op">=</span> <span class="fu">renderDT</span><span class="op">(</span><span class="op">{</span></span>
+<span>      <span class="va">gap</span> <span class="op">%&gt;%</span> </span>
+<span>        <span class="fu">arrange</span><span class="op">(</span><span class="op">!</span><span class="op">!</span><span class="fu">sym</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">sorted_column</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>        <span class="co">#SAME AS ABOVE</span></span>
+<span>        <span class="fu">datatable</span><span class="op">(</span></span>
+<span>          selection <span class="op">=</span> <span class="st">"none"</span>, </span>
+<span>          options <span class="op">=</span> <span class="fu">list</span><span class="op">(</span></span>
+<span>            info <span class="op">=</span> <span class="cn">FALSE</span>, </span>
+<span>            ordering <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>            searching <span class="op">=</span> <span class="cn">FALSE</span> </span>
+<span>          <span class="op">)</span></span>
+<span>        <span class="op">)</span></span>
+<span>    <span class="op">}</span><span class="op">)</span></span>
+<span>    </span>
 <span>  <span class="op">}</span><span class="op">)</span></span></code></pre>
 </div>
-<p>That’s better! This version should be more digestible and intuitive
-(and easier to explain and program!).</p>
-<p>More broadly, <em>if a <code>DT</code> table or any other complex
-interactive graphic has a feature, you should assume there’s a way to
-turn that feature off (you may just have to Google for the specific
-input needed to do it).</em></p>
-<p>Next, let’s boost our table’s aesthetics a little. Let’s make three
-changes:</p>
+<p>That’s better! This version might be more digestible and intuitive
+for most users (and easier for us to explain and program around!).</p>
+<figure><img src="fig/disabled%20DT.png" alt="Notice that, in this DT, there are no sorting arrows, no search bar, no current page info in the bottom-left, and no row selection." class="figure mx-auto d-block"><div class="figcaption">Notice that, in this DT, there are no sorting
+arrows, no search bar, no current page info in the bottom-left, and no
+row selection.</div>
+</figure><p>More broadly, <em>if a <code>DT</code> table (or any other complex
+interactive graphic) has a feature, you should assume you can turn it
+off (you may just have to Google for the specific input
+needed).</em></p>
+<p>Next, let’s tinker with our table’s aesthetics. Let’s make three
+(idosyncratic) changes:</p>
 <ol style="list-style-type: decimal"><li><p>Round the GDP per capita data.</p></li>
 <li><p>Make the <code>continent</code> column center-aligned.</p></li>
 <li><p>Highlight in pink all rows with <code>lifeExp</code> values &gt;
 <code>70</code>.</p></li>
-</ol><p>We’ll use a functions from the <code>format*()</code> and
-<code>style*()</code> families to accomplish these goals, specifically
+</ol><p>We’ll use functions from the <code>format*()</code> and
+<code>style*()</code> families for this: specifically,
 <code>formatRound()</code>, <code>formatStyle()</code>, and
 <code>styleEqual()</code>:</p>
 <div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">##This code should **replace** the renderTable({}) call contained within your server.R file!</span></span>
+<code class="sourceCode R"><span><span class="co">##This code should **replace** ALL table-related code contained within your server.R file!</span></span>
 <span></span>
-<span><span class="co">###TABLE</span></span>
+<span><span class="co">###BASIC GAPMINDER TABLE</span></span>
 <span>  <span class="va">output</span><span class="op">$</span><span class="va">basic_table</span> <span class="op">=</span> <span class="fu">renderDT</span><span class="op">(</span><span class="op">{</span></span>
-<span></span>
-<span>    <span class="va">input</span><span class="op">$</span><span class="va">go_button</span></span>
-<span>    </span>
-<span>    <span class="va">gap</span> <span class="op">%&gt;%</span></span>
-<span>      <span class="fu">arrange</span><span class="op">(</span><span class="op">!</span><span class="op">!</span><span class="fu">sym</span><span class="op">(</span><span class="fu">isolate</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">sorted_column</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="va">gap</span> <span class="op">%&gt;%</span> </span>
 <span>      <span class="fu">datatable</span><span class="op">(</span></span>
-<span>        selection <span class="op">=</span> <span class="st">"none"</span>,</span>
+<span>        selection <span class="op">=</span> <span class="st">"none"</span>, <span class="co">#&lt;--TURNS OFF ROW SELECTION</span></span>
 <span>        options <span class="op">=</span> <span class="fu">list</span><span class="op">(</span></span>
-<span>          info <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>          ordering <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>          searching <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>          info <span class="op">=</span> <span class="cn">FALSE</span>, <span class="co">#&lt;--NO BOTTOM-LEFT INFO</span></span>
+<span>          ordering <span class="op">=</span> <span class="cn">FALSE</span>, <span class="co">#&lt;--NO SORTING</span></span>
+<span>          searching <span class="op">=</span> <span class="cn">FALSE</span> <span class="co">#&lt;--NO SEARCH BAR</span></span>
 <span>        <span class="op">)</span></span>
 <span>      <span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>      <span class="co">#HERE, WE WRITE 'R-LIKE' CSS. WE USE camelCase FOR PROPERTIES, TEXT STRINGS FOR VALUES, AND = INSTEAD OF : TO SEPARATE THEM (COMPARE TO [text-align: center;]).</span></span>
+<span>      <span class="co">#IN THESE FUNCTIONS, WE WRITE 'R-LIKE' CSS CODE. WE USE camelCase FOR PROPERTIES, TEXT STRINGS FOR VALUES, AND = INSTEAD OF : TO SEPARATE THEM.</span></span>
 <span>      <span class="fu">formatRound</span><span class="op">(</span>columns <span class="op">=</span> <span class="st">"gdpPercap"</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>      <span class="fu">formatStyle</span><span class="op">(</span>columns <span class="op">=</span> <span class="st">"continent"</span>, textAlign <span class="op">=</span> <span class="st">"center"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>      <span class="fu">formatStyle</span><span class="op">(</span>columns <span class="op">=</span> <span class="st">"continent"</span>, textAlign <span class="op">=</span> <span class="st">"center"</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="co">#&lt;--COMPARE TO [text-align: center;]</span></span>
 <span>      <span class="fu">formatStyle</span><span class="op">(</span></span>
-<span>        columns <span class="op">=</span> <span class="st">"lifeExp"</span>,</span>
-<span>        target <span class="op">=</span> <span class="st">"row"</span>,</span>
+<span>        columns <span class="op">=</span> <span class="st">"lifeExp"</span>, <span class="co">#&lt;--wHAT COLUMN WILL WE USE TO CONDITIONALLY FORMAT?</span></span>
+<span>        target <span class="op">=</span> <span class="st">"row"</span>, <span class="co">#&lt;--WILL WE STYLE ROWS OR CELLS?</span></span>
 <span>        backgroundColor <span class="op">=</span> <span class="fu">styleEqual</span><span class="op">(</span></span>
-<span>          levels <span class="op">=</span> <span class="va">gap</span><span class="op">$</span><span class="va">lifeExp</span>,</span>
-<span>          values <span class="op">=</span> <span class="fu">ifelse</span><span class="op">(</span><span class="va">gap</span><span class="op">$</span><span class="va">lifeExp</span> <span class="op">&gt;</span> <span class="fl">70</span>, <span class="st">"lightpink"</span>, <span class="st">"white"</span><span class="op">)</span></span>
+<span>          levels <span class="op">=</span> <span class="va">gap</span><span class="op">$</span><span class="va">lifeExp</span>, </span>
+<span>          values <span class="op">=</span> <span class="fu">ifelse</span><span class="op">(</span><span class="va">gap</span><span class="op">$</span><span class="va">lifeExp</span> <span class="op">&gt;</span> <span class="fl">70</span>, <span class="st">"lightpink"</span>, <span class="st">"white"</span><span class="op">)</span> <span class="co">#WHAT RULE WILL WE USE, AND WHAT NEW CSS VALUES WILL WE SET TO EACH POSSIBILITY?</span></span>
 <span>        <span class="op">)</span></span>
 <span>      <span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co">##TABLE OBSERVER (BUTTON)</span></span>
+<span>  <span class="fu">observeEvent</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">go_button</span>, <span class="op">{</span> </span>
+<span>    </span>
+<span>    <span class="va">output</span><span class="op">$</span><span class="va">basic_table</span> <span class="op">=</span> <span class="fu">renderDT</span><span class="op">(</span><span class="op">{</span></span>
+<span>      <span class="va">gap</span> <span class="op">%&gt;%</span> </span>
+<span>        <span class="fu">arrange</span><span class="op">(</span><span class="op">!</span><span class="op">!</span><span class="fu">sym</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">sorted_column</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>        <span class="fu">datatable</span><span class="op">(</span></span>
+<span>          selection <span class="op">=</span> <span class="st">"none"</span>, </span>
+<span>          options <span class="op">=</span> <span class="fu">list</span><span class="op">(</span></span>
+<span>            info <span class="op">=</span> <span class="cn">FALSE</span>, </span>
+<span>            ordering <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>            searching <span class="op">=</span> <span class="cn">FALSE</span> </span>
+<span>          <span class="op">)</span></span>
+<span>        <span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>        <span class="co">#SAME AS ABOVE</span></span>
+<span>        <span class="fu">formatRound</span><span class="op">(</span>columns <span class="op">=</span> <span class="st">"gdpPercap"</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>        <span class="fu">formatStyle</span><span class="op">(</span>columns <span class="op">=</span> <span class="st">"continent"</span>, textAlign <span class="op">=</span> <span class="st">"center"</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>        <span class="fu">formatStyle</span><span class="op">(</span></span>
+<span>          columns <span class="op">=</span> <span class="st">"lifeExp"</span>, </span>
+<span>          target <span class="op">=</span> <span class="st">"row"</span>, </span>
+<span>          backgroundColor <span class="op">=</span> <span class="fu">styleEqual</span><span class="op">(</span></span>
+<span>            levels <span class="op">=</span> <span class="va">gap</span><span class="op">$</span><span class="va">lifeExp</span>, </span>
+<span>            values <span class="op">=</span> <span class="fu">ifelse</span><span class="op">(</span><span class="va">gap</span><span class="op">$</span><span class="va">lifeExp</span> <span class="op">&gt;</span> <span class="fl">70</span>, <span class="st">"lightpink"</span>, <span class="st">"white"</span><span class="op">)</span></span>
+<span>          <span class="op">)</span></span>
+<span>        <span class="op">)</span></span>
+<span>    <span class="op">}</span><span class="op">)</span></span>
 <span>  <span class="op">}</span><span class="op">)</span></span></code></pre>
 </div>
-<p><code>format*()</code> functions ask us to pick 1+ columns to
+<figure><img src="fig/SPIFFY%20dt.png" alt="Now, our continent column values are center-aligned instead of left-aligned, our GDP data are less unruly (because we’ve rounded them), and any row with a life expectancy value &gt; 70 is now light pink, perhaps helping these rows stand out from all others." class="figure mx-auto d-block"><div class="figcaption">Now, our continent column values are
+center-aligned instead of left-aligned, our GDP data are less unruly
+(because we’ve rounded them), and any row with a life expectancy value
+&gt; 70 is now light pink, perhaps helping these rows stand out from all
+others.</div>
+</figure><p><code>format*()</code> functions ask us to pick 1+ columns to
 restyle. Then, we provide <strong>property</strong> and
-<strong>value</strong> pairings, just as in CSS, but using an “R-like”
-syntax instead, <em>e.g.</em>, <code>textAlign = center</code> in R
-Shiny versus <code>text-align: center;</code> in CSS.</p>
+<strong>value</strong> pairings as inputs, just as we would using CSS
+code, but using “R-like” syntax instead, <em>e.g.</em>,
+<code>textAlign = center</code> versus
+<code>text-align: center;</code>.</p>
 <p>If we want to format a column <strong>conditionally</strong>,
-<em>i.e.</em>, formatting only some rows according to a rule, we use the
-<code>style*()</code> functions. In the example above, we used
-<code>styleEqual()</code> to apply a light pink background to only rows
-with life expectancy greater than <code>70</code>.</p>
+<em>i.e.</em>, formatting only <em>some</em> rows according to a rule,
+we use the <code>style*()</code> functions. In the example above, we
+used <code>styleEqual()</code> to apply a light pink background to only
+rows with life expectancy greater than <code>70</code>. This might now
+stand out to users in ways that enable certain workflows.</p>
 </div>
-<div class="section level4">
-<h4 id="update-dont-remake">Update, don’t remake!<a class="anchor" aria-label="anchor" href="#update-dont-remake"></a></h4>
-<p>So far, when user actions have dictated a change to the data in our
+</section><section><h2 class="section-heading" id="update-dont-remake-dt-edition">Update, don’t remake, DT edition!<a class="anchor" aria-label="anchor" href="#update-dont-remake-dt-edition"></a>
+<a class="anchor" aria-label="anchor" href="#update-dont-remake-dt-edition"></a></h2>
+<hr class="half-width"><p>So far, when user actions have dictated change to the data in our
 table (<em>e.g.</em>, how it’s sorted), we’ve re-rendered the
 <em>entire</em> table to <strong>handle</strong> those
 <strong>events</strong>.</p>
-<p>While this works, it’s undesirable for (at least) three reasons:</p>
-<ol style="list-style-type: decimal"><li><p>With large data sets, it could be slow!</p></li>
+<p>This works, but it’s undesirable for (at least) three reasons:</p>
+<ol style="list-style-type: decimal"><li><p>With large data sets, it could be <em>slow</em>! Remember that,
+as R code executes server-side, the app will become completely
+unresponsive, so your users will have to sit around while your code
+finishes.</p></li>
 <li>
 <p>To the user, the table may appear to “flicker” out and in again
-as it’s remade, if the process is fast.</p>
-<ol style="list-style-type: decimal"><li>If the process is slow, the table will instead “gray out” and the
-whole app will freeze while the code needed to remake the table
-completes.</li>
+as it’s remade (if that’s fast).</p>
+<ol style="list-style-type: decimal"><li>If it’s slow, the table will instead “gray out” and the whole app
+will “freeze” while the code completes.</li>
 </ol></li>
 <li><p>If the user had customized the table in any way (they’ve
 navigated to a specific page, <em>e.g.</em>), those customizations will
-be lost if we rebuild the table from scratch.</p></li>
+be lost if we rebuild the table.</p></li>
 </ol><p>If you think about it, if <em>all</em> we’re doing is changing the
-data in our table, there’s no need to remake the <em>whole</em> table—we
-could just repopulate the contents of its cells, right? <em>Whenever
-possible,</em> <em>we should update a complex element rather than wholly
-remake it.</em></p>
-<p>To update widgets “on the fly,” we use something called a
-<strong>proxy</strong>, which is like a telephone that lets R (on the
-server side) and JavaScript (on the client side) talk directly to adjust
-a widget’s <em>contents</em> without redrawing any aspects of the widget
-other than just those that need to be redrawn.</p>
-<p><code>DT</code>’s function <code>dataTableProxy()</code> takes as
+data in our table, there’s no need to remake the <em>whole</em>
+table—why blow up and rebuild all the rows, columns, and cells when we
+just need to change what’s <em>in</em> the cells? <em>Whenever
+possible,</em> <em>we should update a complex interactive graphic
+element rather than remake it.</em></p>
+<p>To update complex interactive graphic elements”on the fly,” we use
+<strong>proxies.</strong> These are like a telephone that lets R (server
+side) and JavaScript (client side) talk directly to adjust a widget
+without refashioning any aspects that don’t need adjustment.</p>
+<p><code>DT</code>’s <code>dataTableProxy()</code> function takes as
 input the <code>outputId</code> of the table we’re updating. We then
-pipe that call into the helper function <code>replaceData()</code>,
-which specifically allows us to swap out the data being shown in a
-table’s cells (and adjusting the number of these as needed).</p>
-<p>Before we can use these tools, though, we should create a reason we’d
-need to swap one data set for another! Earlier, I mentioned that
-<code>DT</code> tables have a <code>selection</code> feature, which
-allows users to select rows/columns/cells. Doing so is an
-<strong>event</strong> that R Shiny can watch for, and although these
-events are not handled by default, we can change that!</p>
-<p>So, let’s set up a system in which a user can click any cell in our
-table to select it. When they do, we’ll filter the table to only rows
-sharing that same value in that same column (e.g., clicking a cell
-containing <code>Asia</code> will filter to only other rows containing
-data from <code>Asia</code>). Meanwhile, when no cell is selected, the
-table isn’t filtered.</p>
-<p>Sounds complicated? It’s actually not too bad! Below, we’ll take this
-step by step. For each step, implement the coding change, run the app,
-and make sure you understand any changes you observe in how the app
-behaves.</p>
-<p>First, let’s use <code>renderTable({})</code> and
-<code>DTOutput()</code> to make the “base” version of our table, just as
-we have been. This time, though, the “bones” of the table made in this
-way will <em>never</em> change:</p>
+pipe it into a helper function such as <code>replaceData()</code>, which
+specifically swaps out the data inside the table’s cells (adjusting cell
+number as needed).</p>
+<p>Before that though, we should create a reason we’d <em>need</em> to
+swap data sets! Earlier, I mentioned that <code>DT</code> tables have a
+<code>selection</code> feature, which allows users to select
+rows/columns/cells, an <strong>event</strong> Shiny can watch for.
+Although these events are not handled by default, we can change
+that!</p>
+<p>Let’s create a system in which users can click any cell to select it.
+When they do, we’ll filter the table to only rows sharing that same
+value in that column (<em>e.g.</em>, clicking a cell containing
+<code>Asia</code> will filter to only rows also containing
+<code>Asia</code> for <code>continent</code>).</p>
+<p>Meanwhile, when no cell is selected (or, equivalently, a selected
+cell gets deselected), no filtering is applied.</p>
+<p>Sounds complicated? Well, yes and no. There are a number of steps
+involved, but none are particularly involved.</p>
+<p>So, we’ll go one step at a time. For each, implement the coding
+change, run the app, and make sure you understand any changes to the
+app’s behaviors.</p>
+<p>First, let’s turn on <code>selection</code> inside
+<code>datatable()</code> by changing the input from <code>"none"</code>
+to <code>list(mode = "single", target = "cell")</code>, which will
+enable users to select one cell at a time:</p>
 <div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">##This code should **replace** the renderTable({}) call contained within your server.R file!</span></span>
+<code class="sourceCode R"><span><span class="co">##This code should **replace** ALL table-related code contained within your server.R file!</span></span>
 <span></span>
 <span><span class="co">##... other server code...</span></span>
 <span></span>
-<span><span class="co">###TABLE</span></span>
+<span><span class="co">###BASIC GAPMINDER TABLE</span></span>
 <span>  <span class="va">output</span><span class="op">$</span><span class="va">basic_table</span> <span class="op">=</span> <span class="fu">renderDT</span><span class="op">(</span><span class="op">{</span></span>
-<span>    </span>
-<span>    <span class="co">##STEP 1: WE SIMPLIFY OUR renderDT({}) CALL SO IT CONTAINS NO REACTIVE OBJECTS. THIS WILL RUN ONLY ONCE, AS THE APP STARTS. </span></span>
-<span>    <span class="va">gap</span> <span class="op">%&gt;%</span></span>
+<span>    <span class="va">gap</span> <span class="op">%&gt;%</span> </span>
 <span>      <span class="fu">datatable</span><span class="op">(</span></span>
-<span>        selection <span class="op">=</span> <span class="st">"none"</span>,</span>
+<span>        selection <span class="op">=</span> <span class="fu">list</span><span class="op">(</span>mode <span class="op">=</span> <span class="st">"single"</span>, target <span class="op">=</span> <span class="st">"cell"</span><span class="op">)</span>, <span class="co">#&lt;--TURN ON SINGLE-CELL SELECTION</span></span>
 <span>        options <span class="op">=</span> <span class="fu">list</span><span class="op">(</span></span>
-<span>          info <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>          ordering <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>          searching <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>          info <span class="op">=</span> <span class="cn">FALSE</span>, </span>
+<span>          ordering <span class="op">=</span> <span class="cn">FALSE</span>, </span>
+<span>          searching <span class="op">=</span> <span class="cn">FALSE</span> </span>
 <span>        <span class="op">)</span></span>
 <span>      <span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>      <span class="fu">formatRound</span><span class="op">(</span>columns <span class="op">=</span> <span class="st">"gdpPercap"</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>      <span class="fu">formatStyle</span><span class="op">(</span>columns <span class="op">=</span> <span class="st">"continent"</span>, textAlign <span class="op">=</span> <span class="st">"center"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>      <span class="fu">formatStyle</span><span class="op">(</span>columns <span class="op">=</span> <span class="st">"continent"</span>, textAlign <span class="op">=</span> <span class="st">"center"</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>      <span class="fu">formatStyle</span><span class="op">(</span></span>
-<span>        columns <span class="op">=</span> <span class="st">"lifeExp"</span>,</span>
-<span>        target <span class="op">=</span> <span class="st">"row"</span>,</span>
+<span>        columns <span class="op">=</span> <span class="st">"lifeExp"</span>, </span>
+<span>        target <span class="op">=</span> <span class="st">"row"</span>, </span>
 <span>        backgroundColor <span class="op">=</span> <span class="fu">styleEqual</span><span class="op">(</span></span>
-<span>          levels <span class="op">=</span> <span class="va">gap</span><span class="op">$</span><span class="va">lifeExp</span>,</span>
-<span>          values <span class="op">=</span> <span class="fu">ifelse</span><span class="op">(</span><span class="va">gap</span><span class="op">$</span><span class="va">lifeExp</span> <span class="op">&gt;</span> <span class="fl">70</span>, <span class="st">"lightpink"</span>, <span class="st">"white"</span><span class="op">)</span></span>
+<span>          levels <span class="op">=</span> <span class="va">gap</span><span class="op">$</span><span class="va">lifeExp</span>, </span>
+<span>          values <span class="op">=</span> <span class="fu">ifelse</span><span class="op">(</span><span class="va">gap</span><span class="op">$</span><span class="va">lifeExp</span> <span class="op">&gt;</span> <span class="fl">70</span>, <span class="st">"lightpink"</span>, <span class="st">"white"</span><span class="op">)</span> </span>
 <span>        <span class="op">)</span></span>
 <span>      <span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co">##TABLE OBSERVER (BUTTON)</span></span>
+<span>  <span class="fu">observeEvent</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">go_button</span>, <span class="op">{</span> </span>
+<span>    </span>
+<span>    <span class="va">output</span><span class="op">$</span><span class="va">basic_table</span> <span class="op">=</span> <span class="fu">renderDT</span><span class="op">(</span><span class="op">{</span></span>
+<span>      <span class="va">gap</span> <span class="op">%&gt;%</span> </span>
+<span>        <span class="fu">arrange</span><span class="op">(</span><span class="op">!</span><span class="op">!</span><span class="fu">sym</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">sorted_column</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>        <span class="fu">datatable</span><span class="op">(</span></span>
+<span>          selection <span class="op">=</span> <span class="fu">list</span><span class="op">(</span>mode <span class="op">=</span> <span class="st">"single"</span>, target <span class="op">=</span> <span class="st">"cell"</span><span class="op">)</span>, <span class="co">#&lt;--SAME AS ABOVE</span></span>
+<span>          options <span class="op">=</span> <span class="fu">list</span><span class="op">(</span></span>
+<span>            info <span class="op">=</span> <span class="cn">FALSE</span>, </span>
+<span>            ordering <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>            searching <span class="op">=</span> <span class="cn">FALSE</span> </span>
+<span>          <span class="op">)</span></span>
+<span>        <span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>        <span class="fu">formatRound</span><span class="op">(</span>columns <span class="op">=</span> <span class="st">"gdpPercap"</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>        <span class="fu">formatStyle</span><span class="op">(</span>columns <span class="op">=</span> <span class="st">"continent"</span>, textAlign <span class="op">=</span> <span class="st">"center"</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>        <span class="fu">formatStyle</span><span class="op">(</span></span>
+<span>          columns <span class="op">=</span> <span class="st">"lifeExp"</span>, </span>
+<span>          target <span class="op">=</span> <span class="st">"row"</span>, </span>
+<span>          backgroundColor <span class="op">=</span> <span class="fu">styleEqual</span><span class="op">(</span></span>
+<span>            levels <span class="op">=</span> <span class="va">gap</span><span class="op">$</span><span class="va">lifeExp</span>, </span>
+<span>            values <span class="op">=</span> <span class="fu">ifelse</span><span class="op">(</span><span class="va">gap</span><span class="op">$</span><span class="va">lifeExp</span> <span class="op">&gt;</span> <span class="fl">70</span>, <span class="st">"lightpink"</span>, <span class="st">"white"</span><span class="op">)</span></span>
+<span>          <span class="op">)</span></span>
+<span>        <span class="op">)</span></span>
+<span>    <span class="op">}</span><span class="op">)</span></span>
+<span>    </span>
 <span>  <span class="op">}</span><span class="op">)</span></span></code></pre>
 </div>
-<p>Next, let’s turn on <code>selection</code> inside
-<code>datatable()</code> by changing the input from <code>"none"</code>
-to <code>list(mode = "single", target = "cell")</code>, such that users
-can select single cells at a time:</p>
+<p>At this point, our table allows cell selection but doesn’t yet
+respond to it. Perhaps more glaringly, though, we’re still re-rendering
+the <em>entire</em> table every time the “Go!” button is pressed even
+though the “bones” of the table aren’t changing. This requires us to
+duplicate a <em>lot</em> of code (pretty much all contents of our
+<code>renderDT({})</code>s—that’s a sign we’re being inefficient!</p>
+<p>Let’s fix that by adjusting our <code>observeEvent({},{})</code> so
+that it uses <code>dataTableProxy()</code> and
+<code>replaceData()</code> to update, rather than remake, the table:</p>
 <div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">##This code should **replace** the renderTable({}) call contained within your server.R file!</span></span>
+<code class="sourceCode R"><span><span class="co">##This code should **replace** the TABLE OBSERVER subsection of your server.R file!</span></span>
 <span></span>
 <span><span class="co">##... other server code...</span></span>
 <span></span>
-<span><span class="co">###TABLE</span></span>
-<span>  <span class="va">output</span><span class="op">$</span><span class="va">basic_table</span> <span class="op">=</span> <span class="fu">renderDT</span><span class="op">(</span><span class="op">{</span></span>
-<span>    <span class="va">gap</span> <span class="op">%&gt;%</span></span>
-<span>      <span class="fu">datatable</span><span class="op">(</span></span>
-<span>        selection <span class="op">=</span> <span class="fu">list</span><span class="op">(</span>mode <span class="op">=</span> <span class="st">"single"</span>, target <span class="op">=</span> <span class="st">"cell"</span><span class="op">)</span>, <span class="co">#&lt;--STEP 2: WE CHANGE SELECTION FROM NONE (NO SELECTION) TO ESSENTIALLY "SELECT UP TO ONE CELL AT A TIME."</span></span>
-<span>        options <span class="op">=</span> <span class="fu">list</span><span class="op">(</span></span>
-<span>          info <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>          ordering <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>          searching <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span>        <span class="op">)</span></span>
-<span>      <span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>      <span class="fu">formatRound</span><span class="op">(</span>columns <span class="op">=</span> <span class="st">"gdpPercap"</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>      <span class="fu">formatStyle</span><span class="op">(</span>columns <span class="op">=</span> <span class="st">"continent"</span>, textAlign <span class="op">=</span> <span class="st">"center"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>      <span class="fu">formatStyle</span><span class="op">(</span></span>
-<span>        columns <span class="op">=</span> <span class="st">"lifeExp"</span>,</span>
-<span>        target <span class="op">=</span> <span class="st">"row"</span>,</span>
-<span>        backgroundColor <span class="op">=</span> <span class="fu">styleEqual</span><span class="op">(</span></span>
-<span>          levels <span class="op">=</span> <span class="va">gap</span><span class="op">$</span><span class="va">lifeExp</span>,</span>
-<span>          values <span class="op">=</span> <span class="fu">ifelse</span><span class="op">(</span><span class="va">gap</span><span class="op">$</span><span class="va">lifeExp</span> <span class="op">&gt;</span> <span class="fl">70</span>, <span class="st">"lightpink"</span>, <span class="st">"white"</span><span class="op">)</span></span>
-<span>        <span class="op">)</span></span>
-<span>      <span class="op">)</span></span>
-<span>  <span class="op">}</span><span class="op">)</span></span></code></pre>
+<span><span class="co">##TABLE OBSERVER (BUTTON)</span></span>
+<span>  <span class="fu">observeEvent</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">go_button</span>, <span class="op">{</span> </span>
+<span>    </span>
+<span>    <span class="co">#SORT THE DATA AS USUAL...</span></span>
+<span>   <span class="va">gap_sorted</span> <span class="op">=</span> <span class="va">gap</span> <span class="op">%&gt;%</span> </span>
+<span>      <span class="fu">arrange</span><span class="op">(</span><span class="op">!</span><span class="op">!</span><span class="fu">sym</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">sorted_column</span><span class="op">)</span><span class="op">)</span></span>
+<span>    </span>
+<span>    <span class="co">#FEED THE SORTED DATA INTO A PROXY...</span></span>
+<span>    <span class="fu">dataTableProxy</span><span class="op">(</span><span class="st">"basic_table"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>      <span class="co">#THEN, SIMPLY SWAP OUT THE OLD DATA FOR THE NEW (NO RE-RENDERING!). ALSO, KEEP CELL SELECTION AS IT WAS.</span></span>
+<span>      <span class="fu">replaceData</span><span class="op">(</span>data <span class="op">=</span> <span class="va">gap_sorted</span>, <span class="co">#&lt;--NOTE CHANGE IN DF REFERENCED HERE.</span></span>
+<span>                  clearSelection <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>    </span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span>  <span class="co">##IF YOU MAKE THIS CHANGE, THE APP SHOULD WORK AS IT HAS, EXCEPT THE CHANGES TO THE TABLE WHEN HITTING THE GO BUTTON SHOULD BE SUBTLER AND SMOOTHER THAN BEFORE.</span></span></code></pre>
 </div>
-<p>At this point, our table no longer responds to our drop-down menu or
-button because we’re removed the corresponding <code>input</code>
-subobjects from the <code>renderDT({})</code> code block.</p>
-<p>It also doesn’t yet respond to cell selection. Let’s fix that by
-introducing an ’<code>observeEvent({},{})</code> that watches for the
-“Go!” button and arranges the data according to our selection in our
-drop-down menu. This time, though, we’ll use
-<code>dataTableProxy()</code> and <code>replaceData()</code> to update,
-rather than remake, the table:</p>
+<p>This observer is now much cleaner than before. All adjustments to the
+table’s features and aesthetics happen up front and then never again in
+the original <code>renderDT({})</code> call, whereas the sorting (and
+<em>only</em> the sorting) happens in the observer. We also don’t
+re-render the table; instead, we use a proxy to swap in new data.</p>
+<p>…Of course, we still need to also watch for changes in cell
+selection. But how?</p>
+<p>Like others widget, <em><code>DT</code>s pass information from the UI
+to the server using the <code>input</code> object</em>,and we can access
+that information server-side using <code>input$outputId_*</code>
+format.</p>
+<p>In this case, the <code>*</code> will be <code>cells_selected</code>
+because that’s the <strong>event type</strong> of interest:</p>
 <div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">##This code should be **added to** your server.R file inside your server function and preferrably below your renderTable({}) call!</span></span>
+<code class="sourceCode R"><span><span class="co">##This code should be **added to** your server.R file, below all previous code but within your server function!</span></span>
 <span></span>
 <span><span class="co">##... other server code...</span></span>
 <span></span>
-<span><span class="co">###TABLE OBSERVER (CELL SELECTION)</span></span>
-<span><span class="co">##STEP 3: ADD AN OBSERVER WATCHING OUR BUTTON. WHEN IT'S PRESSED, SORT OUR DATA. </span></span>
-<span><span class="fu">observeEvent</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">go_button</span>, <span class="op">{</span></span>
+<span><span class="co">##TABLE OBSERVER (CELL SELECTION)</span></span>
+<span>  <span class="fu">observeEvent</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">basic_table_cells_selected</span>, <span class="op">{</span></span>
+<span>    </span>
+<span>    <span class="fu">print</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">basic_table_cells_selected</span><span class="op">)</span> <span class="co">#&lt;--PRINT TO THE R CONSOLE THE CONTENTS OF THIS OBJECT EVERY TIME THIS EXPRESSION EXECUTES.</span></span>
 <span></span>
-<span>   <span class="va">gap_sorted</span> <span class="op">=</span> <span class="va">gap</span> <span class="op">%&gt;%</span> </span>
-<span>      <span class="fu">arrange</span><span class="op">(</span><span class="op">!</span><span class="op">!</span><span class="fu">sym</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">sorted_column</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span>   <span class="co">#FEED THE SORTED DATA INTO A PROXY TO UPDATE JUST THE CONTENTS OF OUR TABLE'S CELLS. </span></span>
-<span>    <span class="fu">dataTableProxy</span><span class="op">(</span><span class="st">"basic_table"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>    <span class="fu">replaceData</span><span class="op">(</span>data <span class="op">=</span> <span class="va">gap_sorted</span>, </span>
-<span>                clearSelection <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co">#&lt;-BUT KEEP ANY NEWLY SELECTED CELLS SELECTED!</span></span>
-<span> <span class="op">}</span><span class="op">)</span></span></code></pre>
+<span>  <span class="op">}</span><span class="op">)</span></span></code></pre>
 </div>
-<p>This observer restores the original functionality of our button and
-drop-down menu, but it <em>doesn’t</em> yet handle cell selection. We
-need this observer to also watch for changes in cell selections too. But
-how?</p>
-<p>Like others widget, <em><code>DT</code> tables pass information from
-the UI to the server constantly using the <code>input</code>
-object.</em> We can access that information server-side using
-<code>input$outputId_*</code> format.</p>
-<p>In this case, the <code>*</code> here will be
-<code>cells_selected</code> because that’s the event type we’re
-interested in. By making our first expression to
-<code>observeEvent({},{})</code> into a list, we can have our observer
-watch more than one input for changes:</p>
+<p>Here, we learn a little trick: R’s <code>print()</code> function can
+be used to show the current value of a <strong>reactive object</strong>
+at specific time points. This is useful for seeing what reactive objects
+look like, as in this case. It can also be useful for debugging
+(<em>e.g.</em>, to see when an observer detects (or fails to detect) an
+event).</p>
+<p>If you run the app now and start selecting cells, you’ll observe that
+<code>input$basic_table_cells_selected</code> returns a matrix when
+accessed. Either this matrix has no rows (when no cell is selected, such
+as on start-up) or one row with two values: row and column numbers for
+the selected cell.</p>
+<figure><img src="fig/cell%20selection.gif" alt="By using print(), we can see when our observer executes its second expression and also what our cell selection reactive object looks like when that happens." class="figure mx-auto d-block"><div class="figcaption">By using print(), we can see when our observer
+executes its second expression and also what our cell selection reactive
+object looks like when that happens.</div>
+</figure><p>We can use that info being tracked to find the value in the selected
+cell plus the name of the column of the selected cell. We can then
+filter our data set accordingly (this just requires some good,
+old-fashioned “R” data wrangling! If the R code here is too much for
+you, just copy-paste it and don’t worry too much about what exactly it
+does):</p>
 <div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">##This code should **replace** the observeEvent({},{}) we introduced in the previous example!</span></span>
+<code class="sourceCode R"><span><span class="co">##This code should **replace** the TABLE OBSERVER subsection of your server.R file!</span></span>
 <span></span>
 <span><span class="co">##... other server code...</span></span>
 <span></span>
-<span><span class="co">###TABLE OBSERVER (CELL SELECTION)</span></span>
-<span><span class="co">##STEP 4: EXTEND THE FIRST EXPRESSION IN OUR OBSERVE TO A LIST INCLUDING BOTH THE GO BUTTON AND THE REACTIVE OBJECT FOR TABLE CELL CLICKS.</span></span>
-<span><span class="fu">observeEvent</span><span class="op">(</span><span class="fu">list</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">go_button</span>,</span>
-<span>                  <span class="va">input</span><span class="op">$</span><span class="va">basic_table_cells_selected</span><span class="op">)</span>, <span class="op">{</span></span>
-<span>                    </span>
-<span>  <span class="co">##THIS LINE WILL PRINT TO THE R CONSOLE THE INFO SENT TO THE SERVER WHEN A CELL IS CLICKED. YOU'LL SEE IT'S A MATRIX WITH 1 ROW AND 2 COLUMNS CONTAINING THE ROW AND COLUMN NUMBERS OF THE CELL SELECTED.</span></span>
-<span>  <span class="fu">print</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">basic_table_cells_selected</span><span class="op">)</span></span>
-<span></span>
-<span>   <span class="va">gap_sorted</span> <span class="op">=</span> <span class="va">gap</span> <span class="op">%&gt;%</span> </span>
-<span>      <span class="fu">arrange</span><span class="op">(</span><span class="op">!</span><span class="op">!</span><span class="fu">sym</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">sorted_column</span><span class="op">)</span><span class="op">)</span></span>
-<span>   </span>
+<span><span class="co">##TABLE OBSERVER (CELL SELECTION)</span></span>
+<span>  <span class="fu">observeEvent</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">basic_table_cells_selected</span>, <span class="op">{</span></span>
+<span>    </span>
+<span>    <span class="fu">req</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">basic_table_cells_selected</span><span class="op">)</span> <span class="co">#&lt;--THE req() FUNCTION WORKS A BIT LIKE IF--IF THE CONTENTS DON'T EXIST, NOTHING ELSE BELOW req() WILL RUN.</span></span>
+<span>    </span>
+<span>    <span class="co">#WHAT WAS THE VALUE IN THE SELECTED CELL?</span></span>
+<span>    <span class="va">val2match</span> <span class="op">=</span> <span class="va">gap</span><span class="op">[</span><span class="va">input</span><span class="op">$</span><span class="va">basic_table_cells_selected</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
+<span>                    <span class="va">input</span><span class="op">$</span><span class="va">basic_table_cells_selected</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>,</span>
+<span>                    drop <span class="op">=</span> <span class="cn">T</span><span class="op">]</span> <span class="co">#&lt;--PRODUCE A VECTOR, NOT A DATA FRAME</span></span>
+<span>    </span>
+<span>    <span class="co">#WHAT WAS THE NAME OF THE COLUMN OF THE SELECTED CELL?</span></span>
+<span>    <span class="va">col2match</span> <span class="op">=</span> <span class="fu">names</span><span class="op">(</span><span class="va">gap</span><span class="op">)</span><span class="op">[</span><span class="va">input</span><span class="op">$</span><span class="va">basic_table_cells_selected</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span>
+<span>    </span>
+<span>    <span class="co">#FILTER THE DATA SET BY THAT COLUMN TO ONLY CELLS WITH THAT SAME VALUE.</span></span>
+<span>    <span class="va">gap_filtered</span> <span class="op">=</span> <span class="va">gap</span><span class="op">[</span><span class="va">gap</span><span class="op">[</span>, <span class="va">col2match</span><span class="op">]</span> <span class="op">==</span> <span class="va">val2match</span>, <span class="op">]</span></span>
+<span>    </span>
 <span>    <span class="fu">dataTableProxy</span><span class="op">(</span><span class="st">"basic_table"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>    <span class="fu">replaceData</span><span class="op">(</span>data <span class="op">=</span> <span class="va">gap_sorted</span>, </span>
-<span>                clearSelection <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> </span>
-<span> <span class="op">}</span><span class="op">)</span></span></code></pre>
+<span>      <span class="fu">replaceData</span><span class="op">(</span>data <span class="op">=</span> <span class="va">gap_filtered</span>, <span class="co">#&lt;--REFERENCE gap_filtered HERE. </span></span>
+<span>                  clearSelection <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span></code></pre>
 </div>
-<p>If you run the app now and start selecting cells, you’ll observe that
-<code>input$basic_table_cells_selected</code> returns a matrix when
-accessed. Either this matrix has no rows (when no cell is selected) or
-one row with two values: a row number and a column number for the cell
-selected.</p>
-<p>We’ll use that info to find the value in the cell selected as well as
-the name of the corresponding column. We can then filter our data set
-accordingly (all this requires some good-old “R” data wrangling!):</p>
+<p>Here, we meet another handy tool: <code>req()</code>.
+<code>req()</code> checks to make sure its contents exist
+(<em>i.e.</em>, aren’t <code>NULL</code>, <code>NA</code>, blank, etc.).
+If they don’t, all remaining code beneath <code>req()</code> won’t
+run.</p>
+<p>We need it here because <code>input$basic_table_cells_selected</code>
+won’t exist sometimes (like on start-up and when no cells are selected).
+In those instances, the rest of our code in this observer would
+break.</p>
+<p>Our observer works! …Or does it? Try it and see:</p>
+<figure><img src="fig/bad%20filtering.gif" alt="The filtering doesn’t work the way it ought to–when we click on an ‘Asia’ cell, we get back ‘Africa’ results. What gives?" class="figure mx-auto d-block"><div class="figcaption">The filtering doesn’t work the way it ought
+to–when we click on an ‘Asia’ cell, we get back ‘Africa’ results. What
+gives?</div>
+</figure><p>On the first click, we get the behavior we expect—if we click a cell
+containing <code>Asia</code>, we get back <em>only</em> other results
+from <code>Asia</code>. However, depending upon where we click next, we
+might get back the wrong results. Can you guess why?</p>
+<p>The issue is this command:</p>
 <div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">##This code should **replace** the observeEvent({},{}) we introduced in the previous example!</span></span>
+<code class="sourceCode R"><span><span class="va">val2match</span> <span class="op">=</span> <span class="va">gap</span><span class="op">[</span><span class="va">input</span><span class="op">$</span><span class="va">basic_table_cells_selected</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, </span>
+<span>                <span class="va">input</span><span class="op">$</span><span class="va">basic_table_cells_selected</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, </span>
+<span>                drop <span class="op">=</span> <span class="cn">T</span><span class="op">]</span></span></code></pre>
+</div>
+<p>We use the row and column numbers in
+<code>input$basic_table_cells_selected</code> to find the value inside
+the cell selected by finding that same cell in <code>gap</code>.</p>
+<p>This works great…the <em>first</em> time. However, the
+<em>second</em> time, <code>input$basic_table_cells_selected</code>
+contains row and column numbers based on a <em>filtered</em> version of
+<code>gap</code>, but we still try to use those row and column numbers
+to pull a value out of the <em>original</em> version of
+<code>gap</code>. They probably won’t line up!</p>
+<p>It seems we need to track the data set so that we’re always
+referencing the one users can actually see, especially if they’ve
+already filtered one or more times.</p>
+<p>This looks like a job for a <strong>reactive value</strong>! Like
+<code>input</code> and <code>output</code>, a reactive value is a
+“changeable object” that R knows to watch for events. Unlike
+<code>input</code> and <code>output</code>, though, we create reactive
+values ourselves and can code exactly when and how they change. We
+create a reactive value using <code>reactiveVal()</code>, placing the
+starting value inside the parentheses:</p>
+<div class="codewrapper sourceCode" id="cb10">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">##This code should **added to** your server.R file anywhere inside your server function but outside any reactive contexts!</span></span>
 <span></span>
 <span><span class="co">##... other server code...</span></span>
 <span></span>
-<span>  <span class="co">###TABLE OBSERVER (CELL SELECTION)</span></span>
-<span>  <span class="fu">observeEvent</span><span class="op">(</span><span class="fu">list</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">go_button</span>, <span class="va">input</span><span class="op">$</span><span class="va">basic_table_cells_selected</span><span class="op">)</span>, <span class="op">{</span></span>
-<span></span>
-<span>    <span class="co">##STEP 5: WE GET THE VALUE IN THE CELL SELECTED...</span></span>
-<span>      <span class="va">val2match</span> <span class="op">=</span> <span class="va">gap</span><span class="op">[</span><span class="va">input</span><span class="op">$</span><span class="va">basic_table_cells_selected</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">input</span><span class="op">$</span><span class="va">basic_table_cells_selected</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, drop <span class="op">=</span> <span class="cn">T</span><span class="op">]</span></span>
-<span>      </span>
-<span>    <span class="co">#...AND THE NAME OF THE COLUMN SELECTED...</span></span>
-<span>      <span class="va">col2match</span> <span class="op">=</span> <span class="fu">names</span><span class="op">(</span><span class="va">gap</span><span class="op">)</span><span class="op">[</span><span class="va">input</span><span class="op">$</span><span class="va">basic_table_cells_selected</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span>
-<span>      </span>
-<span>    <span class="co">#...AND FILTER TO ONLY ROWS MATCHING THAT VALUE.</span></span>
-<span>      <span class="va">gap_filtered</span> <span class="op">=</span> <span class="va">gap</span><span class="op">[</span><span class="va">gap</span><span class="op">[</span>, <span class="va">col2match</span><span class="op">]</span> <span class="op">==</span> <span class="va">val2match</span>, <span class="op">]</span></span>
-<span>      </span>
-<span>      <span class="co">#WE ARRANGE AS NORMAL...</span></span>
-<span>      <span class="va">gap_sorted</span> <span class="op">=</span> <span class="va">gap_filtered</span> <span class="op">%&gt;%</span> <span class="co">#&lt;-BUT UPDATE TO gap_filtered here.</span></span>
-<span>        <span class="fu">arrange</span><span class="op">(</span><span class="op">!</span><span class="op">!</span><span class="fu">sym</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">sorted_column</span><span class="op">)</span><span class="op">)</span></span>
-<span>      </span>
-<span>      <span class="fu">dataTableProxy</span><span class="op">(</span><span class="st">"basic_table"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>        <span class="fu">replaceData</span><span class="op">(</span>data <span class="op">=</span> <span class="va">gap_sorted</span>,</span>
-<span>                    clearSelection <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span>      </span>
-<span>  <span class="op">}</span><span class="op">)</span></span></code></pre>
+<span><span class="va">current_data</span> <span class="op">=</span> <span class="fu">reactiveVal</span><span class="op">(</span><span class="va">gap</span><span class="op">)</span> <span class="co">#&lt;--WHEN THE APP STARTS, WE STORE gap AS THE STARTING DATA SET.</span></span></code></pre>
 </div>
-<p>If the “normal R” code in this example looks stressful, don’t worry
-about the specifics—just read my comments to know what we’re trying to
-accomplish.</p>
-<p>Our observer now works great! Try it and see for yourself.</p>
+<p>From then on, if we want to access the reactive value’s current
+value, we use its name like a function, <em>e.g.</em>,
+<code>current_data()</code>. If we want to <em>change</em> the reactive
+value’s current value, we can put the new value inside the parentheses,
+<em>e.g.</em>, <code>current_data(new)</code>.</p>
+<p>Let’s enhance both our observers so that they reference</p>
 <p>…Except there’s no “undo.” Once we select a cell, we filter out all
 rows that don’t match, and those rows are “lost” to the user because
 there’s no way to restore them. And further clicks only cause loss of
@@ -820,7 +940,7 @@ same).</p>
 <p>Whenever no cell is selected, we need to “return” to the original
 <code>gapminder</code> data set, albeit sorted appropriately. We can
 handle this scenario using <code>if()/else</code>:</p>
-<div class="codewrapper sourceCode" id="cb10">
+<div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -887,26 +1007,26 @@ functionality, or if you’d prefer having both.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>First, we add the reset button to our UI, just below the current
 “Go!” button:</p>
-<div class="codewrapper sourceCode" id="cb11">
+<div class="codewrapper sourceCode" id="cb12">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="do">##This code should **be added to** the "sidebar" content of the Table tabPanel in the BODY section of your ui.R file!</span></span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a></span>
-<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="do">##... other UI code...</span></span>
-<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="fu">actionButton</span>(<span class="at">inputId =</span> <span class="st">"go_button"</span>,</span>
-<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>                        <span class="at">label =</span> <span class="st">"Go!"</span>)<span class="er">)</span>,</span>
-<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="fu">actionButton</span>(<span class="at">inputId =</span> <span class="st">"reset_button"</span>,</span>
-<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>                        <span class="at">label =</span> <span class="st">"Reset!"</span>)<span class="er">)</span>,</span>
-<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a>  <span class="do">##... other UI code...</span></span></code></pre>
+<pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="do">##This code should **be added to** the "sidebar" content of the Table tabPanel in the BODY section of your ui.R file!</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="do">##... other UI code...</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="fu">actionButton</span>(<span class="at">inputId =</span> <span class="st">"go_button"</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>                        <span class="at">label =</span> <span class="st">"Go!"</span>)<span class="er">)</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="fu">actionButton</span>(<span class="at">inputId =</span> <span class="st">"reset_button"</span>,</span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>                        <span class="at">label =</span> <span class="st">"Reset!"</span>)<span class="er">)</span>,</span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>  <span class="do">##... other UI code...</span></span></code></pre>
 </div>
 <p>Then, in our server file, we add a new observer to watch that button
 and handle when a user presses it. This is pretty simple here: we use
 our proxy to restore the original <code>gapminder</code> data set:</p>
-<div class="codewrapper sourceCode" id="cb12">
+<div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -936,8 +1056,6 @@ had!</p>
 </div>
 </div>
 </div>
-</div>
-</div>
 <div class="section level3">
 <h3 id="putting-us-on-the-map">Putting us on the map<a class="anchor" aria-label="anchor" href="#putting-us-on-the-map"></a></h3>
 <div class="section level4">
@@ -946,7 +1064,7 @@ had!</p>
 it ready for mapping (spatial data are complicated!). Add the following
 to your <code>global.R</code> file at the end <em>verbatim</em>. Don’t
 worry about what it does, though!</p>
-<div class="codewrapper sourceCode" id="cb13">
+<div class="codewrapper sourceCode" id="cb14">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1005,7 +1123,7 @@ restaurants).</p></li>
 boundaries).</p></li>
 </ol></li>
 </ol><p>Here, we’ll use <code>addPolygons()</code>:</p>
-<div class="codewrapper sourceCode" id="cb14">
+<div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1026,7 +1144,7 @@ boundaries).</p></li>
 <span>    <span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="co">##... other UI code...</span></span></code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb15">
+<div class="codewrapper sourceCode" id="cb16">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1070,7 +1188,7 @@ guardrails—they can get lost or produce unhelpful visual quirks to
 arise. As I noted earlier, <code>leaflet()</code> contains many global
 settings we can apply to our map. For example, we can set min and max
 zoom levels like so:</p>
-<div class="codewrapper sourceCode" id="cb16">
+<div class="codewrapper sourceCode" id="cb17">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1101,7 +1219,7 @@ regions but no further. This keeps users from zooming in or out to a
 degree that doesn’t really make sense given our data.</p>
 <p>We can also set <strong>maximum bounds</strong>—users can’t
 <strong>pan</strong> the map past these:</p>
-<div class="codewrapper sourceCode" id="cb17">
+<div class="codewrapper sourceCode" id="cb18">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1146,7 +1264,7 @@ expectancy data yet.</p>
 <p>This function has two required inputs: a <code>palette</code>, the
 name of the R color palette we’d like to use, and a <code>domain</code>,
 the set of values we’ll need colors for in our final palette:</p>
-<div class="codewrapper sourceCode" id="cb18">
+<div class="codewrapper sourceCode" id="cb19">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1178,7 +1296,7 @@ the set of values we’ll need colors for in our final palette:</p>
 (<code>domain</code>) and every color it should use
 (<code>palette</code>), we can add coloring instructions to
 <code>addPolygons()</code>:</p>
-<div class="codewrapper sourceCode" id="cb19">
+<div class="codewrapper sourceCode" id="cb20">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1212,7 +1330,7 @@ the set of values we’ll need colors for in our final palette:</p>
 <p>But shouldn’t there be a <strong>legend</strong> that clarifies what
 colors go with what values? We can add one using
 <code>addLegend()</code>:</p>
-<div class="codewrapper sourceCode" id="cb20">
+<div class="codewrapper sourceCode" id="cb21">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1264,7 +1382,7 @@ is a small pop-up that might appear on mouse hover (in
 disappear on mouse click. Inside these, we’ll put the name of the
 country being clicked on, in case users don’t know their countries
 well:</p>
-<div class="codewrapper sourceCode" id="cb21">
+<div class="codewrapper sourceCode" id="cb22">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1307,7 +1425,7 @@ values too? And keep the result human-readable? There are many
 approaches we could take, but one using “Normal R’s” versatile
 <code>paste0()</code> function plus the HTML line break element
 (<code>&lt;br&gt;</code>) is straightforward:</p>
-<div class="codewrapper sourceCode" id="cb22">
+<div class="codewrapper sourceCode" id="cb23">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1363,7 +1481,7 @@ tooltips. Try using the <code>label</code> parameter instead. For
 whatever reason, this requires more “normal R” data wrangling, so here’s
 the <em>exact</em> code you’ll need (feel free to copy and paste
 it!):</p>
-<div class="codewrapper sourceCode" id="cb23">
+<div class="codewrapper sourceCode" id="cb24">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1383,7 +1501,7 @@ your users will use mobile devices, do you think?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>If we use <code>label</code>, we get tooltips that appears on mouse
 hover instead of on mouse click. Actually, this is <em>probably</em>
@@ -1423,44 +1541,44 @@ appear on both hover and on touch.</p>
 data are shown in our map. Let’s give them that control by adding a
 <strong>slider input widget</strong> that will let them select which
 year’s data is plotted:</p>
-<div class="codewrapper sourceCode" id="cb24">
+<div class="codewrapper sourceCode" id="cb25">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="do">##This code should **replace** the "sidebar panel" cell's content within the BODY section of your ui.R file!</span></span>
-<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a></span>
-<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a><span class="do">##... other UI code...</span></span>
-<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a></span>
-<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a><span class="do">###SIDEBAR CELL</span></span>
-<span id="cb24-6"><a href="#cb24-6" tabindex="-1"></a>    <span class="fu">column</span>(</span>
-<span id="cb24-7"><a href="#cb24-7" tabindex="-1"></a>      <span class="at">width =</span> <span class="dv">4</span>,</span>
-<span id="cb24-8"><a href="#cb24-8" tabindex="-1"></a>      <span class="fu">selectInput</span>(</span>
-<span id="cb24-9"><a href="#cb24-9" tabindex="-1"></a>        <span class="at">inputId =</span> <span class="st">"sorted_column"</span>,</span>
-<span id="cb24-10"><a href="#cb24-10" tabindex="-1"></a>        <span class="at">label =</span> <span class="st">"Select a column to sort the table by."</span>,</span>
-<span id="cb24-11"><a href="#cb24-11" tabindex="-1"></a>        <span class="at">choices =</span> <span class="fu">c</span>(</span>
-<span id="cb24-12"><a href="#cb24-12" tabindex="-1"></a>          <span class="st">"Country"</span> <span class="ot">=</span> <span class="st">"country"</span>,</span>
-<span id="cb24-13"><a href="#cb24-13" tabindex="-1"></a>          <span class="st">"Continent"</span> <span class="ot">=</span> <span class="st">"continent"</span>,</span>
-<span id="cb24-14"><a href="#cb24-14" tabindex="-1"></a>          <span class="st">"Year"</span> <span class="ot">=</span> <span class="st">"year"</span>,</span>
-<span id="cb24-15"><a href="#cb24-15" tabindex="-1"></a>          <span class="st">"Life expectancy"</span> <span class="ot">=</span> <span class="st">"lifeExp"</span>,</span>
-<span id="cb24-16"><a href="#cb24-16" tabindex="-1"></a>          <span class="st">"Population size"</span> <span class="ot">=</span> <span class="st">"pop"</span>,</span>
-<span id="cb24-17"><a href="#cb24-17" tabindex="-1"></a>          <span class="st">"GDP per capita"</span> <span class="ot">=</span> <span class="st">"gdpPercap"</span></span>
-<span id="cb24-18"><a href="#cb24-18" tabindex="-1"></a>        )</span>
-<span id="cb24-19"><a href="#cb24-19" tabindex="-1"></a>      ),</span>
-<span id="cb24-20"><a href="#cb24-20" tabindex="-1"></a>      <span class="fu">actionButton</span>(<span class="at">inputId =</span> <span class="st">"go_button"</span>, <span class="at">label =</span> <span class="st">"Go!"</span>),</span>
-<span id="cb24-21"><a href="#cb24-21" tabindex="-1"></a>      <span class="co"># actionButton(inputId = "reset_button",</span></span>
-<span id="cb24-22"><a href="#cb24-22" tabindex="-1"></a>      <span class="co">#                   label = "Reset!"),</span></span>
-<span id="cb24-23"><a href="#cb24-23" tabindex="-1"></a>      <span class="co">#ADD OUR NEWEST SLIDER WIDGET</span></span>
-<span id="cb24-24"><a href="#cb24-24" tabindex="-1"></a>      <span class="fu">sliderInput</span>(</span>
-<span id="cb24-25"><a href="#cb24-25" tabindex="-1"></a>        <span class="at">inputId =</span> <span class="st">"year_slider"</span>,</span>
-<span id="cb24-26"><a href="#cb24-26" tabindex="-1"></a>        <span class="at">label =</span> <span class="st">"Pick what year's data are shown in the map."</span>,</span>
-<span id="cb24-27"><a href="#cb24-27" tabindex="-1"></a>        <span class="at">value =</span> <span class="dv">2007</span>, <span class="co">#&lt;--SET THE DEFAULT CHOICE</span></span>
-<span id="cb24-28"><a href="#cb24-28" tabindex="-1"></a>        <span class="at">min =</span> <span class="fu">min</span>(gap<span class="sc">$</span>year), <span class="co">#&lt;--MIN AND MAX POSSIBLE SELECTIONS</span></span>
-<span id="cb24-29"><a href="#cb24-29" tabindex="-1"></a>        <span class="at">max =</span> <span class="fu">max</span>(gap<span class="sc">$</span>year),</span>
-<span id="cb24-30"><a href="#cb24-30" tabindex="-1"></a>        <span class="at">step =</span> <span class="dv">5</span>, <span class="co">#&lt;--HOW FAR APART CAN CHOICES BE?</span></span>
-<span id="cb24-31"><a href="#cb24-31" tabindex="-1"></a>        <span class="at">sep =</span> <span class="st">""</span> <span class="co">#&lt;--DON'T USE COMMAS TO SEPARATE THE THOUSANDS PLACE.</span></span>
-<span id="cb24-32"><a href="#cb24-32" tabindex="-1"></a>      )),</span>
-<span id="cb24-33"><a href="#cb24-33" tabindex="-1"></a>  <span class="do">##... other UI code...</span></span></code></pre>
+<pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="do">##This code should **replace** the "sidebar panel" cell's content within the BODY section of your ui.R file!</span></span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a><span class="do">##... other UI code...</span></span>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="#cb25-5" tabindex="-1"></a><span class="do">###SIDEBAR CELL</span></span>
+<span id="cb25-6"><a href="#cb25-6" tabindex="-1"></a>    <span class="fu">column</span>(</span>
+<span id="cb25-7"><a href="#cb25-7" tabindex="-1"></a>      <span class="at">width =</span> <span class="dv">4</span>,</span>
+<span id="cb25-8"><a href="#cb25-8" tabindex="-1"></a>      <span class="fu">selectInput</span>(</span>
+<span id="cb25-9"><a href="#cb25-9" tabindex="-1"></a>        <span class="at">inputId =</span> <span class="st">"sorted_column"</span>,</span>
+<span id="cb25-10"><a href="#cb25-10" tabindex="-1"></a>        <span class="at">label =</span> <span class="st">"Select a column to sort the table by."</span>,</span>
+<span id="cb25-11"><a href="#cb25-11" tabindex="-1"></a>        <span class="at">choices =</span> <span class="fu">c</span>(</span>
+<span id="cb25-12"><a href="#cb25-12" tabindex="-1"></a>          <span class="st">"Country"</span> <span class="ot">=</span> <span class="st">"country"</span>,</span>
+<span id="cb25-13"><a href="#cb25-13" tabindex="-1"></a>          <span class="st">"Continent"</span> <span class="ot">=</span> <span class="st">"continent"</span>,</span>
+<span id="cb25-14"><a href="#cb25-14" tabindex="-1"></a>          <span class="st">"Year"</span> <span class="ot">=</span> <span class="st">"year"</span>,</span>
+<span id="cb25-15"><a href="#cb25-15" tabindex="-1"></a>          <span class="st">"Life expectancy"</span> <span class="ot">=</span> <span class="st">"lifeExp"</span>,</span>
+<span id="cb25-16"><a href="#cb25-16" tabindex="-1"></a>          <span class="st">"Population size"</span> <span class="ot">=</span> <span class="st">"pop"</span>,</span>
+<span id="cb25-17"><a href="#cb25-17" tabindex="-1"></a>          <span class="st">"GDP per capita"</span> <span class="ot">=</span> <span class="st">"gdpPercap"</span></span>
+<span id="cb25-18"><a href="#cb25-18" tabindex="-1"></a>        )</span>
+<span id="cb25-19"><a href="#cb25-19" tabindex="-1"></a>      ),</span>
+<span id="cb25-20"><a href="#cb25-20" tabindex="-1"></a>      <span class="fu">actionButton</span>(<span class="at">inputId =</span> <span class="st">"go_button"</span>, <span class="at">label =</span> <span class="st">"Go!"</span>),</span>
+<span id="cb25-21"><a href="#cb25-21" tabindex="-1"></a>      <span class="co"># actionButton(inputId = "reset_button",</span></span>
+<span id="cb25-22"><a href="#cb25-22" tabindex="-1"></a>      <span class="co">#                   label = "Reset!"),</span></span>
+<span id="cb25-23"><a href="#cb25-23" tabindex="-1"></a>      <span class="co">#ADD OUR NEWEST SLIDER WIDGET</span></span>
+<span id="cb25-24"><a href="#cb25-24" tabindex="-1"></a>      <span class="fu">sliderInput</span>(</span>
+<span id="cb25-25"><a href="#cb25-25" tabindex="-1"></a>        <span class="at">inputId =</span> <span class="st">"year_slider"</span>,</span>
+<span id="cb25-26"><a href="#cb25-26" tabindex="-1"></a>        <span class="at">label =</span> <span class="st">"Pick what year's data are shown in the map."</span>,</span>
+<span id="cb25-27"><a href="#cb25-27" tabindex="-1"></a>        <span class="at">value =</span> <span class="dv">2007</span>, <span class="co">#&lt;--SET THE DEFAULT CHOICE</span></span>
+<span id="cb25-28"><a href="#cb25-28" tabindex="-1"></a>        <span class="at">min =</span> <span class="fu">min</span>(gap<span class="sc">$</span>year), <span class="co">#&lt;--MIN AND MAX POSSIBLE SELECTIONS</span></span>
+<span id="cb25-29"><a href="#cb25-29" tabindex="-1"></a>        <span class="at">max =</span> <span class="fu">max</span>(gap<span class="sc">$</span>year),</span>
+<span id="cb25-30"><a href="#cb25-30" tabindex="-1"></a>        <span class="at">step =</span> <span class="dv">5</span>, <span class="co">#&lt;--HOW FAR APART CAN CHOICES BE?</span></span>
+<span id="cb25-31"><a href="#cb25-31" tabindex="-1"></a>        <span class="at">sep =</span> <span class="st">""</span> <span class="co">#&lt;--DON'T USE COMMAS TO SEPARATE THE THOUSANDS PLACE.</span></span>
+<span id="cb25-32"><a href="#cb25-32" tabindex="-1"></a>      )),</span>
+<span id="cb25-33"><a href="#cb25-33" tabindex="-1"></a>  <span class="do">##... other UI code...</span></span></code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb25">
+<div class="codewrapper sourceCode" id="cb26">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1532,7 +1650,7 @@ relevant events.</p></li>
 <li><p>Inside the observer, we use a proxy built using
 <code>leafletProxy()</code>, which is analogous to
 <code>dataTableProxy()</code>, to update our map:</p></li>
-</ol><div class="codewrapper sourceCode" id="cb26">
+</ol><div class="codewrapper sourceCode" id="cb27">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1628,7 +1746,7 @@ relevant events.</p></li>
 <span>    </span>
 <span>  <span class="op">}</span><span class="op">)</span></span></code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb27">
+<div class="codewrapper sourceCode" id="cb28">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1690,7 +1808,7 @@ which will pan and zoom a map to center on a specific location.</p>
 double-click event tracking)! Let’s create a new observer that watches
 for double-clicks, and, when one happens, a <code>leafletProxy()</code>
 centers the map on that location:</p>
-<div class="codewrapper sourceCode" id="cb28">
+<div class="codewrapper sourceCode" id="cb29">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1750,7 +1868,7 @@ as an input. Let’s make it a scatterplot of GDP vs. population for a
 given year (we’ll start by looking at 2007), with each continent getting
 a different color. Additionally, we’ll plot a best-fit regression line
 for each continent:</p>
-<div class="codewrapper sourceCode" id="cb29">
+<div class="codewrapper sourceCode" id="cb30">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1795,7 +1913,7 @@ much about what each piece does.</p>
 agree that, although this graph is not terrible remarkable, it looks
 pretty good. More importantly, it’s just complex enough that it’ll be a
 good test of how well <code>ggplotly()</code> does:</p>
-<div class="codewrapper sourceCode" id="cb30">
+<div class="codewrapper sourceCode" id="cb31">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1806,7 +1924,7 @@ good test of how well <code>ggplotly()</code> does:</p>
 it hopefully won’t surprise you to learn there are
 <code>renderPlotly({})</code> and <code>plotlyOutput()</code> functions
 we can use to add this graph to our app:</p>
-<div class="codewrapper sourceCode" id="cb31">
+<div class="codewrapper sourceCode" id="cb32">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1827,7 +1945,7 @@ we can use to add this graph to our app:</p>
 <span>    <span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">##... other UI code...</span></span></code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb32">
+<div class="codewrapper sourceCode" id="cb33">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1890,7 +2008,7 @@ the specifics of how the plot looks. Inside <code>layout()</code> are
 provide with specific instructions.</p>
 <p>If we give both of these parameters a list containing the instruction
 <code>fixedrange = TRUE</code>, this will prohibit zooming:</p>
-<div class="codewrapper sourceCode" id="cb33">
+<div class="codewrapper sourceCode" id="cb34">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1915,7 +2033,7 @@ responds to clicks. For example, if we want to turn off the
 functionality that redacts a group when its legend key is clicked on, we
 can set the <code>itemclick</code> instruction for the
 <code>legend</code> parameter to <code>FALSE</code>:</p>
-<div class="codewrapper sourceCode" id="cb34">
+<div class="codewrapper sourceCode" id="cb35">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1945,7 +2063,7 @@ can set the <code>itemclick</code> instruction for the
 <p>The <code>config()</code> function, meanwhile, can remove buttons
 from the modebar, although you may need Google’s help to find the names
 of the buttons you want to remove:</p>
-<div class="codewrapper sourceCode" id="cb35">
+<div class="codewrapper sourceCode" id="cb36">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1974,7 +2092,7 @@ tooltip text could look nicer.</p>
 <p>The first issue is easily solved using the <code>legend</code>
 parameter inside of <code>layout()</code>, which we’ve already dabbled
 with:</p>
-<div class="codewrapper sourceCode" id="cb36">
+<div class="codewrapper sourceCode" id="cb37">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2008,7 +2126,7 @@ so it gets packaged up with everything else being passed to
 <code>ggplotly()</code>.</p></li>
 <li><p>Lastly, let’s use <code>style()</code> to make the contents of
 our tooltips <em>only</em> the custom text we’ve cooked up:</p></li>
-</ol><div class="codewrapper sourceCode" id="cb37">
+</ol><div class="codewrapper sourceCode" id="cb38">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2076,46 +2194,46 @@ whole thing!</p>
 <p>That means first giving users a means of affecting the graph beyond
 what the graph itself already provides. Let’s create a drop-down
 selector that lets users pick a new color scheme:</p>
-<div class="codewrapper sourceCode" id="cb38">
+<div class="codewrapper sourceCode" id="cb39">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" tabindex="-1"></a><span class="do">##This code should **replace** the "sidebar panel" cell's content within the BODY section of your ui.R file!</span></span>
-<span id="cb38-2"><a href="#cb38-2" tabindex="-1"></a></span>
-<span id="cb38-3"><a href="#cb38-3" tabindex="-1"></a><span class="do">##... other UI code...</span></span>
-<span id="cb38-4"><a href="#cb38-4" tabindex="-1"></a><span class="do">###SIDEBAR CELL</span></span>
-<span id="cb38-5"><a href="#cb38-5" tabindex="-1"></a>    <span class="fu">column</span>(</span>
-<span id="cb38-6"><a href="#cb38-6" tabindex="-1"></a>      <span class="at">width =</span> <span class="dv">4</span>,</span>
-<span id="cb38-7"><a href="#cb38-7" tabindex="-1"></a>      <span class="fu">selectInput</span>(</span>
-<span id="cb38-8"><a href="#cb38-8" tabindex="-1"></a>        <span class="at">inputId =</span> <span class="st">"sorted_column"</span>,</span>
-<span id="cb38-9"><a href="#cb38-9" tabindex="-1"></a>        <span class="at">label =</span> <span class="st">"Select a column to sort the table by."</span>,</span>
-<span id="cb38-10"><a href="#cb38-10" tabindex="-1"></a>        <span class="at">choices =</span> <span class="fu">c</span>(</span>
-<span id="cb38-11"><a href="#cb38-11" tabindex="-1"></a>          <span class="st">"Country"</span> <span class="ot">=</span> <span class="st">"country"</span>,</span>
-<span id="cb38-12"><a href="#cb38-12" tabindex="-1"></a>          <span class="st">"Continent"</span> <span class="ot">=</span> <span class="st">"continent"</span>,</span>
-<span id="cb38-13"><a href="#cb38-13" tabindex="-1"></a>          <span class="st">"Year"</span> <span class="ot">=</span> <span class="st">"year"</span>,</span>
-<span id="cb38-14"><a href="#cb38-14" tabindex="-1"></a>          <span class="st">"Life expectancy"</span> <span class="ot">=</span> <span class="st">"lifeExp"</span>,</span>
-<span id="cb38-15"><a href="#cb38-15" tabindex="-1"></a>          <span class="st">"Population size"</span> <span class="ot">=</span> <span class="st">"pop"</span>,</span>
-<span id="cb38-16"><a href="#cb38-16" tabindex="-1"></a>          <span class="st">"GDP per capita"</span> <span class="ot">=</span> <span class="st">"gdpPercap"</span></span>
-<span id="cb38-17"><a href="#cb38-17" tabindex="-1"></a>        )</span>
-<span id="cb38-18"><a href="#cb38-18" tabindex="-1"></a>      ),</span>
-<span id="cb38-19"><a href="#cb38-19" tabindex="-1"></a>      <span class="fu">actionButton</span>(<span class="at">inputId =</span> <span class="st">"go_button"</span>, <span class="at">label =</span> <span class="st">"Go!"</span>),</span>
-<span id="cb38-20"><a href="#cb38-20" tabindex="-1"></a>    <span class="co"># actionButton(inputId = "reset_button",</span></span>
-<span id="cb38-21"><a href="#cb38-21" tabindex="-1"></a>      <span class="co">#                   label = "Reset!"),</span></span>
-<span id="cb38-22"><a href="#cb38-22" tabindex="-1"></a>      <span class="fu">sliderInput</span>(</span>
-<span id="cb38-23"><a href="#cb38-23" tabindex="-1"></a>        <span class="at">inputId =</span> <span class="st">"year_slider"</span>,</span>
-<span id="cb38-24"><a href="#cb38-24" tabindex="-1"></a>        <span class="at">label =</span> <span class="st">"Pick what year's data are shown in the map."</span>,</span>
-<span id="cb38-25"><a href="#cb38-25" tabindex="-1"></a>        <span class="at">value =</span> <span class="dv">2007</span>,</span>
-<span id="cb38-26"><a href="#cb38-26" tabindex="-1"></a>        <span class="at">min =</span> <span class="fu">min</span>(gap<span class="sc">$</span>year),</span>
-<span id="cb38-27"><a href="#cb38-27" tabindex="-1"></a>        <span class="at">max =</span> <span class="fu">max</span>(gap<span class="sc">$</span>year),</span>
-<span id="cb38-28"><a href="#cb38-28" tabindex="-1"></a>        <span class="at">step =</span> <span class="dv">5</span>,</span>
-<span id="cb38-29"><a href="#cb38-29" tabindex="-1"></a>        <span class="at">sep =</span> <span class="st">""</span></span>
-<span id="cb38-30"><a href="#cb38-30" tabindex="-1"></a>      ),</span>
-<span id="cb38-31"><a href="#cb38-31" tabindex="-1"></a>      <span class="fu">selectInput</span>(  <span class="co">#&lt;--ADD IN A COLOR SCHEME SELECTOR</span></span>
-<span id="cb38-32"><a href="#cb38-32" tabindex="-1"></a>        <span class="at">inputId =</span> <span class="st">"color_scheme"</span>,</span>
-<span id="cb38-33"><a href="#cb38-33" tabindex="-1"></a>        <span class="at">label =</span> <span class="st">"Pick a color scheme for the graph."</span>,</span>
-<span id="cb38-34"><a href="#cb38-34" tabindex="-1"></a>        <span class="at">choices =</span> <span class="fu">c</span>(<span class="st">"viridis"</span>, <span class="st">"plasma"</span>, <span class="st">"magma"</span>)</span>
-<span id="cb38-35"><a href="#cb38-35" tabindex="-1"></a>      )</span>
-<span id="cb38-36"><a href="#cb38-36" tabindex="-1"></a>    ),</span>
-<span id="cb38-37"><a href="#cb38-37" tabindex="-1"></a><span class="do">##... other UI code...</span></span></code></pre>
+<pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" tabindex="-1"></a><span class="do">##This code should **replace** the "sidebar panel" cell's content within the BODY section of your ui.R file!</span></span>
+<span id="cb39-2"><a href="#cb39-2" tabindex="-1"></a></span>
+<span id="cb39-3"><a href="#cb39-3" tabindex="-1"></a><span class="do">##... other UI code...</span></span>
+<span id="cb39-4"><a href="#cb39-4" tabindex="-1"></a><span class="do">###SIDEBAR CELL</span></span>
+<span id="cb39-5"><a href="#cb39-5" tabindex="-1"></a>    <span class="fu">column</span>(</span>
+<span id="cb39-6"><a href="#cb39-6" tabindex="-1"></a>      <span class="at">width =</span> <span class="dv">4</span>,</span>
+<span id="cb39-7"><a href="#cb39-7" tabindex="-1"></a>      <span class="fu">selectInput</span>(</span>
+<span id="cb39-8"><a href="#cb39-8" tabindex="-1"></a>        <span class="at">inputId =</span> <span class="st">"sorted_column"</span>,</span>
+<span id="cb39-9"><a href="#cb39-9" tabindex="-1"></a>        <span class="at">label =</span> <span class="st">"Select a column to sort the table by."</span>,</span>
+<span id="cb39-10"><a href="#cb39-10" tabindex="-1"></a>        <span class="at">choices =</span> <span class="fu">c</span>(</span>
+<span id="cb39-11"><a href="#cb39-11" tabindex="-1"></a>          <span class="st">"Country"</span> <span class="ot">=</span> <span class="st">"country"</span>,</span>
+<span id="cb39-12"><a href="#cb39-12" tabindex="-1"></a>          <span class="st">"Continent"</span> <span class="ot">=</span> <span class="st">"continent"</span>,</span>
+<span id="cb39-13"><a href="#cb39-13" tabindex="-1"></a>          <span class="st">"Year"</span> <span class="ot">=</span> <span class="st">"year"</span>,</span>
+<span id="cb39-14"><a href="#cb39-14" tabindex="-1"></a>          <span class="st">"Life expectancy"</span> <span class="ot">=</span> <span class="st">"lifeExp"</span>,</span>
+<span id="cb39-15"><a href="#cb39-15" tabindex="-1"></a>          <span class="st">"Population size"</span> <span class="ot">=</span> <span class="st">"pop"</span>,</span>
+<span id="cb39-16"><a href="#cb39-16" tabindex="-1"></a>          <span class="st">"GDP per capita"</span> <span class="ot">=</span> <span class="st">"gdpPercap"</span></span>
+<span id="cb39-17"><a href="#cb39-17" tabindex="-1"></a>        )</span>
+<span id="cb39-18"><a href="#cb39-18" tabindex="-1"></a>      ),</span>
+<span id="cb39-19"><a href="#cb39-19" tabindex="-1"></a>      <span class="fu">actionButton</span>(<span class="at">inputId =</span> <span class="st">"go_button"</span>, <span class="at">label =</span> <span class="st">"Go!"</span>),</span>
+<span id="cb39-20"><a href="#cb39-20" tabindex="-1"></a>    <span class="co"># actionButton(inputId = "reset_button",</span></span>
+<span id="cb39-21"><a href="#cb39-21" tabindex="-1"></a>      <span class="co">#                   label = "Reset!"),</span></span>
+<span id="cb39-22"><a href="#cb39-22" tabindex="-1"></a>      <span class="fu">sliderInput</span>(</span>
+<span id="cb39-23"><a href="#cb39-23" tabindex="-1"></a>        <span class="at">inputId =</span> <span class="st">"year_slider"</span>,</span>
+<span id="cb39-24"><a href="#cb39-24" tabindex="-1"></a>        <span class="at">label =</span> <span class="st">"Pick what year's data are shown in the map."</span>,</span>
+<span id="cb39-25"><a href="#cb39-25" tabindex="-1"></a>        <span class="at">value =</span> <span class="dv">2007</span>,</span>
+<span id="cb39-26"><a href="#cb39-26" tabindex="-1"></a>        <span class="at">min =</span> <span class="fu">min</span>(gap<span class="sc">$</span>year),</span>
+<span id="cb39-27"><a href="#cb39-27" tabindex="-1"></a>        <span class="at">max =</span> <span class="fu">max</span>(gap<span class="sc">$</span>year),</span>
+<span id="cb39-28"><a href="#cb39-28" tabindex="-1"></a>        <span class="at">step =</span> <span class="dv">5</span>,</span>
+<span id="cb39-29"><a href="#cb39-29" tabindex="-1"></a>        <span class="at">sep =</span> <span class="st">""</span></span>
+<span id="cb39-30"><a href="#cb39-30" tabindex="-1"></a>      ),</span>
+<span id="cb39-31"><a href="#cb39-31" tabindex="-1"></a>      <span class="fu">selectInput</span>(  <span class="co">#&lt;--ADD IN A COLOR SCHEME SELECTOR</span></span>
+<span id="cb39-32"><a href="#cb39-32" tabindex="-1"></a>        <span class="at">inputId =</span> <span class="st">"color_scheme"</span>,</span>
+<span id="cb39-33"><a href="#cb39-33" tabindex="-1"></a>        <span class="at">label =</span> <span class="st">"Pick a color scheme for the graph."</span>,</span>
+<span id="cb39-34"><a href="#cb39-34" tabindex="-1"></a>        <span class="at">choices =</span> <span class="fu">c</span>(<span class="st">"viridis"</span>, <span class="st">"plasma"</span>, <span class="st">"magma"</span>)</span>
+<span id="cb39-35"><a href="#cb39-35" tabindex="-1"></a>      )</span>
+<span id="cb39-36"><a href="#cb39-36" tabindex="-1"></a>    ),</span>
+<span id="cb39-37"><a href="#cb39-37" tabindex="-1"></a><span class="do">##... other UI code...</span></span></code></pre>
 </div>
 <p>In <code>plotly</code>, the color scheme is generally specified
 inside the <code>plot_ly()</code> call (the equivalent of
@@ -2136,7 +2254,7 @@ trigger a re-styling of the graph.</p>
 graph from a new observer that watches <code>input$color_scheme</code>
 and triggers restyling using <code>plotlyProxy()</code>. Let’s see all
 these pieces in action:</p>
-<div class="codewrapper sourceCode" id="cb39">
+<div class="codewrapper sourceCode" id="cb40">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2226,7 +2344,7 @@ functions <code>event_register()</code> to specify which events to track
 and <code>event_data()</code> to pass the relevant event data from the
 UI to the server. This <em>sounds</em> a more complicated than what
 we’re used to, but it’s really the same idea, just with more parts:</p>
-<div class="codewrapper sourceCode" id="cb40">
+<div class="codewrapper sourceCode" id="cb41">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2248,7 +2366,7 @@ we’re used to, but it’s really the same idea, just with more parts:</p>
 <span>    <span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">##... other UI code...</span></span></code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb41">
+<div class="codewrapper sourceCode" id="cb42">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2261,7 +2379,7 @@ we’re used to, but it’s really the same idea, just with more parts:</p>
 <span>  <span class="fu">event_register</span><span class="op">(</span><span class="st">"plotly_click"</span><span class="op">)</span> <span class="op">%&gt;%</span>  <span class="co">##&lt;--WATCH THIS GRAPH FOR USER CLICKS, SPECIFICALLY.</span></span>
 <span>  <span class="fu">style</span><span class="op">(</span>hoverinfo <span class="op">=</span> <span class="st">"text"</span><span class="op">)</span></span></code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb42">
+<div class="codewrapper sourceCode" id="cb43">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2398,7 +2516,7 @@ any links that you are not going to use.
   "url": "https://carpentries.github.io/r_shiny_workshop/shiny_4.html",
   "identifier": "https://carpentries.github.io/r_shiny_workshop/shiny_4.html",
   "dateCreated": "2024-07-10",
-  "dateModified": "2024-07-11",
+  "dateModified": "2024-08-20",
   "datePublished": "2024-08-20"
 }
 

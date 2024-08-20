@@ -219,7 +219,7 @@
 <div class="accordion accordion-flush" id="accordionFlush2">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading2">
-        <a href="shiny_1.html">1. Web development 101</a>
+        <a href="shiny_1.html">1. Welcome to the Web!</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -298,7 +298,7 @@
       </div>
       <!-- content for large screens -->
       <div class="d-none d-sm-none d-md-block">
-        <a class="chapter-link float-end" href="shiny_1.html" rel="next">Next: Web development 101... <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
+        <a class="chapter-link float-end" href="shiny_1.html" rel="next">Next: Welcome to the Web!... <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
       </div>
       <hr></nav><main id="main-content" class="main-content"><h1 class="schedule-heading">Summary and Setup</h1>
       
@@ -313,40 +313,42 @@ any links that you are not going to use.
 
       <section id="setup"><section><h2 class="section-heading" id="required-setup">Required Setup<a class="anchor" aria-label="anchor" href="#required-setup"></a>
 <a class="anchor" aria-label="anchor" href="#required-setup"></a></h2>
-<hr class="half-width"><p>This lesson assumes you have R and RStudio installed on your
-computer. If you need either or both of these, use the links below:</p>
+<hr class="half-width"><p>This lesson assumes you have R and RStudio installed. If you need
+either, use the links below:</p>
 <ul><li><p><a href="https://www.r-project.org/" class="external-link">Download and install the
 latest version of R</a> for your operating system.</p></li>
 <li><p><a href="https://posit.co/download/rstudio-desktop/#download" class="external-link">Download and
-install RStudio</a> for your operating system. RStudio is an application
-(an integrated development environment or IDE) that facilitates the use
-of R and offers a number of nice additional features. You will need the
-free Desktop version.</p></li>
-</ul><p>This lesson also takes advantage of several add-on packages for R
+install RStudio</a> for your operating system.</p></li>
+</ul><p>RStudio is an application (an integrated development environment, or
+IDE, to be exact) that facilitates the use of R and offers a number of
+nice features. While R Studio is not <em>strictly</em> required to use
+base R, it is all but required to build Shiny app (to try to build a
+Shiny app in base R sounds nightmarish to me, and I’m not sure it’s even
+possible).</p>
+<p>This lesson also takes advantage of several add-on packages for R
 that do not come bundled with R’s default installation. These packages
-can be installed using the following command within R or RStudio:</p>
+can be installed using the following command within R/RStudio:</p>
 <p><code>{r installing packages, eval=F} install.packages("shiny", "dplyr", "ggplot2", "leaflet", "DT", "plotly", "gapminder", "countrycode", "sf")</code></p>
 </section><section><h2 class="section-heading" id="data-sets">Data Sets<a class="anchor" aria-label="anchor" href="#data-sets"></a>
 <a class="anchor" aria-label="anchor" href="#data-sets"></a></h2>
-<hr class="half-width"><p>For the <code>leaflet</code> portion of the workshop, we will need to
-work with some spatial data. Please download <a href="data/TM_WORLD_BORDERS_SIMPL-0.3.zip">this zipped file of spatial
-data containing country boundaries</a>. Unzip it onto your desktop for
-now; you will be asked to move it to a new location later.</p>
-<p>We’ll also be using the <code>gapminder</code> data set for this set
-of lessons. This data set is available via the <code>gapminder</code>
-package within R:</p>
-<p><code>{r gapminder data, eval=F} library(gapminder) gap = gapminder #&lt;--OR WHATEVER YOU'D PREFER TO CALL THIS SHORTCUT.</code></p>
-<p>We recommend accessing this data set as shown above. <a href="data/gapminder.csv">However, you may also download it via this
+<hr class="half-width"><p>For the <code>leaflet</code> portion of the lesson, we’ll work with
+<strong>spatial data</strong>. Download <a href="data/TM_WORLD_BORDERS_SIMPL-0.3.zip">this zipped file of spatial
+data containing country boundaries</a>. Unzip it and place it on your
+desktop; you’ll move it later in the lessons.</p>
+<p>We’ll also use the <code>gapminder</code> data set for this lesson,
+available via the <code>gapminder</code> package:</p>
+<p><code>{r gapminder data, eval=F} library(gapminder) gap = gapminder #&lt;--OR WHATEVER YOU'D PREFER TO CALL IT.</code></p>
+<p>I recommend accessing it via the code above, <a href="data/gapminder.csv">but you may also download it via this
 link</a>.</p>
 </section><section><h2 class="section-heading" id="disclaimers">Disclaimers<a class="anchor" aria-label="anchor" href="#disclaimers"></a>
 <a class="anchor" aria-label="anchor" href="#disclaimers"></a></h2>
-<hr class="half-width"><p>This lesson assumes a working understanding of programming in R and
-of navigating the RStudio IDE. <u>This workshop is <strong>not</strong>
-an introduction to R or to RStudio, and it is not recommended for users
-who need either of these things</u>. Those who need R instruction are
-strongly encouraged to take, at a minimum, <a href="https://umn-dash.github.io/r-novice-gapminder/index.html" class="external-link">the “R
-for Reproducible Scientific Analysis” workshop</a> before enrolling in
-this workshop.</p>
+<hr class="half-width"><p>This lesson assumes a working understanding of the R programming
+language and of the RStudio IDE. <u>This workshop is
+<strong>not</strong> an introduction to R or RStudio, and it is
+<em>not</em> recommended for users who need either thing</u>. Those who
+do are <em>strongly</em> encouraged to complete, at a minimum, <a href="https://umn-dash.github.io/r-novice-gapminder/index.html" class="external-link">the “R
+for Reproducible Scientific Analysis” workshop</a> <em>before</em>
+engaging with in this lesson.</p>
 <!--
 Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
@@ -356,7 +358,7 @@ any links that you are not going to use.
       </div>
       <!-- content for large screens -->
       <div class="d-none d-sm-none d-md-block">
-        <a class="chapter-link float-end" href="shiny_1.html" rel="next">Next: Web development 101... <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
+        <a class="chapter-link float-end" href="shiny_1.html" rel="next">Next: Welcome to the Web!... <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
       </div>
     </nav></div>
 <!-- END  : inst/pkgdown/templates/content-syllabus.html -->

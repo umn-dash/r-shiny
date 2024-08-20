@@ -206,7 +206,7 @@
 <div class="accordion accordion-flush" id="accordionFlush2">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading2">
-        <a href="shiny_1.html">1. Web development 101</a>
+        <a href="shiny_1.html">1. Welcome to the Web!</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -237,6 +237,9 @@
         <ul><li><a href="#going-from-nothing-to-something">Going from nothing to something</a></li>
 <li><a href="#giving-your-users-input">Giving your users input</a></li>
 <li><a href="#how-r-shiny-differs-from-normal-r">How R Shiny differs from “normal R”</a></li>
+<li><a href="#buttoning-this-up">Buttoning this up</a></li>
+<li><a href="#being-observant">Being observant</a></li>
+<li><a href="#totally-tabular">Totally tabular</a></li>
         </ul></div><!--/div.accordion-body-->
     </div><!--/div.accordion-collapse-->
 
@@ -310,7 +313,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>R Shiny--The First Floor (Rendering, Inputs, and Reactivity)</h1>
-        <p>Last updated on 2024-07-17 |
+        <p>Last updated on 2024-08-20 |
 
         <a href="https://github.com/carpentries/r_shiny_workshop/edit/main/episodes/shiny_3.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -790,9 +793,9 @@ triggered to (re)run.</p>
 </div>
 </div>
 </div>
-<div class="section level3">
-<h3 id="buttoning-this-up">Buttoning this up<a class="anchor" aria-label="anchor" href="#buttoning-this-up"></a></h3>
-<p>By this point, R now knows that:</p>
+</section><section><h2 class="section-heading" id="buttoning-this-up">Buttoning this up<a class="anchor" aria-label="anchor" href="#buttoning-this-up"></a>
+<a class="anchor" aria-label="anchor" href="#buttoning-this-up"></a></h2>
+<hr class="half-width"><p>By this point, R now knows that:</p>
 <ol style="list-style-type: decimal"><li><p>Users might select new columns in our input widget
 (<strong>events</strong>),</p></li>
 <li><p>It should watch out for any such events, specifically inside
@@ -898,10 +901,9 @@ as guidance.</p>
 <figure><img src="../fig/go%20button%20works.gif" alt="Thanks to isolate(), our table only re-renders when the “Go” button is pressed, but the drop-down menu’s current value is still used in that process." class="figure mx-auto d-block"><div class="figcaption">Thanks to isolate(), our table only re-renders
 when the “Go” button is pressed, but the drop-down menu’s current value
 is still used in that process.</div>
-</figure></div>
-<div class="section level3">
-<h3 id="being-observant">Being observant<a class="anchor" aria-label="anchor" href="#being-observant"></a></h3>
-<p>This <em>works</em>, but it can get unwieldy if you have
+</figure></section><section><h2 class="section-heading" id="being-observant">Being observant<a class="anchor" aria-label="anchor" href="#being-observant"></a>
+<a class="anchor" aria-label="anchor" href="#being-observant"></a></h2>
+<hr class="half-width"><p>This <em>works</em>, but it can get unwieldy if you have
 <em>many</em> inputs that would need isolating. For those situations in
 which you want the app to respond a <em>specific</em> way <em>only</em>
 when a <em>specific</em> reactive object changes, especially when the
@@ -953,10 +955,9 @@ my own apps—they make an app’s behaviors far more predictable. [However,
 if you have a lot of events to handle, this may be a verbose way to
 handle them. Check out <code>observe({})</code> as a potential
 alternative.]</p>
-</div>
-<div class="section level3">
-<h3 id="totally-tabular">Totally tabular<a class="anchor" aria-label="anchor" href="#totally-tabular"></a></h3>
-<p>We now have all the conceptual tools needed to build a really cool
+</section><section><h2 class="section-heading" id="totally-tabular">Totally tabular<a class="anchor" aria-label="anchor" href="#totally-tabular"></a>
+<a class="anchor" aria-label="anchor" href="#totally-tabular"></a></h2>
+<hr class="half-width"><p>We now have all the conceptual tools needed to build a really cool
 app! In the next lesson, we’ll replace this table with a cooler one, and
 we’ll add map and graph widgets. To keep all this organized, though,
 let’s add <strong>tabs</strong> to our main content area, one for each
@@ -1045,7 +1046,6 @@ which is visible at a time.</li>
 Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use.
  -->
-</div>
 </section></div> <!-- / div.lesson-content -->
     </main><!-- / main#main-content.main-content --><nav class="bottom-pagination mx-md-4" aria-label="Previous and Next Chapter"><div class="d-block d-sm-block d-md-none">
         <a class="chapter-link" href="../instructor/shiny_2.html"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous</a>
@@ -1104,7 +1104,7 @@ any links that you are not going to use.
   "url": "https://carpentries.github.io/r_shiny_workshop/instructor/shiny_3.html",
   "identifier": "https://carpentries.github.io/r_shiny_workshop/instructor/shiny_3.html",
   "dateCreated": "2024-07-10",
-  "dateModified": "2024-07-17",
+  "dateModified": "2024-08-20",
   "datePublished": "2024-08-20"
 }
 
