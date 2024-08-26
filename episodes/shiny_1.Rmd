@@ -315,11 +315,51 @@ many layers deep:
 ```{r, eval = F}
 div(id = "my box",
     div(id = "layer2", 
-        div(id = "layer3", ....)))
+        div(id = "layer3", ...)))
 ```
 
 It's through this nesting of boxes that the complex visual structure of
 a typical website is born.
+
+::: exercise
+Below is some HTML code containing some (nested) HTML boxes. Rewrite the
+code below in R Shiny UI code instead using the `div()` function:
+
+``` HTML
+<div id="main-container" class="container">
+<div class="content">Welcome to our app!</div>
+</div>
+```
+
+::: solution
+The above code contains one outer HTML box with both an `id` attribute
+and a `class` attribute. R Shiny has equivalent **function parameters**
+for those two attributes in its `div()` function:
+
+```{r shiny divs, eval=F}
+div(id = "main-container",
+    class = "container",
+    #...contents go here.
+    )
+```
+
+In this example, this outer `div`'s contents are another `div`, which
+itself has a class and some text contents:
+
+```{r shiny divs2, eval=F}
+div(id = "main-container",
+    class = "container",
+    div(class = "content",
+        "Welcome to our app!") #Text strings need to be quoted in R even though they don't in HTML.
+    )
+```
+
+While nesting many function calls inside one another is not an uncommon
+practice among everyday R users, it's certainly not universal, but it's
+essential to coding in HTML, so some find the amount of nesting found in
+R Shiny UI code to be unfamiliar.
+:::
+:::
 
 #### Key concept #2: Websites have heads and bodies
 
@@ -374,12 +414,44 @@ function) is a box that holds a link to a URL or file. You could use
 several such boxes within a single paragraph box *without* spawning a
 new line after each one.
 
+``` HTML
+<!-- HERE'S HOW YOU'D RECREATE THE IMAGE ABOVE IN HTML -->
+<div>
+<h1>Block-level</h1>
+<p>This is a paragraph.</p>
+<p>This is another paragraph.</p>
+<p>Paragraphs are block elements, so they stack vertically.</p>
+<h1>Inline</h1>
+<a>Links are</a>
+<a>Inline elements,</a>
+<a>so they fit side-by-side.</a>
+</div>
+```
+
+```{r equivalent html, eval=F}
+#And here's the exact same code, only written in R Shiny code instead:
+div(
+  h1("Block-level"),
+  p("This is a paragraph."),
+  p("This is another paragraph."),
+  p("Paragraphs are block elements, so they stack vertically."),
+  h1("Inline"),
+  a("Links are"),
+  a("Inline elements,"),
+  a("so they fit side-by-side")
+)
+
+#Note that text contents are quoted. Note also that commas separate every UI element from the next. 
+
+#Lastly, note that the line breaks between elements here (and in the HTML code above) are irrelevant with respect to the code's effects--paragraph and heading boxes would still stack vertically without them, and links still will fit side-by-side with them.
+```
+
 This dichotomy means every element of every website falls into one of
 two aesthetic camps. Certain elements tend to "stand alone" or "stand
-apart" from others visually, such as headings and navigation bars. These
-are generally block elements. Other elements "fit together" and
-"co-mingle," such as links and images. These are generally inline
-elements.
+apart" from others visually and logically, such as headings and
+navigation bars. These are generally block elements. Other elements "fit
+together" and "co-mingle," such as links and images. These are generally
+inline elements.
 
 #### Key concept #4: The Flow
 
