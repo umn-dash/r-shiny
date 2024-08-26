@@ -1,6 +1,6 @@
 ---
-title: R Shiny--The First Floor (Rendering, Inputs, and Reactivity)
-teaching: 40
+title: "R Shiny's Core Concepts: Rendering, Inputs, and Reactivity"
+teaching: 50
 exercises: 10
 source: Rmd
 editor_options: 
@@ -9,74 +9,82 @@ editor_options:
 ---
 
 ::: objectives
--   Build a table to add to your app's UI.
--   Allow users to adjust how the table appears in real time.
--   Give users greater control over when the table's appearance changes.
--   Define the terms **reactive context**, **event**, **event
-    handling**, **declarative coding**, and **imperative coding**.
--   Explain how and why R Shiny server-side code executes differently
-    than traditional R code.
--   Use **isolation** and **observers** to control event handling more
-    tightly.
--   Expand your UI's "real estate" by introducing a tab set.
+-   Add a table to your app's UI to present data to the user.
+-   Allow users to adjust how the table looks, and give them control
+    over when its looks change.
+-   Define **reactive context**, **event**, **event handling**,
+    **declarative coding**, and **imperative coding**.
+-   Explain how and why R Shiny server code executes differently than
+    "traditional" R code.
+-   Use **isolation** and **observers** to more tightly control event
+    handling.
+-   Expand your UI's "real estate" by introducing a tab set panel.
 :::
 
 ::: questions
 -   How do I add cool features to my app?
--   How do I give my users meaningful things to do?
--   How do I code my app to respond to user actions?
--   How do I give my users greater control over when/how my app
+-   How do I give my users meaningful things to do on my app?
+-   How do I get my app to respond meaningfully to users' actions?
+-   How do I give users greater control over when/how my app responds?
+-   How do I give *myself* greater control over when/how my app
     responds?
--   How do I give myself greater control over when/how my app responds?
--   How is R Shiny server code (likely) different than code I've written
+-   How is R Shiny server code different than code I may have written
     before?
 :::
 
 ## Going from nothing to something
 
-As we saw at the end of last lesson, our app doesn't look like much
-yet—just a title on an otherwise empty page. In this lesson, we'll fix
-that! As we add content, we'll learn three core concepts of building a
-website using Shiny: 1) **rendering** and **outputting** complex UI
-elements, 2) **input widgets**, and 3) **reactivity**.
+As we saw at the end of the last lesson, our app doesn't look like
+much...yet! It is just a title on an otherwise empty page. In this
+lesson, we'll fix that! As we add content, we'll learn three core
+concepts of building a website using Shiny: 1) **rendering** and
+**outputting** complex UI elements, 2) **input widgets**, and 3)
+**reactivity**.
 
-We'll create an app for showcasing the `gapminder` data set, which
-contains population, life expectancy, and economic data over time for
-most countries. The goal will be to give users interesting ways to
-interactively engage with these data. As we go, imagine how you might do
-the same for your own data sets!
+Our app will showcase the `gapminder` data set, which contains
+population, life expectancy, and economic data over time for most of the
+world's countries. Our goal is give users interesting ways to engage
+with these data. As we go, imagine how you might do the same for your
+own data sets!
 
-Let's start by giving users a table with which to view the data. If you
-think about it, a table is just several boxes (cells) within larger
-boxes (rows and columns). So, it makes sense that a table should be
-something buildable in HTML, and it can be! However, depending on the
-number of cells, it would require typing a LOT of boxes.
+Let's start by giving users a table with which to view the raw data. If
+you think about it, a table is just a bunch of boxes (cells) within
+larger boxes (rows and columns) within one outermost box (the table
+"holder").
 
-Fortunately, we don't have to "code" all those boxes "by hand;" we can
-have R do that! To build an element that is complex enough that building
-it programmatically is appealing and then insert it into our UI where a
-user can see it, we must:
+So, it makes sense that a table should be build-able in HTML, a language
+all about building nested boxes! However, depending on the number of
+cells, it would require typing out a LOT of boxes...Fortunately, we
+don't have to "code" all those boxes "by hand;" we can have R do it!
 
-1.  Make (*i.e.*, *render*) that element on the server side of our app.
+To build an element (like a table for a data set) complex enough that
+building it programmatically instead of by hand is appealing, and then
+to insert that complex element into our UI where a user can see it, we
+must:
 
-    1.  This involves first doing whatever "heavy lifting" is needed to
-        assemble the product. For a table, *e.g.*, R might need to do
-        some data manipulation.
+1.  Make (*i.e.*, *render*) that element on the server half of our app.
 
-    2.  Then, it involves converting (behind the scenes) what we've put
-        together into the equivalent HTML code.
+    -   This first involves doing whatever "heavy lifting" is needed to
+        assemble the underlying R object. For a table, *e.g.*, R might
+        need to do some data manipulation, like joining two smaller
+        tables together.
 
-2.  Then, we pass it to the UI side and indicate where *exactly* in our
-    UI we'd like the finished element to go.
+    -   Then, we convert (behind the scenes) that R object into its
+        functional equivalent in HTML, a process called *rendering* in
+        Shiny.
 
-For virtually every such complex element you'd want to build in Shiny,
-there is a pair of functions designed to do those two steps. In this
-particular case, that pair with be `renderTable({})` on the server side
-and `tableOutput()` on the UI side. [Notice that most Shiny functions
-follow a camelCase **naming convention**.]
+2.  Then, we pass te rendered version over to the UI side of our app,
+    indicating *where* in our UI we'd like the finished element to
+    display for a user, a process called *outputting* in Shiny.
+
+For virtually every complex element you'd want to build in Shiny, there
+is a pair of functions designed to do those two steps. In this
+particular case, that pair is `renderTable({})` on the server side and
+`tableOutput()` on the UI side. [Notice that most Shiny functions use a
+camelCase **naming convention**.]
 
 Let's use these two functions to add a basic table of the `gapminder`
-data set to our app:
+data set to our app's UI:
 
 
 ``` r
@@ -84,39 +92,45 @@ data set to our app:
 
 ###TABLE
 output$basic_table = renderTable({
-  gap #<--OR WHATEVER YOU NAMED THIS OBJECT IN GLOBAL.R
+  gap #<--OR WHATEVER YOU NAMED THIS DATA SET OBJECT IN YOUR GLOBAL.R
 })
 ```
 
-Above, we instructed R to render an "HTML-ized" version of a table
-containing the entire gapminder data set. If we wanted to do any
-operations on this data set first (such as filtering it or adding
-columns to it), we could have done those using "normal" R code inside
-`renderTable({})`'s braces. So long as it's a table, the last thing
-produced inside these braces is what will be rendered. Here, we wanted
-to render entire data set, so that's all we put inside the braces.
+Above, we instructed R to render an "HTML-ized" version of a data frame
+of the entire raw gapminder data set. Here, because we wanted to render
+the entire data set, that's all we put inside the braces. If we had
+wanted to do any operations on this data set first (such as filtering it
+or adding columns to it), though, we could have done so using "normal R
+code" inside `renderTable({})`'s braces. So long as it's a data
+frame-like object, the last thing produced inside the braces is what
+will be rendered (anything else being last will trigger an error).
 
-*How* the finished table gets passed from the server to the UI, though,
-is worth highlighting. Last lesson, recall that the app creates an
-object called `output` as soon as the app starts running.
+So, we now have a rendered, HTML-ized table of our data set on the
+server side of our app. How do we get it from the server to the UI?
+Remember that users can only see what the server instructs a user's
+browser to build into a UI, so we must tell R to "pass" this rendered
+table over to the UI *somehow*...
 
-The task of passing rendered elements from the server side to the client
-side is what that `output` object is for. If an app is a restaurant, and
+Last lesson, recall that the app creates an object called `output` as
+soon as the app boots. [Passing rendered elements from the server to the
+client is `output`'s job]{.underline}. If an app is a restaurant, and
 rendering is the process of "cooking" elements back in the kitchen area,
-then `output` is the waiter that brings those finished element out into
-the dining area where users can experience them.
+then `output` is the waiter that brings those finished elements out to
+the dining area where users/customers can experience them.
 
-For this to work, we just needed to give the element a nickname (an
-`outputId`) to use to stick the element to the `output` object using the
-`$` operator. Here, the nickname I provided was `basic_table`. Think of
-the `outputId` as a code for the table of diners that ordered the
-element. `output` (our "waiter") can use that code to figure out where
-to take the element once it's ready.
+For this process to happen, we first give the element a nickname (an
+`outputId`) it adopts once it has been rendered. Then, we use that
+`outputId` to "stick" the rendered element to the `output` object using
+the `$` operator.
 
-The only other thing the app needs to know is *where* it should put this
-rendered table in the app's UI—we need to "drop this element off at the
-appropriate table." We tell the app where to place the table element
-through our placement of the `tableOutput()` call in our UI:
+Here, the nickname we provided was `basic_table`. In our restautant
+analogy, think of the `outputId` as the order ticket the waiter filled
+out when a table ordered food. `output` (our "waiter") uses that code
+later to figure out which prepared food belongs to which order.
+
+Now, we just need to code the equivalent of "dropping this element off
+at the appropriate table." We tell the app where to place the element
+through placement of a `tableOutput()` call in our UI:
 
 
 ``` r
@@ -129,7 +143,7 @@ fluidRow(
   column(width = 4),
   ###MAIN PANEL CELL
   column(width = 8,
-         tableOutput("basic_table")#<--PUTTING OUR RENDERED TABLE INTO OUR "MAIN PANEL" CELL.
+         tableOutput("basic_table")#<--PUTTING OUR RENDERED TABLE INTO OUR "MAIN PANEL" CELL USING tableOutput AND THE outputId OF THE RENDERED PRODUCT AS ITS INPUT.
          )
 ),
 
@@ -139,31 +153,33 @@ fluidRow(
 Here, we've placed our outputted table inside the "main panel" cell of
 our central, two-column `fluidRow()`.
 
-A single app might render and display multiple tables. How would the app
-know *which* table should be displayed *where*? This is cleared up by
-`tableOutput()` because it takes, as its first input, the `outputId` of
-the table that should be displayed in that location. So, we use the
-`outputId`s we pick server-side to keep our outputs straight UI-side.
+Why do we need to use our `outputId` in this way? Wouldn't it be enough
+to just place an empty `tableOutput()` call here? Well, a single app
+might render and display multiple different tables. How would the app
+know *which* table should be displayed *where*? This ambiguity is
+cleared up by specifying the `outputId` of the specific table we want
+displayed in a specific location in the UI.
 
 If you run your app at this point, you should get something that looks
 like this:
 
-![Our Shiny app with our basic HTML table of the gapminder data
-set.](fig/basic%20table.png)
+![Our Shiny app with our basic HTML table of the gapminder data set
+displayed in the UI.](fig/basic%20table.png)
 
-Which is cool! But not *terribly* exciting...it looks a little drab, and
-users can't actually **do** anything with this table except look at it.
-The first problem we'll start to fix later when we swap it for a much
+Our table is cool! But not *terribly* exciting...it looks a little drab,
+and users can't actually **do** anything with it except look at it. The
+first problem we'll start to fix later when we swap it out for a *much*
 better one. However, we can fix the second problem now.
 
 ## Giving your users input
 
-The value of a Shiny app can be measured by how much it lets users *do*.
-To enable meaningful user interactions, we need to add **widgets**. A
-widget is an element users can interact with such that the app might
-reasonably respond in some way. In web development, user actions that
-the webpage can watch for are called **events**; responding to an event
-(or choosing to not respond!) is called **event** **handling**.
+In my opinion, the value of a Shiny app can be measured by how much it
+lets users *do*. To enable meaningful user interactions, we can add
+**widgets**. A widget is any element users can interact with and thus
+provide data to the app it could (maybe) use to respond. In web
+development, user actions a webpage can watch for are called **events**;
+responding to an event (or choosing to not respond!) is called **event**
+**handling**.
 
 Let's start by adding an **input widget** to our UI so that new
 **events** are possible. Specifically, let's add a `selectInput()` to
