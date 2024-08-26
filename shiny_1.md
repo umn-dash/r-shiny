@@ -322,7 +322,7 @@ div(id = "my box",
 It's through this nesting of boxes that the complex visual structure of
 a typical website is born.
 
-::: exercise
+::: challenge
 Below is some HTML code containing some (nested) HTML boxes. Rewrite the
 code below in R Shiny UI code instead using the `div()` function:
 
@@ -591,7 +591,7 @@ simultaneously, with those two targets separated with a comma:
         specify the class to target all those elements with the same CSS
         rule (*e.g.*, `.intro`).
 
-::: exercise
+::: challenge
 Consider the following elements. Which ones do you think would be
 affected by a CSS selector of `p.intro?`
 
