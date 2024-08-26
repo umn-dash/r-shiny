@@ -528,7 +528,7 @@ What do you think gets deleted when you do that?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>A good portion of your cache (in terms of numbers of files, anyway)
 will be HTML, CSS, and JS files sent to you by servers to build websites
@@ -587,7 +587,7 @@ using R Shiny, then?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <p>A few things are different about building a website using R Shiny,
 but I think the two most important are:</p>
@@ -731,7 +731,7 @@ function:</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <p>The above code contains one outer HTML box with both an
 <code>id</code> attribute and a <code>class</code> attribute. R Shiny
@@ -915,7 +915,7 @@ How does this website “flow?”</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4"> Show me the solution </h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
 <div class="accordion-body">
 <p>For me, I saw a number of changes as I shrunk my browser screen: The
 menu at the top became a collapsed “hamburger” menu (a button with three
@@ -978,13 +978,15 @@ our <strong>selector</strong>, which here is targeting two different
 groups of boxes simultaneously, with those two targets separated with a
 comma:</p>
 <ol style="list-style-type: decimal">
-<li><p>The first target is paragraph boxes (<code>p()</code>s), but
+<li>The first target is paragraph boxes (<code>p()</code>s), but
 <em>only</em> those with the <code>intro</code> <strong>class</strong>
 <strong>attribute</strong>. A <strong>class</strong> is actually an HTML
 <strong><em>attribute</em></strong> that allows many boxes to be
 controlled and styled as one group. A period connects an HTML element
 type with a <strong>class</strong> name in a CSS selector
-(<em>e.g.</em>, <code>p.intro</code>).</p></li>
+(<em>e.g.</em>, <code>p.intro</code>).</li>
+</ol>
+<!-- --><ol style="list-style-type: decimal">
 <li>
 <p>Our second target is <code>div</code>s (a highly generic HTML
 box), but <em>only</em> the one with the <strong>id</strong>
@@ -1003,6 +1005,42 @@ CSS rule (<em>e.g.</em>, <code>.intro</code>).</p></li>
 </ul>
 </li>
 </ol>
+<div class="exercise">
+<p>Consider the following elements. Which ones do you think would be
+affected by a CSS selector of <code>p.intro?</code></p>
+<div class="codewrapper sourceCode" id="cb11">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">p</span><span class="op">(</span>class <span class="op">=</span> <span class="st">"intro"</span><span class="op">)</span></span>
+<span><span class="fu">p</span><span class="op">(</span>class <span class="op">=</span> <span class="st">"intro special"</span><span class="op">)</span></span>
+<span><span class="fu">p</span><span class="op">(</span>class <span class="op">=</span> <span class="st">"body"</span><span class="op">)</span></span>
+<span><span class="fu">p</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"intro"</span><span class="op">)</span></span>
+<span><span class="fu">a</span><span class="op">(</span>class <span class="op">=</span> <span class="st">"intro"</span><span class="op">)</span></span></code></pre>
+</div>
+<div id="accordionSolution5" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution5" aria-expanded="false" aria-controls="collapseSolution5">
+  <h4 class="accordion-header" id="headingSolution5"> Show me the solution </h4>
+</button>
+<div id="collapseSolution5" class="accordion-collapse collapse" data-bs-parent="#accordionSolution5" aria-labelledby="headingSolution5">
+<div class="accordion-body">
+<p>Answers can be found embedded in the code below:</p>
+<div class="codewrapper sourceCode" id="cb12">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">p</span><span class="op">(</span>class <span class="op">=</span> <span class="st">"intro"</span>, <span class="st">"This p element has the intro class and would be affected by a CSS selector of p.intro."</span><span class="op">)</span></span>
+<span><span class="fu">p</span><span class="op">(</span>class <span class="op">=</span> <span class="st">"intro special"</span>, <span class="st">"This p element actually has two classes, 'intro' and 'special' (multiple classes can be applied if they are separated with a space). Since one of those classes is 'intro', this element would be affected by the selector p.intro."</span><span class="op">)</span></span>
+<span><span class="fu">p</span><span class="op">(</span>class <span class="op">=</span> <span class="st">"body"</span>, <span class="st">"This p element does not have the specific class 'intro' and would thus be unaffected by the selector p.intro."</span><span class="op">)</span></span>
+<span><span class="fu">p</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"intro"</span>, <span class="st">"ids and classes are different attributes, so this p element would be unaffected by the selector p.intro, but it would be affected by the selector p#intro."</span><span class="op">)</span></span>
+<span><span class="fu">a</span><span class="op">(</span>class <span class="op">=</span> <span class="st">"intro"</span>, <span class="st">"An a (link) element is different from a p element, so the selector p.intro won't affect this element even though the element does have the 'intro' class. It would be affected by the selectors .intro and a.intro though."</span><span class="op">)</span></span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 <p>Inside of our rule’s braces, meanwhile, we have a list. Each list
 item is a <strong>property name</strong> (<em>e.g.</em>,
 <code>font-style</code>) and a new <strong>value</strong>
@@ -1030,21 +1068,21 @@ center-aligned.</p>
 </div>
 </div>
 </div>
-<div id="accordionSolution5" class="accordion challenge-accordion accordion-flush">
+<div id="accordionSolution6" class="accordion challenge-accordion accordion-flush">
 <div class="accordion-item">
-<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution5" aria-expanded="false" aria-controls="collapseSolution5">
-  <h4 class="accordion-header" id="headingSolution5"> Show me the solution </h4>
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution6" aria-expanded="false" aria-controls="collapseSolution6">
+  <h4 class="accordion-header" id="headingSolution6"> Show me the solution </h4>
 </button>
-<div id="collapseSolution5" class="accordion-collapse collapse" aria-labelledby="headingSolution5" data-bs-parent="#accordionSolution5">
+<div id="collapseSolution6" class="accordion-collapse collapse" data-bs-parent="#accordionSolution6" aria-labelledby="headingSolution6">
 <div class="accordion-body">
 <p>Here’s how you’d write this rule:</p>
-<div class="codewrapper sourceCode" id="cb11">
+<div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">CSS<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode css" tabindex="0"><code class="sourceCode css"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>p {</span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="kw">color</span><span class="ch">:</span> <span class="cn">red</span><span class="op">;</span></span>
-<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="kw">text-align</span><span class="ch">:</span> <span class="dv">center</span><span class="op">;</span></span>
-<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>}</span></code></pre>
+<pre class="sourceCode css" tabindex="0"><code class="sourceCode css"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>p {</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="kw">color</span><span class="ch">:</span> <span class="cn">red</span><span class="op">;</span></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="kw">text-align</span><span class="ch">:</span> <span class="dv">center</span><span class="op">;</span></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>}</span></code></pre>
 </div>
 <p>Notice that we can target <em>all</em> <code>p</code> elements by not
 appending any classes or ids. Don’t forget your colons, braces, commas
@@ -1148,12 +1186,12 @@ recognize (buttons, text blocks, etc.).</p>
 </div>
 </div>
 </div>
-<div id="accordionSolution6" class="accordion challenge-accordion accordion-flush">
+<div id="accordionSolution7" class="accordion challenge-accordion accordion-flush">
 <div class="accordion-item">
-<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution6" aria-expanded="false" aria-controls="collapseSolution6">
-  <h4 class="accordion-header" id="headingSolution6"> Show me the solution </h4>
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution7" aria-expanded="false" aria-controls="collapseSolution7">
+  <h4 class="accordion-header" id="headingSolution7"> Show me the solution </h4>
 </button>
-<div id="collapseSolution6" class="accordion-collapse collapse" aria-labelledby="headingSolution6" data-bs-parent="#accordionSolution6">
+<div id="collapseSolution7" class="accordion-collapse collapse" data-bs-parent="#accordionSolution7" aria-labelledby="headingSolution7">
 <div class="accordion-body">
 <p>Here’s what I noticed and identified:</p>
 <figure><img src="fig/clipboard-2886539574.png" class="figure mx-auto d-block"></figure><p>You may have noticed more, fewer, or different things—that’s ok!</p>
@@ -3254,7 +3292,7 @@ functionality, or if you’d prefer having both.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>First, we add the reset button to our UI, just below the current
 “Go!” button:</p>
@@ -3759,7 +3797,7 @@ your users will use mobile devices, do you think?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <p>If we use <code>label</code>, we get tooltips that appears on mouse
 hover instead of on mouse click. Actually, this is <em>probably</em>
