@@ -569,7 +569,10 @@ simultaneously, with those two targets separated with a comma:
     as one group. A period connects an HTML element type with a
     **class** name in a CSS selector (*e.g.*, `p.intro`).
 
-2.  Our second target is `div`s (a highly generic HTML box), but *only*
+```{=html}
+<!-- -->
+```
+1.  Our second target is `div`s (a highly generic HTML box), but *only*
     the one with the **id** **attribute** of `firstintro`. `id`s allow
     us to control or style just a specific element. A hashtag connects
     an HTML element type with an `id` name in a CSS selector (*e.g.*,
@@ -583,6 +586,31 @@ simultaneously, with those two targets separated with a comma:
         have the same class, you can omit an element type and just
         specify the class to target all those elements with the same CSS
         rule (*e.g.*, `.intro`).
+
+::: exercise
+Consider the following elements. Which ones do you think would be
+affected by a CSS selector of `p.intro?`
+
+```{r example css exercise, eval=F}
+p(class = "intro")
+p(class = "intro special")
+p(class = "body")
+p(id = "intro")
+a(class = "intro")
+```
+
+::: solution
+Answers can be found embedded in the code below:
+
+```{r example css classes, eval=F}
+p(class = "intro", "This p element has the intro class and would be affected by a CSS selector of p.intro.")
+p(class = "intro special", "This p element actually has two classes, 'intro' and 'special' (multiple classes can be applied if they are separated with a space). Since one of those classes is 'intro', this element would be affected by the selector p.intro.")
+p(class = "body", "This p element does not have the specific class 'intro' and would thus be unaffected by the selector p.intro.")
+p(id = "intro", "ids and classes are different attributes, so this p element would be unaffected by the selector p.intro, but it would be affected by the selector p#intro.")
+a(class = "intro", "An a (link) element is different from a p element, so the selector p.intro won't affect this element even though the element does have the 'intro' class. It would be affected by the selectors .intro and a.intro though.")
+```
+:::
+:::
 
 Inside of our rule's braces, meanwhile, we have a list. Each list item
 is a **property name** (*e.g.*, `font-style`) and a new **value**
