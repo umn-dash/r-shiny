@@ -531,7 +531,7 @@ What do you think gets deleted when you do that?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>A good portion of your cache (in terms of numbers of files, anyway)
 will be HTML, CSS, and JS files sent to you by servers to build websites
@@ -590,7 +590,7 @@ using R Shiny, then?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>A few things are different about building a website using R Shiny,
 but I think the two most important are:</p>
@@ -718,7 +718,13 @@ many layers deep:</p>
 </div>
 <p>It’s through this nesting of boxes that the complex visual structure
 of a typical website is born.</p>
-<div class="exercise">
+<div id="challenge1" class="callout challenge">
+<div class="callout-square">
+<i class="callout-icon" data-feather="zap"></i>
+</div>
+<div class="callout-inner">
+<h3 class="callout-title">Challenge</h3>
+<div class="callout-content">
 <p>Below is some HTML code containing some (nested) HTML boxes. Rewrite
 the code below in R Shiny UI code instead using the <code>div()</code>
 function:</p>
@@ -729,12 +735,15 @@ function:</p>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"content"</span><span class="dt">&gt;</span>Welcome to our app!<span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
 <span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span></code></pre>
 </div>
+</div>
+</div>
+</div>
 <div id="accordionSolution3" class="accordion challenge-accordion accordion-flush">
 <div class="accordion-item">
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
 <div class="accordion-body">
 <p>The above code contains one outer HTML box with both an
 <code>id</code> attribute and a <code>class</code> attribute. R Shiny
@@ -765,7 +774,6 @@ attributes in its <code>div()</code> function:</p>
 uncommon practice among everyday R users, it’s certainly not universal,
 but it’s essential to coding in HTML, so some find the amount of nesting
 found in R Shiny UI code to be unfamiliar.</p>
-</div>
 </div>
 </div>
 </div>
@@ -900,7 +908,7 @@ narrow screens.</p></li>
 screen narrows such that, if all elements are arranged vertically, their
 order is more logical to a user encountering them in that way.</p></li>
 </ul>
-<div id="challenge1" class="callout challenge">
+<div id="challenge2" class="callout challenge">
 <div class="callout-square">
 <i class="callout-icon" data-feather="zap"></i>
 </div>
@@ -918,7 +926,7 @@ How does this website “flow?”</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4"> Show me the solution </h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
 <div class="accordion-body">
 <p>For me, I saw a number of changes as I shrunk my browser screen: The
 menu at the top became a collapsed “hamburger” menu (a button with three
@@ -1008,7 +1016,13 @@ CSS rule (<em>e.g.</em>, <code>.intro</code>).</p></li>
 </ul>
 </li>
 </ol>
-<div class="exercise">
+<div id="challenge3" class="callout challenge">
+<div class="callout-square">
+<i class="callout-icon" data-feather="zap"></i>
+</div>
+<div class="callout-inner">
+<h3 class="callout-title">Challenge</h3>
+<div class="callout-content">
 <p>Consider the following elements. Which ones do you think would be
 affected by a CSS selector of <code>p.intro?</code></p>
 <div class="codewrapper sourceCode" id="cb11">
@@ -1021,12 +1035,15 @@ affected by a CSS selector of <code>p.intro?</code></p>
 <span><span class="fu">p</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"intro"</span><span class="op">)</span></span>
 <span><span class="fu">a</span><span class="op">(</span>class <span class="op">=</span> <span class="st">"intro"</span><span class="op">)</span></span></code></pre>
 </div>
+</div>
+</div>
+</div>
 <div id="accordionSolution5" class="accordion challenge-accordion accordion-flush">
 <div class="accordion-item">
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution5" aria-expanded="false" aria-controls="collapseSolution5">
   <h4 class="accordion-header" id="headingSolution5"> Show me the solution </h4>
 </button>
-<div id="collapseSolution5" class="accordion-collapse collapse" data-bs-parent="#accordionSolution5" aria-labelledby="headingSolution5">
+<div id="collapseSolution5" class="accordion-collapse collapse" aria-labelledby="headingSolution5" data-bs-parent="#accordionSolution5">
 <div class="accordion-body">
 <p>Answers can be found embedded in the code below:</p>
 <div class="codewrapper sourceCode" id="cb12">
@@ -1043,7 +1060,6 @@ affected by a CSS selector of <code>p.intro?</code></p>
 </div>
 </div>
 </div>
-</div>
 <p>Inside of our rule’s braces, meanwhile, we have a list. Each list
 item is a <strong>property name</strong> (<em>e.g.</em>,
 <code>font-style</code>) and a new <strong>value</strong>
@@ -1054,7 +1070,7 @@ anything, so mind the rules carefully!</p>
 <p>CSS rules get more complex than this one, but they can be simpler
 than this one too, so if this rule makes sense to you, you’re in great
 shape!</p>
-<div id="challenge2" class="callout challenge">
+<div id="challenge4" class="callout challenge">
 <div class="callout-square">
 <i class="callout-icon" data-feather="zap"></i>
 </div>
@@ -1076,7 +1092,7 @@ center-aligned.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution6" aria-expanded="false" aria-controls="collapseSolution6">
   <h4 class="accordion-header" id="headingSolution6"> Show me the solution </h4>
 </button>
-<div id="collapseSolution6" class="accordion-collapse collapse" data-bs-parent="#accordionSolution6" aria-labelledby="headingSolution6">
+<div id="collapseSolution6" class="accordion-collapse collapse" aria-labelledby="headingSolution6" data-bs-parent="#accordionSolution6">
 <div class="accordion-body">
 <p>Here’s how you’d write this rule:</p>
 <div class="codewrapper sourceCode" id="cb13">
@@ -1172,7 +1188,7 @@ you’ll make when building a Shiny app are deciding:</p>
 </ol>
 <p>While the list above is not exhaustive, it should help you begin to
 make those decisions.</p>
-<div id="challenge3" class="callout challenge">
+<div id="challenge5" class="callout challenge">
 <div class="callout-square">
 <i class="callout-icon" data-feather="zap"></i>
 </div>
@@ -1194,7 +1210,7 @@ recognize (buttons, text blocks, etc.).</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution7" aria-expanded="false" aria-controls="collapseSolution7">
   <h4 class="accordion-header" id="headingSolution7"> Show me the solution </h4>
 </button>
-<div id="collapseSolution7" class="accordion-collapse collapse" data-bs-parent="#accordionSolution7" aria-labelledby="headingSolution7">
+<div id="collapseSolution7" class="accordion-collapse collapse" aria-labelledby="headingSolution7" data-bs-parent="#accordionSolution7">
 <div class="accordion-body">
 <p>Here’s what I noticed and identified:</p>
 <figure><img src="../fig/clipboard-2886539574.png" class="figure mx-auto d-block"></figure><p>You may have noticed more, fewer, or different things—that’s ok!</p>
@@ -1247,7 +1263,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-shiny_2"><p>Content from <a href="shiny_2.html">Building the Ground Floor of a Shiny App</a></p>
 <hr>
-<p>Last updated on 2024-08-20 |
+<p>Last updated on 2024-08-26 |
 
         <a href="https://github.com/carpentries/r_shiny_workshop/edit/main/episodes/shiny_2.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 15 minutes</p>
@@ -1690,7 +1706,13 @@ essential to craft attractive apps.</p>
 <p>What about our CSS file we linked in, though? Sure, we’ve linked to
 our CSS stylesheet, but we haven’t actually put any code in it yet.
 Until we do, Shiny’s default, bland rules will be used.</p>
-<div class="exercise">
+<div id="challenge1" class="callout challenge">
+<div class="callout-square">
+<i class="callout-icon" data-feather="zap"></i>
+</div>
+<div class="callout-inner">
+<h3 class="callout-title">Challenge</h3>
+<div class="callout-content">
 <p>Let’s make our first style rules! Since there’s nothing else to style
 yet, though, let’s style our title. In your <code>styles.css</code> file
 (which you can open in RStudio), write a <strong>rule</strong> that will
@@ -1700,6 +1722,9 @@ make the title of our app <em>green</em> and <em>bold</em>.</p>
 <code>bold</code>. I’ll leave you to figure out what the second
 property-value pairing should be! Run your app to make sure your rule is
 working.</p>
+</div>
+</div>
+</div>
 <div id="accordionSolution2" class="accordion challenge-accordion accordion-flush">
 <div class="accordion-item">
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
@@ -1722,7 +1747,6 @@ change:</p>
 <figure><img src="../fig/postcss.png" alt="We’ve restyled our title to make it a little more snazzy using CSS." class="figure mx-auto d-block"><div class="figcaption">We’ve restyled our title to make it a
 <em>little</em> more snazzy using CSS.</div>
 </figure>
-</div>
 </div>
 </div>
 </div>
@@ -2203,7 +2227,7 @@ when this happens; rephrase it in your own words.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>You’ll get an error that looks a lot like this:<br><br><code>Error in $: Can't access reactive value 'sorted_column' outside of reactive consumer. ℹ Do you need to wrap inside reactive() or observe()?</code></p>
 <p>This error notes that <code>input$sorted_column</code> is a
@@ -2299,7 +2323,7 @@ we might write?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>Server-side R code is mostly broken up into many reactive contexts,
 each tasked with generating one or more complex UI elements and/or
@@ -3298,7 +3322,7 @@ functionality, or if you’d prefer having both.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>First, we add the reset button to our UI, just below the current
 “Go!” button:</p>
@@ -3803,7 +3827,7 @@ your users will use mobile devices, do you think?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>If we use <code>label</code>, we get tooltips that appears on mouse
 hover instead of on mouse click. Actually, this is <em>probably</em>
