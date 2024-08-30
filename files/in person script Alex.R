@@ -188,3 +188,131 @@ server = function(input, output, session) {
       arrange(!!sym(input$sorted_column))
   })
 }
+
+
+#Adding a go button
+ui = fluidPage(
+
+  tags$head(
+    tags$link(href = "styles.css",
+              rel = "stylesheet"),
+    tags$title("Check this out!")
+  ),
+
+  h1("Our amazing Shiny app!",
+     id = "header"),
+
+  fluidRow(
+    column(width = 4,
+           selectInput(
+             inputId = "sorted_column",
+             label = "Select a column to sort the table by.",
+             choices = names(gap)
+           ),
+           actionButton(
+             inputId = "go_button",
+             label = "Go!") #NEW
+    ), #SIDEBAR
+    column(width = 8,
+           tableOutput(outputId = "table1")) #MAIN PANEL
+  ),
+
+  tags$footer("This is my app")
+)
+
+#wiring the go button
+server = function(input, output, session) {
+
+  # input$sorted_column #CAN'T DO THIS! NOT IN A REACTIVE CONTEXT!
+
+  #TABLE
+  output$table1 = renderTable({
+    # print(input$sorted_column)
+    input$go_button #WILL BE REACTIVE TO THIS NOW TOO.
+    gap %>%
+      arrange(!!sym(input$sorted_column))
+  })
+}
+
+#Isolating
+#wiring the go button
+server = function(input, output, session) {
+
+  # input$sorted_column #CAN'T DO THIS! NOT IN A REACTIVE CONTEXT!
+
+  #TABLE
+  output$table1 = renderTable({
+    # print(input$sorted_column)
+    input$go_button #WILL BE REACTIVE TO THIS NOW TOO.
+    gap %>%
+      arrange(!!sym(isolate(input$sorted_column)))
+  })
+}
+
+#Re-configuring to make this an observeEvent instead.
+#Isolating
+#wiring the go button
+server = function(input, output, session) {
+
+  # input$sorted_column #CAN'T DO THIS! NOT IN A REACTIVE CONTEXT!
+
+  #TABLE
+  # output$table1 = renderTable({
+  #   # print(input$sorted_column)
+  #   input$go_button #WILL BE REACTIVE TO THIS NOW TOO.
+  #   gap %>%
+  #     arrange(!!sym(isolate(input$sorted_column)))
+  # })
+
+  #MAKE INITIAL TABLE ON START-UP
+  output$table1 = renderTable({
+    gap
+  })
+
+  #THEN WATCH FOR EVENTS AND UPDATE WHEN THEY OCCUR.
+  observeEvent({input$go_button},
+               ignoreInit = FALSE, {
+
+                 output$table1 = renderTable({
+                   gap %>%
+                     arrange(!!sym(input$sorted_column)) #NO NEED TO ISOLATE
+
+                 })
+               })
+}
+
+#Adding the tabset panel
+ui = fluidPage(
+
+  tags$head(
+    tags$link(href = "styles.css",
+              rel = "stylesheet"),
+    tags$title("Check this out!")
+  ),
+
+  h1("Our amazing Shiny app!",
+     id = "header"),
+
+  fluidRow(
+    column(width = 4,
+           selectInput(
+             inputId = "sorted_column",
+             label = "Select a column to sort the table by.",
+             choices = names(gap)
+           ),
+           actionButton(
+             inputId = "go_button",
+             label = "Go!") #NEW
+    ), #SIDEBAR
+    column(width = 8, #MAIN PANEL
+           tabsetPanel(
+             tabPanel(title = "Table",
+                      tableOutput(outputId = "table1")),
+             tabPanel(title = "Map"),
+             tabPanel(title = "Graph")
+            )
+           )
+  ),
+
+  tags$footer("This is my app")
+)

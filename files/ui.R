@@ -15,10 +15,19 @@ ui = fluidPage(
              inputId = "sorted_column",
              label = "Select a column to sort the table by.",
              choices = names(gap)
-            )
+            ),
+           actionButton(
+             inputId = "go_button",
+             label = "Go!")
            ), #SIDEBAR
     column(width = 8,
-           tableOutput(outputId = "table1")) #MAIN PANEL
+           tabsetPanel(
+             tabPanel(title = "Table",
+                      tableOutput(outputId = "table1")),
+             tabPanel(title = "Map"),
+             tabPanel(title = "Graph")
+           )
+    ) #MAIN PANEL
   ),
 
   tags$footer("This is my app")

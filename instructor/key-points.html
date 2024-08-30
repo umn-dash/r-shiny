@@ -403,41 +403,46 @@ retrieve it using your browser’s developer tools.</li>
 <hr class="half-width">
 <ul>
 <li>Complex UI elements, like tables, first need to be
-<strong>rendered</strong> server-side and then placed within our UI
-using an <code>*Output()</code> function.</li>
+<strong>rendered</strong> server-side using a <code>render*({})</code>
+function and then placed within our UI using an <code>*Output()</code>
+function.</li>
 <li>Rendered entities are passed from the server to the UI via the
-<code>output</code> object using the <code>outputId</code>’s we gave
-these entities when we <strong>rendered</strong> them.</li>
+<code>output</code> object using the <code>outputId</code>s we provided
+them when we <strong>rendered</strong> them.</li>
 <li>
 <strong>Input widgets</strong> are UI elements that allow users to
-interact with our app in simple, pre-defined and familiar ways. The
-current values of these widgets are passed from the UI to the server via
-the <code>input</code> object using the <code>inputId</code>’s we gave
-these widgets when we created them.</li>
+interact with our app in pre-defined and familiar ways. The current
+values of these widgets are passed from the UI to the server via the
+<code>input</code> object using the <code>inputId</code>s we provided
+them when we created them.</li>
 <li>R knows to watch <strong>reactive objects</strong> (like those
 attached to <code>input</code>) for changes. Any such changes are
 <strong>events</strong>. <strong>Event handling</strong> is coding how
 the app should respond to an event.</li>
 <li>The primary way Shiny handles events is by re-running any
 <strong>reactive contexts</strong> containing the reactive object(s)
-that changed (unless they’re <code>isolate()</code>d).</li>
+that just changed (unless those objects have been
+<code>isolate()</code>d, in which case they can’t trigger events but
+they can be used in operations).</li>
 <li>Server-side, reactive contexts are triggered to run
 <strong>directively</strong> (when a precipitating event occurs), not
 <strong>imperatively</strong> (when a coder hits “run”). They might run
-in any order, or never—it all depends on what the user and app do.</li>
-<li>However, <em>once</em> a reactive context begins executing, it’s
-contents are executed imperatively like “normal” R code until they
-complete (even if that takes a long time!), during which time the app
-will be unresponsive.</li>
+in any order, many times, or never—it all depends on what the user
+does.</li>
+<li>However, <em>once</em> a reactive context begins executing, its
+contents are executed imperatively, like “normal,” until they complete
+(even if that takes a long time!), during which time the app will be
+unresponsive.</li>
 <li>
 <strong>Observers</strong> (like <code>observeEvent({},{})</code>)
 allow for more precise event-handling; <code>observeEvent({},{})</code>s
-only rerun their second expression and only when events occur in their
-first expression, so they enable “If X, then Y” event handling.</li>
+only rerun their second expression and only in response to events that
+occur in their first expression, so they enable precise “If X, then Y”
+event handling.</li>
 <li>
 <code>tabPanel()</code> and <code>tabsetPanel()</code> create a
-“tabular layout,” dividing up one UI space into several, only one of
-which is visible at a time.</li>
+“tabular layout,” dividing one UI space into several, only one of which
+is visible at a time.</li>
 </ul></section><section id="shiny_4"><h2 class="section-heading"><a href="shiny_4.html">DTs and Leaflets and Plotlys, Oh my!</a></h2>
 <hr class="half-width">
 <ul>
