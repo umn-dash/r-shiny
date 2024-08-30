@@ -12,7 +12,7 @@ This lesson assumes you have R and RStudio installed. If you need either, use th
 
 RStudio is an application (an integrated development environment, or IDE, to be exact) that facilitates the use of R and offers a number of nice features. While R Studio is not *strictly* required to use base R, it is all but required to build Shiny app (to try to build a Shiny app in base R sounds nightmarish to me, and I'm not sure it's even possible).
 
-This lesson also takes advantage of several add-on packages for R that do not come bundled with R's default installation. These packages can be installed using the following command within R/RStudio:
+This lesson also takes advantage of several add-on packages for R that do not come bundled with R's default installation. While we will also pause to install these packages during the lesson, the process can take some time, so these packages can be installed ahead of time using the following command:
 
 ``` r
 install.packages("shiny", "dplyr", "ggplot2", "leaflet", "DT", "plotly", "gapminder", "countrycode", "sf")
