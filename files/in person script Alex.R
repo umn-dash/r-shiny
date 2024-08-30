@@ -47,7 +47,6 @@ tags$head(
 ),
 
 #And linking to a stylesheet:
-#Adjusting the head box:
 tags$head(
   tags$link(href = "styles.css",
             rel = "stylesheet"),
@@ -55,7 +54,6 @@ tags$head(
 ),
 
 #Begin fleshing out our UI's structure:
-
 ui = fluidPage(
 h1("Our amazing Shiny app!",
    id = "header"),
