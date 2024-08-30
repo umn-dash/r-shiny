@@ -1,5 +1,5 @@
 ---
-title: "R Shiny's Core Concepts: Rendering, Inputs, and Reactivity"
+title: "R Shiny's Core Concepts: Rendering and Outputting, Input widgets, and Reactivity"
 teaching: 50
 exercises: 10
 source: Rmd
@@ -45,6 +45,14 @@ Our app will showcase the `gapminder` data set, which contains
 population, life expectancy, and economic data over time for most of the
 world's countries:
 
+
+``` r
+gap = gapminder
+```
+
+``` error
+Error in eval(expr, envir, enclos): object 'gapminder' not found
+```
 
 ``` r
 head(gap)
