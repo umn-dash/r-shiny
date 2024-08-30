@@ -1260,7 +1260,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-shiny_2"><p>Content from <a href="shiny_2.html">Building the Ground Floor of a Shiny App</a></p>
 <hr>
-<p>Last updated on 2024-08-29 |
+<p>Last updated on 2024-08-30 |
 
         <a href="https://github.com/carpentries/r_shiny_workshop/edit/main/episodes/shiny_2.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -1310,11 +1310,11 @@ this lesson, we’ll tackle several important steps that’ll set us up for
 success in that endeavor.</p>
 </div>
 <div class="section level3">
-<h3 id="installing-packages">Installing packages<a class="anchor" aria-label="anchor" href="#installing-packages"></a>
+<h3 id="detour-installing-packages">(Detour: Installing packages)<a class="anchor" aria-label="anchor" href="#detour-installing-packages"></a>
 </h3>
 <p>In this lesson, we’ll begin to use some of R’s
-<strong>packages</strong>. If you haven’t already, install those now
-using the following command:</p>
+<strong>packages</strong>. If you haven’t already, install those
+now:</p>
 <div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1322,14 +1322,8 @@ using the following command:</p>
 <code class="sourceCode R"><span><span class="co">##RUN THIS CODE IN YOUR CONSOLE PANE--**DON'T** INCLUDE IT INSIDE YOUR SHINY FILES. YOU ONLY NEED TO INSTALL PACKAGES **ONCE**.</span></span>
 <span><span class="fu">install.packages</span><span class="op">(</span><span class="st">"shiny"</span>, <span class="st">"dplyr"</span>, <span class="st">"ggplot2"</span>, <span class="st">"leaflet"</span>, <span class="st">"DT"</span>, <span class="st">"plotly"</span>, <span class="st">"gapminder"</span>, <span class="st">"countrycode"</span>, <span class="st">"sf"</span><span class="op">)</span></span></code></pre>
 </div>
-<p><code>dplyr</code> and <code>ggplot2</code> are part of the
-<code>tidyverse</code>, which can be installed using
-<code>install.packages('tidyverse')</code>. However, that installation
-takes awhile, and we won’t use other <code>tidyverse</code> packages in
-these lessons, so it’s faster to install just these two packages for now
-if you’re in a hurry.</p>
-<p>Of course, to access their features, we need to turn all these
-packages on too, but there are some other things we must do first.</p>
+<p>Of course, to access their features, we need to turn these packages
+on too, but there are some other things we must do first.</p>
 </div>
 <section><h2 class="section-heading" id="establishing-our-shiny-apps-project-folder">Establishing our Shiny app’s Project Folder<a class="anchor" aria-label="anchor" href="#establishing-our-shiny-apps-project-folder"></a>
 </h2>
@@ -1352,7 +1346,8 @@ don’t pick that one</em>! Instead, select the <em>first</em> option,
 <li>
 <p>On the next screen, use the <code>Browse</code> button to find a
 location on your computer to place your project folder. Then, give the
-project a name related to your app.</p>
+project a name, such as <code>shiny_workshop</code>, that befits your
+current project.</p>
 <ul>
 <li>There are other options on this screen that, if you’re familiar with
 Git or <code>renv</code>, you might consider as well (both are
@@ -1410,36 +1405,46 @@ this name in your root directory for many things, including media files
 (like images), custom font files, and CSS files referenced by your
 app.</p>
 <ul>
-<li><p>Speaking of which: Click <code>File</code>,
-<code>New File</code>, then <code>CSS file</code>. Give this new file
-the name <code>styles.css</code> and save it in your <code>www</code>
-folder. We’ll put custom CSS code in this file to style our app’s
-aesthetics.</p></li>
-<li><p>If you plan to build complex Shiny apps, you <em>may</em> also
-want to create a file for custom JavaScript code called
+<li>Speaking of which: Click <code>File</code>, <code>New File</code>,
+then <code>CSS file</code>. Give this new file the name
+<code>styles.css</code> and save it in your <code>www</code> folder.
+We’ll put custom CSS code in this file to style our app’s
+aesthetics.</li>
+</ul>
+</li>
+</ul>
+<div id="callout1" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<div class="callout-inner">
+<h3 class="callout-title">Callout</h3>
+<div class="callout-content">
+<p>If you plan to build complex Shiny apps, you <em>may</em> also want
+to create a file for custom JavaScript code called
 <code>behaviors.js</code> and place this file in <code>www</code> as
 well. We won’t use such a file in these lessons, but because there is
 more you can do using JS than R Shiny will easily do for you, there are
 many instances where a <em>little</em> custom JS code can
 <em>significantly</em> enhance your app’s behaviors, and having a
-specific file in which to put that code is tidy.</p></li>
-</ul>
-</li>
-<li><p>Next, create a second new folder inside your Project Folder. Call
-it <code>inputs</code>. Use this folder to store input files your app
-needs to start up, like data sets, that <em>aren’t</em> media like
-pictures or fonts. We won’t use such a sub-folder in these lessons, but,
-for real projects, it useful to have such a folder to stay
-organized.</p></li>
-<li><p>Similarly, create a third new folder inside your Project Folder.
-Call it <code>Rcode</code>. As an app’s code base gets larger, you may
-want to divide your app’s code into smaller, more managable chunks (such
-as by building custom functions to perform repeated tasks or by dividing
-your app’s code into “modules”). At that stage, you can place R files
-for each chunk in this folder, then source those files in your
+specific file in which to put that code is tidy.</p>
+<p>For complex apps, I’d also recommend a folder inside your Project
+folder called <code>inputs</code>. Use this folder to store input files
+your app needs to start up, like data sets, that <em>aren’t</em> media
+like pictures or fonts. We won’t use such a sub-folder in these lessons,
+but, for real projects, it useful to have such a folder to stay
+organized.</p>
+<p>Similarly, I’d recommend a third new folder inside your Project
+folder called <code>Rcode</code>. As an app’s code base gets larger, you
+may want to divide your app’s code into smaller, more manageable chunks
+(such as by building custom functions to perform repeated tasks or by
+dividing your app’s code into “modules”). At that stage, you can place R
+files for each chunk in this folder, then source those files in your
 <code>global.R</code> file. We won’t use any such sub-folder, but I use
-one for all my apps.</p></li>
-</ul>
+one for all my apps.</p>
+</div>
+</div>
+</div>
 <p>We now have all the files and folders we’ll need, so let’s work on
 getting our app to where it’ll actually start up.</p>
 <div class="section level3">
@@ -1659,6 +1664,25 @@ of function calls inside other calls. For many, this can be confusing!
 Keeping your code organized using comments to create sub-sections can
 help you keep things straight.</p></li>
 </ol>
+<div id="callout2" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<div class="callout-inner">
+<h3 class="callout-title">Callout</h3>
+<div class="callout-content">
+<p>Start up your app at this point by pressing the “Run App” button in
+the upper-right corner of the Script Pane when viewing any of your
+<code>.R</code> files.</p>
+<p>I recommend using the drop-down menu on the side of the “Run App”
+button to select the “Run External” option, which will cause your app to
+launch in your default web browser instead of in RStudio’s Viewer pane
+or in a separate R window. In general, apps will perform better when run
+in a web browser, so you will get a more actionable impression of how
+your app is doing this way.</p>
+</div>
+</div>
+</div>
 <div id="discussion1" class="callout discussion">
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
@@ -1666,14 +1690,14 @@ help you keep things straight.</p></li>
 <div class="callout-inner">
 <h3 class="callout-title">Discussion</h3>
 <div class="callout-content">
-<p>Start up your app at this point. What do you see? Explain why the app
-looks the way it does so far.</p>
+<p>What do you see when you start up your app? Explain why the app looks
+the way it does so far.</p>
 <div id="accordionSolution1" class="accordion challenge-accordion accordion-flush">
 <div class="accordion-item">
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>Besides our title we placed as contents inside our header, our app
 will actually look completely empty!</p>
@@ -1726,7 +1750,7 @@ working.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>Here’s what our CSS rule should look like:</p>
 <div class="codewrapper sourceCode" id="cb7">
@@ -2623,7 +2647,7 @@ don’t need to watch the same reactive objects, it’s sometimes
 unavoidable. In those instances, <code>observeEvent({},{})</code>’s
 <code>priority</code> parameter can be used—R will use the values
 specified to <code>priority</code> to decide the order “racing”
-observers should execute in.</p>
+observers should execute in-.</p>
 </div>
 </div>
 </div>
