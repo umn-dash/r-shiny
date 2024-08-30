@@ -1,3 +1,11 @@
 server = function(input, output, session) {
-  #ALL OUR EVENTUAL SERVER-SIDE CODE WILL GO INSIDE HERE.
+
+  #input$sorted_column #BAD!
+
+  #TABLE
+  output$table1 = renderTable({
+    print(input$sorted_column)
+    gap %>%
+      arrange(!!sym(input$sorted_column))
+  })
 }

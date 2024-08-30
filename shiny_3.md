@@ -9,25 +9,23 @@ editor_options:
 ---
 
 ::: objectives
--   Add a table to your app's UI to present data to the user.
+-   Present data to users by adding a table to your UI.
 -   Allow users to adjust how the table looks, and give them control
-    over when its looks change.
+    over when it changes.
 -   Define **reactive context**, **event**, **event handling**,
     **declarative coding**, and **imperative coding**.
--   Explain how and why R Shiny server code executes differently than
-    "traditional" R code.
--   Use **isolation** and **observers** to more tightly control event
-    handling.
--   Expand your UI's "real estate" by introducing a tab set panel.
+-   Explain how and why R Shiny server code executes differently than R
+    code.
+-   Use **isolation** and **observers** to control event handling.
+-   Expand your UI's "real estate" by adding a tab set panel.
 :::
 
 ::: questions
 -   How do I add cool features to my app?
 -   How do I give my users meaningful things to do on my app?
--   How do I get my app to respond meaningfully to users' actions?
--   How do I give users greater control over when/how my app responds?
--   How do I give *myself* greater control over when/how my app
-    responds?
+-   How do I get my app to respond meaningfully to user actions?
+-   How do I give users control over when/how my app responds?
+-   How do I give *myself* control over when/how my app responds?
 -   How is R Shiny server code different than code I may have written
     before?
 :::
@@ -35,53 +33,68 @@ editor_options:
 ## Going from nothing to something
 
 As we saw at the end of the last lesson, our app doesn't look like
-much...yet! It is just a title on an otherwise empty page. In this
-lesson, we'll fix that! As we add content, we'll learn three core
-concepts of building a website using Shiny: 1) **rendering** and
-**outputting** complex UI elements, 2) **input widgets**, and 3)
-**reactivity**.
+much...yet! It is just a title (and a footer, if you added one on your
+own) on an otherwise empty page.
+
+In this lesson, we'll fix that! As we add content to our app's UI, we'll
+learn three core concepts of using Shiny to build a website: 1)
+**rendering** and **outputting** UI elements, 2) **input widgets**, and
+3) **reactivity**.
 
 Our app will showcase the `gapminder` data set, which contains
 population, life expectancy, and economic data over time for most of the
-world's countries. Our goal is give users interesting ways to engage
-with these data. As we go, imagine how you might do the same for your
-own data sets!
+world's countries:
 
-Let's start by giving users a table with which to view the raw data. If
-you think about it, a table is just a bunch of boxes (cells) within
-larger boxes (rows and columns) within one outermost box (the table
-"holder").
+
+``` r
+head(gap)
+```
+
+``` error
+Error in eval(expr, envir, enclos): object 'gap' not found
+```
+
+Our goal will be to give users interesting ways to engage with these
+data. As we go, imagine how you might do the same for your own data
+sets!
+
+Let's start by giving users a table with which to view the raw
+`gapminder` data set.
+
+If you think about it, a table is just a bunch of boxes (cells) within
+larger boxes (rows and columns) all within one outermost box (the table
+itself).
 
 So, it makes sense that a table should be build-able in HTML, a language
-all about building nested boxes! However, depending on the number of
-cells, it would require typing out a LOT of boxes...Fortunately, we
-don't have to "code" all those boxes "by hand;" we can have R do it!
+*all about* nested boxes! However, depending on the number of cells, it
+would require typing out a LOT of boxes to build such a table from
+scratch in HTML.
 
-To build an element (like a table for a data set) complex enough that
-building it programmatically instead of by hand is appealing, and then
-to insert that complex element into our UI where a user can see it, we
-must:
+Fortunately, we don't have to; we can have R do it! To build an element
+(like a table) complex enough that building it programmatically instead
+of "by hand" is appealing, and then to insert that complex element into
+our UI where a user can see it, we must:
 
-1.  Make (*i.e.*, *render*) that element on the server half of our app.
+1.  Make (*i.e.*, **render**) that element on the server side of our
+    app.
 
-    -   This first involves doing whatever "heavy lifting" is needed to
-        assemble the underlying R object. For a table, *e.g.*, R might
-        need to do some data manipulation, like joining two smaller
+    -   This involves first doing whatever "heavy lifting" is needed to
+        assemble the underlying R object. For a table, *e.g.*, we might
+        use R to do some data manipulation, like joining two smaller
         tables together.
 
-    -   Then, we convert (behind the scenes) that R object into its
-        functional equivalent in HTML, a process called *rendering* in
-        Shiny.
+2.  Then, we convert (behind the scenes) that R object into its
+    functional HTML equivalent, a process Shiny calls *rendering*.
 
-2.  Then, we pass te rendered version over to the UI side of our app,
-    indicating *where* in our UI we'd like the finished element to
-    display for a user, a process called *outputting* in Shiny.
+3.  Lastly, we pass the rendered entity to the UI side. In the process,
+    we indicate *where* in our UI we'd like the finished element to
+    display, a process Shiny calls *outputting*.
 
 For virtually every complex element you'd want to build in Shiny, there
-is a pair of functions designed to do those two steps. In this
-particular case, that pair is `renderTable({})` on the server side and
-`tableOutput()` on the UI side. [Notice that most Shiny functions use a
-camelCase **naming convention**.]
+is a pair of functions designed to do those latter two steps. In this
+case, that pair is `renderTable({})` on the server side and
+`tableOutput()` on the UI side. [Notice that most Shiny functions have
+camelCase names.]
 
 Let's use these two functions to add a basic table of the `gapminder`
 data set to our app's UI:
@@ -96,41 +109,36 @@ output$basic_table = renderTable({
 })
 ```
 
-Above, we instructed R to render an "HTML-ized" version of a data frame
-of the entire raw gapminder data set. Here, because we wanted to render
-the entire data set, that's all we put inside the braces. If we had
-wanted to do any operations on this data set first (such as filtering it
-or adding columns to it), though, we could have done so using "normal R
-code" inside `renderTable({})`'s braces. So long as it's a data
-frame-like object, the last thing produced inside the braces is what
-will be rendered (anything else being last will trigger an error).
+Above, we told R to **render** an "HTML-ized" version of the raw
+gapminder data frame. Because we wanted to render the raw data set with
+no modifications, we put just the data frame's name inside
+`renderDT({})`'s braces. If we had wanted to do any operations on this
+data set first (such as filtering it or adding columns to it), though,
+we could have those operations using normal R code inside those braces.
+So long as it's a table-like object, the last thing produced inside the
+braces is what gets rendered (placing anything else last will trigger an
+error).
 
-So, we now have a rendered, HTML-ized table of our data set on the
-server side of our app. How do we get it from the server to the UI?
-Remember that users can only see what the server instructs a user's
-browser to build into a UI, so we must tell R to "pass" this rendered
-table over to the UI *somehow*...
+Once we have a rendered, HTML-ized table on the server side, how do we
+pass it from the server to the UI? Remember that users only see what the
+server instructs a user's browser to build in the UI, so we must tell R
+to "hand over" this rendered table to the UI *somehow*...
 
-Last lesson, recall that the app creates an object called `output` as
-soon as the app boots. [Passing rendered elements from the server to the
-client is `output`'s job]{.underline}. If an app is a restaurant, and
-rendering is the process of "cooking" elements back in the kitchen area,
-then `output` is the waiter that brings those finished elements out to
-the dining area where users/customers can experience them.
+Last lesson, recall that the app creates an object called `output` when
+the app boots up. [Passing rendered elements from the server to the UI
+is `output`'s job]{.underline}. If an app is like a restaurant, then
+rendering is the process of "cooking" elements in the kitchen, and
+`output` is the waiter that brings finished elements into the dining
+room where users/customers can experience them.
 
-For this process to happen, we first give the element a nickname (an
-`outputId`) it adopts once it has been rendered. Then, we use that
-`outputId` to "stick" the rendered element to the `output` object using
-the `$` operator.
+For this to work, though, we need to give the rendered element a
+nickname (an `outputId`). Then, we use that `outputId` to "stick" the
+rendered element to `output` using the `$` operator. Here, the
+`outputId` we set was `basic_table`.
 
-Here, the nickname we provided was `basic_table`. In our restautant
-analogy, think of the `outputId` as the order ticket the waiter filled
-out when a table ordered food. `output` (our "waiter") uses that code
-later to figure out which prepared food belongs to which order.
-
-Now, we just need to code the equivalent of "dropping this element off
-at the appropriate table." We tell the app where to place the element
-through placement of a `tableOutput()` call in our UI:
+Now, we just need to code the equivalent of "dropping our prepared
+element off at the right table." We tell the app *where* to place the
+element with our placement of the `tableOutput()` call in our UI:
 
 
 ``` r
@@ -143,50 +151,53 @@ fluidRow(
   column(width = 4),
   ###MAIN PANEL CELL
   column(width = 8,
-         tableOutput("basic_table")#<--PUTTING OUR RENDERED TABLE INTO OUR "MAIN PANEL" CELL USING tableOutput AND THE outputId OF THE RENDERED PRODUCT AS ITS INPUT.
+         tableOutput("basic_table")#<--PUTTING OUR RENDERED TABLE IN OUR "MAIN PANEL" CELL USING tableOutput(), WITH THE outputId OF THE RENDERED PRODUCT AS INPUT.
          )
 ),
 
 ##... other UI code...
 ```
 
-Here, we've placed our outputted table inside the "main panel" cell of
-our central, two-column `fluidRow()`.
+Here, we've placed our outputted table inside the "main panel" cell.
 
-Why do we need to use our `outputId` in this way? Wouldn't it be enough
-to just place an empty `tableOutput()` call here? Well, a single app
-might render and display multiple different tables. How would the app
-know *which* table should be displayed *where*? This ambiguity is
-cleared up by specifying the `outputId` of the specific table we want
-displayed in a specific location in the UI.
+Why do we need to use our `outputId` as the input for `tableOutput()`?
+Wouldn't it be enough to place an empty `tableOutput()` call here? Well,
+a single app might render and display many different tables. How would
+the app know *which* table should be displayed *where*, if all it had to
+go on was where `tableOutput()` calls were?
 
-If you run your app at this point, you should get something that looks
-like this:
+This ambiguity is cleared up by specifying the `outputId` of the
+*specific* table we want displayed in a *specific* location. In our
+restaurant analogy, the `outputId` is like the order ticket the waiter
+filled out when a table ordered food. `output` (our "waiter") then uses
+that code later to figure out which prepared food belongs to which
+tables.
 
-![Our Shiny app with our basic HTML table of the gapminder data set
-displayed in the UI.](fig/basic%20table.png)
+If we run the app now, it should look like this:
 
-Our table is cool! But not *terribly* exciting...it looks a little drab,
-and users can't actually **do** anything with it except look at it. The
-first problem we'll start to fix later when we swap it out for a *much*
-better one. However, we can fix the second problem now.
+![Our Shiny app with our basic HTML table of the gapminder data
+set.](fig/basic%20table.png)
+
+Our table is cool! But not *terribly* exciting...it looks a little drab
+(and long!), and users can't actually **do** anything with it except
+look at it. The first problem we'll fix later by swapping it for a
+fancier one. However, we can fix the second problem now.
 
 ## Giving your users input
 
-In my opinion, the value of a Shiny app can be measured by how much it
-lets users *do*. To enable meaningful user interactions, we can add
+The value of a Shiny app can be measured in terms of how much it lets
+users *do*. To enable meaningful user interactions, we can add
 **widgets**. A widget is any element users can interact with and thus
-provide data to the app it could (maybe) use to respond. In web
+provide data to the app that it could use to respond in some way. In web
 development, user actions a webpage can watch for are called **events**;
 responding to an event (or choosing to not respond!) is called **event**
 **handling**.
 
 Let's start by adding an **input widget** to our UI so that new
 **events** are possible. Specifically, let's add a `selectInput()` to
-our "sidebar" UI container. This will produce a "drop-down menu" style
-element that allows users to select a single choice from a pre-defined
-list. We'll populate the list with the column names from the `gapminder`
-data set:
+our "sidebar." This will produce a "drop-down menu"-style element that
+allows users to pick a choice from a pre-defined list. We'll populate
+the list with the column names from the `gapminder` data set:
 
 
 ``` r
@@ -210,23 +221,24 @@ data set:
 
 Notice we provided `selectInput()` three inputs:
 
-1.  An `inputId` is both an `id` for CSS purposes as well as a nickname
-    the app will use for this widget server-side. We'll see how that
-    works in a minute.
+1.  An `inputId` is both an `id` for CSS as well as a nickname the app
+    uses to pass this widget's current value from the UI to the server.
+    We'll see how that works in a minute.
 
-2.  The text we provide to `label` will be the text that accompanies the
-    widget in the UI and, usually, explains to the user what the widget
-    does (in case it isn't obvious).
+2.  The text we provide to `label` will accompany the widget in the UI
+    and, usually, should explain to the user what the widget does (when
+    it isn't obvious).
 
-3.  For `choices`, we provide a vector of values that will be the
-    options that appear in our drop-down menu.
+3.  For `choices`, we provide a vector of values that'll be the options
+    in our drop-down menu.
 
 While there are a few variations, most Shiny input widgets work a lot
 like `selectInput()`, so it's a good first example.
 
 Now, our app should look like this:
 
-![Our new select input widget.](fig/select%20input.png)
+![Our new selectInput, drop-down-menu-style
+widget.](fig/select%20input.png)
 
 Very nice!
 
@@ -240,8 +252,8 @@ annoying. Plus, longer and more complex names require more typing.
 
 Instead, we can provide a **named vector** to `choices`. The names we
 give (left of the `=`) will be displayed in the drop-down menu, whereas
-the original column names (right of the `=`) will be sent to the server
-side to work with:
+the original column names (right of the `=`) will be retained internally
+for the app to use in operations:
 
 
 ``` r
@@ -270,24 +282,23 @@ side to work with:
 ##... other UI code...
 ```
 
-With that change made, our drop-down menu widget should be looking much
-better!
+With that change made, our drop-down menu widget is looking much
+cleaner!
 
-![Now our choices look much more human-readable for our users, but the
-original column names are preserved for work behind the scenes
-too.](fig/prettier%20choices.png)
+![Now our choices look much more human-readable, but the original column
+names are preserved for work behind the
+scenes.](fig/prettier%20choices.png)
 
-...Except that fiddling with the drop-down still doesn't *do*
+The more serious issue is that fiddling with the drop-down doesn't *do*
 anything...*yet*. We've created something a user can interact with,
 triggering **events**, but we haven't told the app how to **handle**
-those yet.
+them yet.
 
 ### R'll handle that
 
-Let's do that next. We'll give the user the ability to re-sort the table
-by the column they've selected using the drop-down widget. You might be
-surprised to learn this is actually quite straightforward—it just
-requires one adjustment to our server-side code:
+Let's do that next. We'll give users the ability to re-sort the table by
+the column they've selected using our drop-down widget. This requires
+only a modest adjustment to our server code:
 
 
 ``` r
@@ -297,61 +308,54 @@ requires one adjustment to our server-side code:
 output$basic_table = renderTable({
   
   gap %>% 
-    #USE dplyr's arrange() VERB FOR SORTING BY THE PICKED COLUMN.
-    arrange(!!sym(input$sorted_column)) #!! (PRONOUNCED "BANG-BANG") AND sym() ARE dplyr TRICKS, NOT R SHINY THINGS. LET'S NOT WORRY ABOUT WHAT THEY DO.
+    #USE dplyr's arrange() TO SORT BY THE PICKED COLUMN.
+    arrange(!!sym(input$sorted_column)) #!! (PRONOUNCED "BANG-BANG") AND sym() ARE dplyr HACKS HERE, NOT R SHINY THINGS. DON'T WORRY ABOUT WHAT THEY DO.
 })
 ```
 
-Run the app and try it out. As you select different columns using the
-drop-down menu, the table *automatically* rebuilds, sorted by the column
-you've picked:
+Run the app and try it! As you select different columns using the
+drop-down menu, the table *rebuilds*, sorted by the column you've
+picked:
 
-![Now, when a user selects a new column using our drop-down widget, the
-table re-sorts by that column.](fig/sorting%20by%20column.gif)
+![Now, when a user selects a new column using the drop-down widget, the
+table is rebuilt, sorted by that column.](fig/sorting%20by%20column.gif)
 
-Earlier, we met the `output` object, which passes rendered elements from
-the server to the UI where they can be seen. Here, we finally meet
-`input`, which passes **event data** from the UI to the server where
-responses can be crafted.
+Earlier, we met `output`, which passes rendered elements from the server
+to the UI. Here, we meet `input`, which passes **event data** from the
+UI to the server. Here, `input` is passing the *current* value of the
+widget with the `inputId` of `sorted_column` over to the server every
+time that value changes. Our server code can use that value in
+operations, such as deciding how to sort the data in our rendered table.
 
-Here, `input` is passing the *current* value of the widget with the
-`inputId` of `sorted_column` (that's the nickname we gave our drop-down
-menu when we created it) over to the server when the app starts up and
-every time that value changes thereafter. At any time, our server code
-can use that value in operations, such as to decide how to sort the data
-in our table.
-
-But, more importantly, Shiny knows that, *at any moment*,
-`input$sorted_column`'s value could *change*. Objects with values that
-could change as a result of events are **reactive objects**—at any
-moment, they might change *in reaction to* something.
+More importantly, though, Shiny knows that `input$sorted_column`'s value
+could change *at any moment*. Objects with values that could change as a
+result of events are called **reactive objects**—at any time, they could
+change *in reaction to* something the user did.
 
 Because we've used `input$sorted_column` in some of our server code, and
 because R knows that `input$sorted_column`'s value could change at any
-time, it knows to be *watching* for such changes. Whenever it sees one,
-it'll run code including `input$sorted_column` *again*. The logic makes
-sense, when you think about it: If `input$sorted_column` has changed,
-anything that used its *previous* value to produce outputs may now be
-"outdated," so re-running the associated code and producing more current
-outputs makes sense!
+time, Shiny knows to be *watching* for such changes. Whenever it spots
+one, it'll run any code that includes `input$sorted_column` *again*. The
+logic for this holds up: If `input$sorted_column` has changed, any
+outputs produced using its previous value as an input may now be
+"outdated," so re-running the associated code and producing new outputs
+makes sense!
 
 Because the code inside `renderTable({})` contains
-`input$sorted_column`, all that code reruns every time
+`input$sorted_column`, that code will re-run every time
 `input$sorted_column` changes, which happens every time the user selects
 a new column from the drop-down menu. We're successfully **handling**
-the **events** triggered by our user's interactions with our input
-widget!
+**events** triggered by our user's interactions with our input widget!
 
 ### Reactivity
 
 There is just one small but important technical detail: Shiny *can't*
-watch for changes in **reactive objects** *everywhere* in our server
-code—it can *only* do so within **reactive contexts**.
-
-A **reactive context** is a code block that R *knows* it needs to watch
-for changes in reactive objects and thus it might need to re-run over
-and over again. It makes sense that we can only put "changeable" objects
-inside code blocks that R knows it needs to watch for such changes in!
+watch for changes in **reactive objects** *everywhere*—it can *only* do
+so within **reactive contexts**. A **reactive context** is a code block
+that R *knows* to watch for changes because reactive objects can be
+there and those might change. It makes sense that we can only put these
+kinds of "changeable" objects inside code blocks that R knows might
+contain such objects!
 
 ::: challenge
 **Try it:** Pause here to prove the previous point. Copy

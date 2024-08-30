@@ -1,3 +1,8 @@
+
+# Lessons 1 and 2 (Intro to Web Development and Project Setup) ------------
+
+
+
 #Install packages if they haven't already done so:
 
 install.packages("shiny", "dplyr", "ggplot2", "leaflet", "DT", "plotly", "gapminder", "countrycode", "sf")
@@ -88,4 +93,98 @@ ui = fluidPage(
 #header {
 color: green;
 font-weight: bold;
+}
+
+
+# Lesson 3 (Shiny Core Concepts) ------------------------------------------
+
+#Outputting a basic table of the gapminder data set.
+server = function(input, output, session) {
+
+  #TABLE
+  output$table1 = renderTable({
+    gap
+  })
+}
+
+ui = fluidPage(
+
+  tags$head(
+    tags$link(href = "styles.css",
+              rel = "stylesheet"),
+    tags$title("Check this out!")
+  ),
+
+  h1("Our amazing Shiny app!",
+     id = "header"),
+
+  fluidRow(
+    column(width = 4), #SIDEBAR
+    column(width = 8,
+           tableOutput(outputId = "table1")) #MAIN PANEL
+  ),
+
+  tags$footer("This is my app")
+)
+
+
+#Next, adding an input widget
+ui = fluidPage(
+
+  tags$head(
+    tags$link(href = "styles.css",
+              rel = "stylesheet"),
+    tags$title("Check this out!")
+  ),
+
+  h1("Our amazing Shiny app!",
+     id = "header"),
+
+  fluidRow(
+    column(width = 4,
+           selectInput(
+             inputId = "sorted_column",
+             label = "Select a column to sort the table by.",
+             choices = names(gap)
+            )
+           ), #SIDEBAR
+    column(width = 8,
+           tableOutput(outputId = "table1")) #MAIN PANEL
+  ),
+
+  tags$footer("This is my app")
+)
+
+#Now, wire the input server side
+server = function(input, output, session) {
+
+  #TABLE
+  output$table1 = renderTable({
+    gap %>%
+      arrange(!!sym(input$sorted_column)) #DON'T WORRY ABOUT WHAT THE !!sym() PART DOES HERE!
+  })
+}
+
+#Demonstrate the value of print:
+server = function(input, output, session) {
+
+  #TABLE
+  output$table1 = renderTable({
+    print(input$sorted_column)
+    gap %>%
+      arrange(!!sym(input$sorted_column))
+  })
+}
+
+#Demonstrate the value of print:
+server = function(input, output, session) {
+
+  input$sorted_column #CAN'T DO THIS! NOT IN A REACTIVE CONTEXT!
+
+  #TABLE
+  output$table1 = renderTable({
+    print(input$sorted_column)
+    gap %>%
+      arrange(!!sym(input$sorted_column))
+  })
 }

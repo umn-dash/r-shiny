@@ -326,7 +326,7 @@ a typical website is born.
 Below is some HTML code containing some (nested) HTML boxes. Rewrite the
 code below in R Shiny UI code instead using the `div()` function:
 
-``` HTML
+``` html
 <div id="main-container" class="container">
 <div class="content">Welcome to our app!</div>
 </div>
@@ -417,7 +417,7 @@ function) is a box that holds a link to a URL or file. You could use
 several such boxes within a single paragraph box *without* spawning a
 new line after each one.
 
-``` HTML
+``` html
 <!-- HERE'S HOW YOU'D RECREATE THE IMAGE ABOVE IN HTML -->
 <div>
 <h1>Block-level</h1>
@@ -573,9 +573,8 @@ simultaneously, with those two targets separated with a comma:
     as one group. A period connects an HTML element type with a
     **class** name in a CSS selector (*e.g.*, `p.intro`).
 
-```{=html}
 <!-- -->
-```
+
 1.  Our second target is `div`s (a highly generic HTML box), but *only*
     the one with the **id** **attribute** of `firstintro`. `id`s allow
     us to control or style just a specific element. A hashtag connects
