@@ -313,7 +313,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>R Shiny's Core Concepts: Rendering, Inputs, and Reactivity</h1>
-        <p>Last updated on 2024-08-29 |
+        <p>Last updated on 2024-08-30 |
 
         <a href="https://github.com/carpentries/r_shiny_workshop/edit/main/episodes/shiny_3.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -334,10 +334,9 @@
 <h3 class="card-title">Questions</h3>
 <ul><li>How do I add cool features to my app?</li>
 <li>How do I give my users meaningful things to do on my app?</li>
-<li>How do I get my app to respond meaningfully to users’ actions?</li>
-<li>How do I give users greater control over when/how my app
-responds?</li>
-<li>How do I give <em>myself</em> greater control over when/how my app
+<li>How do I get my app to respond meaningfully to user actions?</li>
+<li>How do I give users control over when/how my app responds?</li>
+<li>How do I give <em>myself</em> control over when/how my app
 responds?</li>
 <li>How is R Shiny server code different than code I may have written
 before?</li>
@@ -348,17 +347,17 @@ before?</li>
 <div class="card-body">
 <div class="inner bordered">
 <h3 class="card-title">Objectives</h3>
-<ul><li>Add a table to your app’s UI to present data to the user.</li>
+<ul><li>Present data to users by adding a table to your UI.</li>
 <li>Allow users to adjust how the table looks, and give them control
-over when its looks change.</li>
+over when it changes.</li>
 <li>Define <strong>reactive context</strong>, <strong>event</strong>,
 <strong>event handling</strong>, <strong>declarative coding</strong>,
 and <strong>imperative coding</strong>.</li>
-<li>Explain how and why R Shiny server code executes differently than
-“traditional” R code.</li>
+<li>Explain how and why R Shiny server code executes differently than R
+code.</li>
 <li>Use <strong>isolation</strong> and <strong>observers</strong> to
-more tightly control event handling.</li>
-<li>Expand your UI’s “real estate” by introducing a tab set panel.</li>
+control event handling.</li>
+<li>Expand your UI’s “real estate” by adding a tab set panel.</li>
 </ul></div>
 </div>
 </div>
@@ -366,52 +365,65 @@ more tightly control event handling.</li>
 </div>
 <section><h2 class="section-heading" id="going-from-nothing-to-something">Going from nothing to something<a class="anchor" aria-label="anchor" href="#going-from-nothing-to-something"></a></h2>
 <hr class="half-width"><p>As we saw at the end of the last lesson, our app doesn’t look like
-much…yet! It is just a title on an otherwise empty page. In this lesson,
-we’ll fix that! As we add content, we’ll learn three core concepts of
-building a website using Shiny: 1) <strong>rendering</strong> and
-<strong>outputting</strong> complex UI elements, 2) <strong>input
-widgets</strong>, and 3) <strong>reactivity</strong>.</p>
+much…yet! It is just a title (and a footer, if you added one on your
+own) on an otherwise empty page.</p>
+<p>In this lesson, we’ll fix that! As we add content to our app’s UI,
+we’ll learn three core concepts of using Shiny to build a website: 1)
+<strong>rendering</strong> and <strong>outputting</strong> UI elements,
+2) <strong>input widgets</strong>, and 3)
+<strong>reactivity</strong>.</p>
 <p>Our app will showcase the <code>gapminder</code> data set, which
 contains population, life expectancy, and economic data over time for
-most of the world’s countries. Our goal is give users interesting ways
-to engage with these data. As we go, imagine how you might do the same
-for your own data sets!</p>
-<p>Let’s start by giving users a table with which to view the raw data.
-If you think about it, a table is just a bunch of boxes (cells) within
-larger boxes (rows and columns) within one outermost box (the table
-“holder”).</p>
+most of the world’s countries:</p>
+<div class="codewrapper sourceCode" id="cb1">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">head</span><span class="op">(</span><span class="va">gap</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="error" tabindex="0"><code>Error in eval(expr, envir, enclos): object 'gap' not found</code></pre>
+</div>
+<p>Our goal will be to give users interesting ways to engage with these
+data. As we go, imagine how you might do the same for your own data
+sets!</p>
+<p>Let’s start by giving users a table with which to view the raw
+<code>gapminder</code> data set.</p>
+<p>If you think about it, a table is just a bunch of boxes (cells)
+within larger boxes (rows and columns) all within one outermost box (the
+table itself).</p>
 <p>So, it makes sense that a table should be build-able in HTML, a
-language all about building nested boxes! However, depending on the
-number of cells, it would require typing out a LOT of boxes…Fortunately,
-we don’t have to “code” all those boxes “by hand;” we can have R do
-it!</p>
-<p>To build an element (like a table for a data set) complex enough that
-building it programmatically instead of by hand is appealing, and then
-to insert that complex element into our UI where a user can see it, we
-must:</p>
+language <em>all about</em> nested boxes! However, depending on the
+number of cells, it would require typing out a LOT of boxes to build
+such a table from scratch in HTML.</p>
+<p>Fortunately, we don’t have to; we can have R do it! To build an
+element (like a table) complex enough that building it programmatically
+instead of “by hand” is appealing, and then to insert that complex
+element into our UI where a user can see it, we must:</p>
 <ol style="list-style-type: decimal"><li>
-<p>Make (<em>i.e.</em>, <em>render</em>) that element on the server
-half of our app.</p>
-<ul><li><p>This first involves doing whatever “heavy lifting” is needed to
-assemble the underlying R object. For a table, <em>e.g.</em>, R might
-need to do some data manipulation, like joining two smaller tables
-together.</p></li>
-<li><p>Then, we convert (behind the scenes) that R object into its
-functional equivalent in HTML, a process called <em>rendering</em> in
-Shiny.</p></li>
+<p>Make (<em>i.e.</em>, <strong>render</strong>) that element on the
+server side of our app.</p>
+<ul><li>This involves first doing whatever “heavy lifting” is needed to
+assemble the underlying R object. For a table, <em>e.g.</em>, we might
+use R to do some data manipulation, like joining two smaller tables
+together.</li>
 </ul></li>
-<li><p>Then, we pass te rendered version over to the UI side of our app,
-indicating <em>where</em> in our UI we’d like the finished element to
-display for a user, a process called <em>outputting</em> in
-Shiny.</p></li>
+<li><p>Then, we convert (behind the scenes) that R object into its
+functional HTML equivalent, a process Shiny calls
+<em>rendering</em>.</p></li>
+<li><p>Lastly, we pass the rendered entity to the UI side. In the
+process, we indicate <em>where</em> in our UI we’d like the finished
+element to display, a process Shiny calls <em>outputting</em>.</p></li>
 </ol><p>For virtually every complex element you’d want to build in Shiny,
-there is a pair of functions designed to do those two steps. In this
-particular case, that pair is <code>renderTable({})</code> on the server
-side and <code>tableOutput()</code> on the UI side. [Notice that most
-Shiny functions use a camelCase <strong>naming convention</strong>.]</p>
+there is a pair of functions designed to do those latter two steps. In
+this case, that pair is <code>renderTable({})</code> on the server side
+and <code>tableOutput()</code> on the UI side. [Notice that most Shiny
+functions have camelCase names.]</p>
 <p>Let’s use these two functions to add a basic table of the
 <code>gapminder</code> data set to our app’s UI:</p>
-<div class="codewrapper sourceCode" id="cb1">
+<div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -422,124 +434,125 @@ Shiny functions use a camelCase <strong>naming convention</strong>.]</p>
 <span>  <span class="va">gap</span> <span class="co">#&lt;--OR WHATEVER YOU NAMED THIS DATA SET OBJECT IN YOUR GLOBAL.R</span></span>
 <span><span class="op">}</span><span class="op">)</span></span></code></pre>
 </div>
-<p>Above, we instructed R to render an “HTML-ized” version of a data
-frame of the entire raw gapminder data set. Here, because we wanted to
-render the entire data set, that’s all we put inside the braces. If we
-had wanted to do any operations on this data set first (such as
-filtering it or adding columns to it), though, we could have done so
-using “normal R code” inside <code>renderTable({})</code>’s braces. So
-long as it’s a data frame-like object, the last thing produced inside
-the braces is what will be rendered (anything else being last will
-trigger an error).</p>
-<p>So, we now have a rendered, HTML-ized table of our data set on the
-server side of our app. How do we get it from the server to the UI?
-Remember that users can only see what the server instructs a user’s
-browser to build into a UI, so we must tell R to “pass” this rendered
-table over to the UI <em>somehow</em>…</p>
+<p>Above, we told R to <strong>render</strong> an “HTML-ized” version of
+the raw gapminder data frame. Because we wanted to render the raw data
+set with no modifications, we put just the data frame’s name inside
+<code>renderDT({})</code>’s braces. If we had wanted to do any
+operations on this data set first (such as filtering it or adding
+columns to it), though, we could have those operations using normal R
+code inside those braces. So long as it’s a table-like object, the last
+thing produced inside the braces is what gets rendered (placing anything
+else last will trigger an error).</p>
+<p>Once we have a rendered, HTML-ized table on the server side, how do
+we pass it from the server to the UI? Remember that users only see what
+the server instructs a user’s browser to build in the UI, so we must
+tell R to “hand over” this rendered table to the UI
+<em>somehow</em>…</p>
 <p>Last lesson, recall that the app creates an object called
-<code>output</code> as soon as the app boots. <u>Passing rendered
-elements from the server to the client is <code>output</code>’s job</u>.
-If an app is a restaurant, and rendering is the process of “cooking”
-elements back in the kitchen area, then <code>output</code> is the
-waiter that brings those finished elements out to the dining area where
-users/customers can experience them.</p>
-<p>For this process to happen, we first give the element a nickname (an
-<code>outputId</code>) it adopts once it has been rendered. Then, we use
-that <code>outputId</code> to “stick” the rendered element to the
-<code>output</code> object using the <code>$</code> operator.</p>
-<p>Here, the nickname we provided was <code>basic_table</code>. In our
-restautant analogy, think of the <code>outputId</code> as the order
-ticket the waiter filled out when a table ordered food.
-<code>output</code> (our “waiter”) uses that code later to figure out
-which prepared food belongs to which order.</p>
-<p>Now, we just need to code the equivalent of “dropping this element
-off at the appropriate table.” We tell the app where to place the
-element through placement of a <code>tableOutput()</code> call in our
-UI:</p>
-<div class="codewrapper sourceCode" id="cb2">
+<code>output</code> when the app boots up. <u>Passing rendered elements
+from the server to the UI is <code>output</code>’s job</u>. If an app is
+like a restaurant, then rendering is the process of “cooking” elements
+in the kitchen, and <code>output</code> is the waiter that brings
+finished elements into the dining room where users/customers can
+experience them.</p>
+<p>For this to work, though, we need to give the rendered element a
+nickname (an <code>outputId</code>). Then, we use that
+<code>outputId</code> to “stick” the rendered element to
+<code>output</code> using the <code>$</code> operator. Here, the
+<code>outputId</code> we set was <code>basic_table</code>.</p>
+<p>Now, we just need to code the equivalent of “dropping our prepared
+element off at the right table.” We tell the app <em>where</em> to place
+the element with our placement of the <code>tableOutput()</code> call in
+our UI:</p>
+<div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="do">##This code should **replace** the "main" fluidRow() contained within the BODY section of your ui.R file!</span></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="do">##... other UI code...</span></span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="fu">fluidRow</span>(</span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>  <span class="do">###SIDEBAR CELL</span></span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>  <span class="fu">column</span>(<span class="at">width =</span> <span class="dv">4</span>),</span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>  <span class="do">###MAIN PANEL CELL</span></span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>  <span class="fu">column</span>(<span class="at">width =</span> <span class="dv">8</span>,</span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>         <span class="fu">tableOutput</span>(<span class="st">"basic_table"</span>)<span class="co">#&lt;--PUTTING OUR RENDERED TABLE INTO OUR "MAIN PANEL" CELL USING tableOutput AND THE outputId OF THE RENDERED PRODUCT AS ITS INPUT.</span></span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>         )</span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>),</span>
-<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a></span>
-<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="do">##... other UI code...</span></span></code></pre>
+<pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="do">##This code should **replace** the "main" fluidRow() contained within the BODY section of your ui.R file!</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="do">##... other UI code...</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="fu">fluidRow</span>(</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  <span class="do">###SIDEBAR CELL</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>  <span class="fu">column</span>(<span class="at">width =</span> <span class="dv">4</span>),</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>  <span class="do">###MAIN PANEL CELL</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>  <span class="fu">column</span>(<span class="at">width =</span> <span class="dv">8</span>,</span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>         <span class="fu">tableOutput</span>(<span class="st">"basic_table"</span>)<span class="co">#&lt;--PUTTING OUR RENDERED TABLE IN OUR "MAIN PANEL" CELL USING tableOutput(), WITH THE outputId OF THE RENDERED PRODUCT AS INPUT.</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>         )</span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>),</span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="do">##... other UI code...</span></span></code></pre>
 </div>
-<p>Here, we’ve placed our outputted table inside the “main panel” cell
-of our central, two-column <code>fluidRow()</code>.</p>
-<p>Why do we need to use our <code>outputId</code> in this way? Wouldn’t
-it be enough to just place an empty <code>tableOutput()</code> call
-here? Well, a single app might render and display multiple different
-tables. How would the app know <em>which</em> table should be displayed
-<em>where</em>? This ambiguity is cleared up by specifying the
-<code>outputId</code> of the specific table we want displayed in a
-specific location in the UI.</p>
-<p>If you run your app at this point, you should get something that
-looks like this:</p>
-<figure><img src="fig/basic%20table.png" alt="Our Shiny app with our basic HTML table of the gapminder data set displayed in the UI." class="figure mx-auto d-block"><div class="figcaption">Our Shiny app with our basic HTML table of the
-gapminder data set displayed in the UI.</div>
+<p>Here, we’ve placed our outputted table inside the “main panel”
+cell.</p>
+<p>Why do we need to use our <code>outputId</code> as the input for
+<code>tableOutput()</code>? Wouldn’t it be enough to place an empty
+<code>tableOutput()</code> call here? Well, a single app might render
+and display many different tables. How would the app know <em>which</em>
+table should be displayed <em>where</em>, if all it had to go on was
+where <code>tableOutput()</code> calls were?</p>
+<p>This ambiguity is cleared up by specifying the <code>outputId</code>
+of the <em>specific</em> table we want displayed in a <em>specific</em>
+location. In our restaurant analogy, the <code>outputId</code> is like
+the order ticket the waiter filled out when a table ordered food.
+<code>output</code> (our “waiter”) then uses that code later to figure
+out which prepared food belongs to which tables.</p>
+<p>If we run the app now, it should look like this:</p>
+<figure><img src="fig/basic%20table.png" alt="Our Shiny app with our basic HTML table of the gapminder data set." class="figure mx-auto d-block"><div class="figcaption">Our Shiny app with our basic HTML table of the
+gapminder data set.</div>
 </figure><p>Our table is cool! But not <em>terribly</em> exciting…it looks a
-little drab, and users can’t actually <strong>do</strong> anything with
-it except look at it. The first problem we’ll start to fix later when we
-swap it out for a <em>much</em> better one. However, we can fix the
-second problem now.</p>
+little drab (and long!), and users can’t actually <strong>do</strong>
+anything with it except look at it. The first problem we’ll fix later by
+swapping it for a fancier one. However, we can fix the second problem
+now.</p>
 </section><section><h2 class="section-heading" id="giving-your-users-input">Giving your users input<a class="anchor" aria-label="anchor" href="#giving-your-users-input"></a></h2>
-<hr class="half-width"><p>In my opinion, the value of a Shiny app can be measured by how much
-it lets users <em>do</em>. To enable meaningful user interactions, we
-can add <strong>widgets</strong>. A widget is any element users can
-interact with and thus provide data to the app it could (maybe) use to
-respond. In web development, user actions a webpage can watch for are
+<hr class="half-width"><p>The value of a Shiny app can be measured in terms of how much it lets
+users <em>do</em>. To enable meaningful user interactions, we can add
+<strong>widgets</strong>. A widget is any element users can interact
+with and thus provide data to the app that it could use to respond in
+some way. In web development, user actions a webpage can watch for are
 called <strong>events</strong>; responding to an event (or choosing to
 not respond!) is called <strong>event</strong>
 <strong>handling</strong>.</p>
 <p>Let’s start by adding an <strong>input widget</strong> to our UI so
 that new <strong>events</strong> are possible. Specifically, let’s add a
-<code>selectInput()</code> to our “sidebar” UI container. This will
-produce a “drop-down menu” style element that allows users to select a
-single choice from a pre-defined list. We’ll populate the list with the
-column names from the <code>gapminder</code> data set:</p>
-<div class="codewrapper sourceCode" id="cb3">
+<code>selectInput()</code> to our “sidebar.” This will produce a
+“drop-down menu”-style element that allows users to pick a choice from a
+pre-defined list. We’ll populate the list with the column names from the
+<code>gapminder</code> data set:</p>
+<div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="do">##This code should **replace** the "sidebar" cell contained within the main fluidRow() of your ui.R file!</span></span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="do">##... other UI code...</span></span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="do">###SIDEBAR CELL</span></span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>    <span class="fu">column</span>(</span>
-<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>      <span class="at">width =</span> <span class="dv">4</span>,</span>
-<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>      <span class="do">##ADDING A DROP-DOWN MENU WIDGET TO THE SIDEBAR.</span></span>
-<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>      <span class="fu">selectInput</span>(</span>
-<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>        <span class="at">inputId =</span> <span class="st">"sorted_column"</span>,</span>
-<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>        <span class="at">label =</span> <span class="st">"Select a column to sort the table by."</span>,</span>
-<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>        <span class="at">choices =</span> <span class="fu">names</span>(gap) <span class="co">#&lt;--OR WHATEVER YOU NAMED THIS OBJECT IN GLOBAL.R</span></span>
-<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>      )</span>
-<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>    ),</span>
-<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>  </span>
-<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="do">##... other UI code...</span></span></code></pre>
+<pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="do">##This code should **replace** the "sidebar" cell contained within the main fluidRow() of your ui.R file!</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="do">##... other UI code...</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="do">###SIDEBAR CELL</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>    <span class="fu">column</span>(</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>      <span class="at">width =</span> <span class="dv">4</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>      <span class="do">##ADDING A DROP-DOWN MENU WIDGET TO THE SIDEBAR.</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>      <span class="fu">selectInput</span>(</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>        <span class="at">inputId =</span> <span class="st">"sorted_column"</span>,</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>        <span class="at">label =</span> <span class="st">"Select a column to sort the table by."</span>,</span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>        <span class="at">choices =</span> <span class="fu">names</span>(gap) <span class="co">#&lt;--OR WHATEVER YOU NAMED THIS OBJECT IN GLOBAL.R</span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>      )</span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>    ),</span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a>  </span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="do">##... other UI code...</span></span></code></pre>
 </div>
 <p>Notice we provided <code>selectInput()</code> three inputs:</p>
-<ol style="list-style-type: decimal"><li><p>An <code>inputId</code> is both an <code>id</code> for CSS
-purposes as well as a nickname the app will use for this widget
-server-side. We’ll see how that works in a minute.</p></li>
-<li><p>The text we provide to <code>label</code> will be the text that
-accompanies the widget in the UI and, usually, explains to the user what
-the widget does (in case it isn’t obvious).</p></li>
-<li><p>For <code>choices</code>, we provide a vector of values that will
-be the options that appear in our drop-down menu.</p></li>
+<ol style="list-style-type: decimal"><li><p>An <code>inputId</code> is both an <code>id</code> for CSS as
+well as a nickname the app uses to pass this widget’s current value from
+the UI to the server. We’ll see how that works in a minute.</p></li>
+<li><p>The text we provide to <code>label</code> will accompany the
+widget in the UI and, usually, should explain to the user what the
+widget does (when it isn’t obvious).</p></li>
+<li><p>For <code>choices</code>, we provide a vector of values that’ll
+be the options in our drop-down menu.</p></li>
 </ol><p>While there are a few variations, most Shiny input widgets work a lot
 like <code>selectInput()</code>, so it’s a good first example.</p>
 <p>Now, our app should look like this:</p>
-<figure><img src="fig/select%20input.png" alt="Our new select input widget." class="figure mx-auto d-block"><div class="figcaption">Our new select input widget.</div>
+<figure><img src="fig/select%20input.png" alt="Our new selectInput, drop-down-menu-style widget." class="figure mx-auto d-block"><div class="figcaption">Our new selectInput, drop-down-menu-style
+widget.</div>
 </figure><p>Very nice!</p>
 <p>…<em>Except</em> for two things. First, the choices in the drop-down
 menu are…ugly. Some are abbreviations that lack spaces between words and
@@ -551,51 +564,50 @@ typing.</p>
 <p>Instead, we can provide a <strong>named vector</strong> to
 <code>choices</code>. The names we give (left of the <code>=</code>)
 will be displayed in the drop-down menu, whereas the original column
-names (right of the <code>=</code>) will be sent to the server side to
-work with:</p>
-<div class="codewrapper sourceCode" id="cb4">
+names (right of the <code>=</code>) will be retained internally for the
+app to use in operations:</p>
+<div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="do">##This code should **replace** the "sidebar" cell contained within the main fluidRow() of your ui.R file!</span></span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="do">##... other UI code...</span></span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="do">###SIDEBAR CELL</span></span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>    <span class="fu">column</span>(</span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>      <span class="at">width =</span> <span class="dv">4</span>,</span>
-<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>      <span class="fu">selectInput</span>(</span>
-<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>        <span class="at">inputId =</span> <span class="st">"sorted_column"</span>,</span>
-<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>        <span class="at">label =</span> <span class="st">"Select a column to sort the table by."</span>,</span>
-<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>        <span class="at">choices =</span> <span class="fu">c</span>(</span>
-<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>          <span class="co">#BY USING A NAMED VECTOR, WE CAN HAVE HUMAN-READABLE CHOICES AND COMPUTER-READABLE VALUES. TYPE CAREFULLY HERE!</span></span>
-<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>          <span class="st">"Country"</span> <span class="ot">=</span> <span class="st">"country"</span>,</span>
-<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a>          <span class="st">"Continent"</span> <span class="ot">=</span> <span class="st">"continent"</span>,</span>
-<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>          <span class="st">"Year"</span> <span class="ot">=</span> <span class="st">"year"</span>,</span>
-<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>          <span class="st">"Life expectancy"</span> <span class="ot">=</span> <span class="st">"lifeExp"</span>,</span>
-<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a>          <span class="st">"Population size"</span> <span class="ot">=</span> <span class="st">"pop"</span>,</span>
-<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a>          <span class="st">"GDP per capita"</span> <span class="ot">=</span> <span class="st">"gdpPercap"</span></span>
-<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a>        )</span>
-<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a>      )</span>
-<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a>    ),</span>
-<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a>  </span>
-<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a><span class="do">##... other UI code...</span></span></code></pre>
+<pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="do">##This code should **replace** the "sidebar" cell contained within the main fluidRow() of your ui.R file!</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="do">##... other UI code...</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="do">###SIDEBAR CELL</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>    <span class="fu">column</span>(</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>      <span class="at">width =</span> <span class="dv">4</span>,</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>      <span class="fu">selectInput</span>(</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>        <span class="at">inputId =</span> <span class="st">"sorted_column"</span>,</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>        <span class="at">label =</span> <span class="st">"Select a column to sort the table by."</span>,</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>        <span class="at">choices =</span> <span class="fu">c</span>(</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>          <span class="co">#BY USING A NAMED VECTOR, WE CAN HAVE HUMAN-READABLE CHOICES AND COMPUTER-READABLE VALUES. TYPE CAREFULLY HERE!</span></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>          <span class="st">"Country"</span> <span class="ot">=</span> <span class="st">"country"</span>,</span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>          <span class="st">"Continent"</span> <span class="ot">=</span> <span class="st">"continent"</span>,</span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>          <span class="st">"Year"</span> <span class="ot">=</span> <span class="st">"year"</span>,</span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a>          <span class="st">"Life expectancy"</span> <span class="ot">=</span> <span class="st">"lifeExp"</span>,</span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a>          <span class="st">"Population size"</span> <span class="ot">=</span> <span class="st">"pop"</span>,</span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a>          <span class="st">"GDP per capita"</span> <span class="ot">=</span> <span class="st">"gdpPercap"</span></span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a>        )</span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a>      )</span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a>    ),</span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a>  </span>
+<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a><span class="do">##... other UI code...</span></span></code></pre>
 </div>
-<p>With that change made, our drop-down menu widget should be looking
-much better!</p>
-<figure><img src="fig/prettier%20choices.png" alt="Now our choices look much more human-readable for our users, but the original column names are preserved for work behind the scenes too." class="figure mx-auto d-block"><div class="figcaption">Now our choices look much more human-readable
-for our users, but the original column names are preserved for work
-behind the scenes too.</div>
-</figure><p>…Except that fiddling with the drop-down still doesn’t <em>do</em>
-anything…<em>yet</em>. We’ve created something a user can interact with,
-triggering <strong>events</strong>, but we haven’t told the app how to
-<strong>handle</strong> those yet.</p>
+<p>With that change made, our drop-down menu widget is looking much
+cleaner!</p>
+<figure><img src="fig/prettier%20choices.png" alt="Now our choices look much more human-readable, but the original column names are preserved for work behind the scenes." class="figure mx-auto d-block"><div class="figcaption">Now our choices look much more human-readable,
+but the original column names are preserved for work behind the
+scenes.</div>
+</figure><p>The more serious issue is that fiddling with the drop-down doesn’t
+<em>do</em> anything…<em>yet</em>. We’ve created something a user can
+interact with, triggering <strong>events</strong>, but we haven’t told
+the app how to <strong>handle</strong> them yet.</p>
 <div class="section level3">
 <h3 id="rll-handle-that">R’ll handle that<a class="anchor" aria-label="anchor" href="#rll-handle-that"></a></h3>
-<p>Let’s do that next. We’ll give the user the ability to re-sort the
-table by the column they’ve selected using the drop-down widget. You
-might be surprised to learn this is actually quite straightforward—it
-just requires one adjustment to our server-side code:</p>
-<div class="codewrapper sourceCode" id="cb5">
+<p>Let’s do that next. We’ll give users the ability to re-sort the table
+by the column they’ve selected using our drop-down widget. This requires
+only a modest adjustment to our server code:</p>
+<div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -605,58 +617,54 @@ just requires one adjustment to our server-side code:</p>
 <span><span class="va">output</span><span class="op">$</span><span class="va">basic_table</span> <span class="op">=</span> <span class="fu">renderTable</span><span class="op">(</span><span class="op">{</span></span>
 <span>  </span>
 <span>  <span class="va">gap</span> <span class="op">%&gt;%</span> </span>
-<span>    <span class="co">#USE dplyr's arrange() VERB FOR SORTING BY THE PICKED COLUMN.</span></span>
-<span>    <span class="fu">arrange</span><span class="op">(</span><span class="op">!</span><span class="op">!</span><span class="fu">sym</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">sorted_column</span><span class="op">)</span><span class="op">)</span> <span class="co">#!! (PRONOUNCED "BANG-BANG") AND sym() ARE dplyr TRICKS, NOT R SHINY THINGS. LET'S NOT WORRY ABOUT WHAT THEY DO.</span></span>
+<span>    <span class="co">#USE dplyr's arrange() TO SORT BY THE PICKED COLUMN.</span></span>
+<span>    <span class="fu">arrange</span><span class="op">(</span><span class="op">!</span><span class="op">!</span><span class="fu">sym</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">sorted_column</span><span class="op">)</span><span class="op">)</span> <span class="co">#!! (PRONOUNCED "BANG-BANG") AND sym() ARE dplyr HACKS HERE, NOT R SHINY THINGS. DON'T WORRY ABOUT WHAT THEY DO.</span></span>
 <span><span class="op">}</span><span class="op">)</span></span></code></pre>
 </div>
-<p>Run the app and try it out. As you select different columns using the
-drop-down menu, the table <em>automatically</em> rebuilds, sorted by the
-column you’ve picked:</p>
-<figure><img src="fig/sorting%20by%20column.gif" alt="Now, when a user selects a new column using our drop-down widget, the table re-sorts by that column." class="figure mx-auto d-block"><div class="figcaption">Now, when a user selects a new column using our
-drop-down widget, the table re-sorts by that column.</div>
-</figure><p>Earlier, we met the <code>output</code> object, which passes rendered
-elements from the server to the UI where they can be seen. Here, we
-finally meet <code>input</code>, which passes <strong>event
-data</strong> from the UI to the server where responses can be
-crafted.</p>
-<p>Here, <code>input</code> is passing the <em>current</em> value of the
-widget with the <code>inputId</code> of <code>sorted_column</code>
-(that’s the nickname we gave our drop-down menu when we created it) over
-to the server when the app starts up and every time that value changes
-thereafter. At any time, our server code can use that value in
-operations, such as to decide how to sort the data in our table.</p>
-<p>But, more importantly, Shiny knows that, <em>at any moment</em>,
-<code>input$sorted_column</code>’s value could <em>change</em>. Objects
-with values that could change as a result of events are <strong>reactive
-objects</strong>—at any moment, they might change <em>in reaction
-to</em> something.</p>
+<p>Run the app and try it! As you select different columns using the
+drop-down menu, the table <em>rebuilds</em>, sorted by the column you’ve
+picked:</p>
+<figure><img src="fig/sorting%20by%20column.gif" alt="Now, when a user selects a new column using the drop-down widget, the table is rebuilt, sorted by that column." class="figure mx-auto d-block"><div class="figcaption">Now, when a user selects a new column using the
+drop-down widget, the table is rebuilt, sorted by that column.</div>
+</figure><p>Earlier, we met <code>output</code>, which passes rendered elements
+from the server to the UI. Here, we meet <code>input</code>, which
+passes <strong>event data</strong> from the UI to the server. Here,
+<code>input</code> is passing the <em>current</em> value of the widget
+with the <code>inputId</code> of <code>sorted_column</code> over to the
+server every time that value changes. Our server code can use that value
+in operations, such as deciding how to sort the data in our rendered
+table.</p>
+<p>More importantly, though, Shiny knows that
+<code>input$sorted_column</code>’s value could change <em>at any
+moment</em>. Objects with values that could change as a result of events
+are called <strong>reactive objects</strong>—at any time, they could
+change <em>in reaction to</em> something the user did.</p>
 <p>Because we’ve used <code>input$sorted_column</code> in some of our
 server code, and because R knows that <code>input$sorted_column</code>’s
-value could change at any time, it knows to be <em>watching</em> for
-such changes. Whenever it sees one, it’ll run code including
-<code>input$sorted_column</code> <em>again</em>. The logic makes sense,
-when you think about it: If <code>input$sorted_column</code> has
-changed, anything that used its <em>previous</em> value to produce
-outputs may now be “outdated,” so re-running the associated code and
-producing more current outputs makes sense!</p>
+value could change at any time, Shiny knows to be <em>watching</em> for
+such changes. Whenever it spots one, it’ll run any code that includes
+<code>input$sorted_column</code> <em>again</em>. The logic for this
+holds up: If <code>input$sorted_column</code> has changed, any outputs
+produced using its previous value as an input may now be “outdated,” so
+re-running the associated code and producing new outputs makes
+sense!</p>
 <p>Because the code inside <code>renderTable({})</code> contains
-<code>input$sorted_column</code>, all that code reruns every time
+<code>input$sorted_column</code>, that code will re-run every time
 <code>input$sorted_column</code> changes, which happens every time the
 user selects a new column from the drop-down menu. We’re successfully
-<strong>handling</strong> the <strong>events</strong> triggered by our
+<strong>handling</strong> <strong>events</strong> triggered by our
 user’s interactions with our input widget!</p>
 </div>
 <div class="section level3">
 <h3 id="reactivity">Reactivity<a class="anchor" aria-label="anchor" href="#reactivity"></a></h3>
 <p>There is just one small but important technical detail: Shiny
 <em>can’t</em> watch for changes in <strong>reactive objects</strong>
-<em>everywhere</em> in our server code—it can <em>only</em> do so within
-<strong>reactive contexts</strong>.</p>
-<p>A <strong>reactive context</strong> is a code block that R
-<em>knows</em> it needs to watch for changes in reactive objects and
-thus it might need to re-run over and over again. It makes sense that we
-can only put “changeable” objects inside code blocks that R knows it
-needs to watch for such changes in!</p>
+<em>everywhere</em>—it can <em>only</em> do so within <strong>reactive
+contexts</strong>. A <strong>reactive context</strong> is a code block
+that R <em>knows</em> to watch for changes because reactive objects can
+be there and those might change. It makes sense that we can only put
+these kinds of “changeable” objects inside code blocks that R knows
+might contain such objects!</p>
 <div id="challenge1" class="callout challenge">
 <div class="callout-square">
 <i class="callout-icon" data-feather="zap"></i>
@@ -678,7 +686,7 @@ when this happens; rephrase it in your own words.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>You’ll get an error that looks a lot like this:<br><br><code>Error in $: Can't access reactive value 'sorted_column' outside of reactive consumer. ℹ Do you need to wrap inside reactive() or observe()?</code></p>
 <p>This error notes that <code>input$sorted_column</code> is a
@@ -772,7 +780,7 @@ we might write?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <p>Server-side R code is mostly broken up into many reactive contexts,
 each tasked with generating one or more complex UI elements and/or
@@ -821,33 +829,33 @@ some users just want to be “in control” because they’d find the updating
 process distracting when it happens not on <em>their</em> terms.</p>
 <p>In any case, we can give users greater control by adding another
 input widget: an <code>actionButton()</code>.</p>
-<div class="codewrapper sourceCode" id="cb6">
+<div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="do">##This code should **replace** the "sidebar" cell contained within the main fluidRow() of your ui.R file!</span></span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="do">##... other UI code...</span></span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="do">###SIDEBAR CELL</span></span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>    <span class="fu">column</span>(</span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>      <span class="at">width =</span> <span class="dv">4</span>,</span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>      <span class="fu">selectInput</span>(</span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>        <span class="at">inputId =</span> <span class="st">"sorted_column"</span>,</span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>        <span class="at">label =</span> <span class="st">"Select a column to sort the table by."</span>,</span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>        <span class="at">choices =</span> <span class="fu">c</span>(</span>
-<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>          <span class="st">"Country"</span> <span class="ot">=</span> <span class="st">"country"</span>,</span>
-<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>          <span class="st">"Continent"</span> <span class="ot">=</span> <span class="st">"continent"</span>,</span>
-<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>          <span class="st">"Year"</span> <span class="ot">=</span> <span class="st">"year"</span>,</span>
-<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>          <span class="st">"Life expectancy"</span> <span class="ot">=</span> <span class="st">"lifeExp"</span>,</span>
-<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a>          <span class="st">"Population size"</span> <span class="ot">=</span> <span class="st">"pop"</span>,</span>
-<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a>          <span class="st">"GDP per capita"</span> <span class="ot">=</span> <span class="st">"gdpPercap"</span></span>
-<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a>        )</span>
-<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a>      ),</span>
-<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a>      <span class="do">##ADD AN actionButton(). PAY </span><span class="al">ATTENTION</span><span class="do"> TO COMMAS/PARENTHESES AROUND THIS NEW CODE!</span></span>
-<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a>      <span class="fu">actionButton</span>(<span class="at">inputId =</span> <span class="st">"go_button"</span>, <span class="at">label =</span> <span class="st">"Go!"</span>)</span>
-<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a>    ),</span>
-<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a>  </span>
-<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a><span class="do">##... other UI code...</span></span></code></pre>
+<pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="do">##This code should **replace** the "sidebar" cell contained within the main fluidRow() of your ui.R file!</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="do">##... other UI code...</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="do">###SIDEBAR CELL</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>    <span class="fu">column</span>(</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>      <span class="at">width =</span> <span class="dv">4</span>,</span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>      <span class="fu">selectInput</span>(</span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>        <span class="at">inputId =</span> <span class="st">"sorted_column"</span>,</span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>        <span class="at">label =</span> <span class="st">"Select a column to sort the table by."</span>,</span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>        <span class="at">choices =</span> <span class="fu">c</span>(</span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>          <span class="st">"Country"</span> <span class="ot">=</span> <span class="st">"country"</span>,</span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a>          <span class="st">"Continent"</span> <span class="ot">=</span> <span class="st">"continent"</span>,</span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a>          <span class="st">"Year"</span> <span class="ot">=</span> <span class="st">"year"</span>,</span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a>          <span class="st">"Life expectancy"</span> <span class="ot">=</span> <span class="st">"lifeExp"</span>,</span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a>          <span class="st">"Population size"</span> <span class="ot">=</span> <span class="st">"pop"</span>,</span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a>          <span class="st">"GDP per capita"</span> <span class="ot">=</span> <span class="st">"gdpPercap"</span></span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a>        )</span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a>      ),</span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a>      <span class="do">##ADD AN actionButton(). PAY </span><span class="al">ATTENTION</span><span class="do"> TO COMMAS/PARENTHESES AROUND THIS NEW CODE!</span></span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a>      <span class="fu">actionButton</span>(<span class="at">inputId =</span> <span class="st">"go_button"</span>, <span class="at">label =</span> <span class="st">"Go!"</span>)</span>
+<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a>    ),</span>
+<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a>  </span>
+<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a><span class="do">##... other UI code...</span></span></code></pre>
 </div>
 <p>This adds a simple, button-style input widget to our app’s sidebar.
 It says <code>Go!</code> on it (<code>label</code>), and it’s current
@@ -878,7 +886,7 @@ prevents changes in that value from <strong>invalidating</strong>
 (<em>i.e.</em>, rendering “outdated”) the reactive context it appears
 in.</p>
 <p>Here’s how we can use <code>isolate()</code> to achieve our goal:</p>
-<div class="codewrapper sourceCode" id="cb7">
+<div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -910,7 +918,7 @@ when a <em>specific</em> reactive object changes, especially when the
 response involves a bunch of other reactive objects you <em>don’t</em>
 want watched, we can make our event handling way more precise using
 <code>observeEvent({},{})</code>:</p>
-<div class="codewrapper sourceCode" id="cb8">
+<div class="codewrapper sourceCode" id="cb10">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -964,27 +972,27 @@ new feature we’ll add.</p>
 <p>We do this using the Shiny functions <code>tabsetPanel()</code>, a
 box to hold all the individual tabs, and <code>tabPanel()</code>, which
 makes the box for the contents of one tab:</p>
-<div class="codewrapper sourceCode" id="cb9">
+<div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="do">##This code should **replace** the content of the "main panel" cell within the BODY section of your ui.R file!</span></span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="do">##... other UI code...</span></span>
-<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a></span>
-<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="do">###MAIN PANEL CELL</span></span>
-<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="do">##NEST YOUR UI ELEMENTS **CAREFULLY**!</span></span>
-<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>    <span class="fu">column</span>(<span class="at">width =</span> <span class="dv">8</span>, <span class="fu">tabsetPanel</span>(</span>
-<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>      <span class="do">###TABLE TAB</span></span>
-<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>      <span class="fu">tabPanel</span>(<span class="at">title =</span> <span class="st">"Table"</span>, </span>
-<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>               <span class="fu">tableOutput</span>(<span class="st">"basic_table"</span>)),</span>
-<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>      <span class="do">###MAP TAB</span></span>
-<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a>      <span class="fu">tabPanel</span>(<span class="at">title =</span> <span class="st">"Map"</span>),</span>
-<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a>      <span class="do">###GRAPH TAB</span></span>
-<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a>      <span class="fu">tabPanel</span>(<span class="at">title =</span> <span class="st">"Graph"</span>)</span>
-<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a>    ))</span>
-<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a>   <span class="er">)</span></span>
-<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a></span>
-<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a><span class="do">##... other UI code...</span></span></code></pre>
+<pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="do">##This code should **replace** the content of the "main panel" cell within the BODY section of your ui.R file!</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="do">##... other UI code...</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="do">###MAIN PANEL CELL</span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="do">##NEST YOUR UI ELEMENTS **CAREFULLY**!</span></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>    <span class="fu">column</span>(<span class="at">width =</span> <span class="dv">8</span>, <span class="fu">tabsetPanel</span>(</span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a>      <span class="do">###TABLE TAB</span></span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a>      <span class="fu">tabPanel</span>(<span class="at">title =</span> <span class="st">"Table"</span>, </span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a>               <span class="fu">tableOutput</span>(<span class="st">"basic_table"</span>)),</span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a>      <span class="do">###MAP TAB</span></span>
+<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a>      <span class="fu">tabPanel</span>(<span class="at">title =</span> <span class="st">"Map"</span>),</span>
+<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a>      <span class="do">###GRAPH TAB</span></span>
+<span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a>      <span class="fu">tabPanel</span>(<span class="at">title =</span> <span class="st">"Graph"</span>)</span>
+<span id="cb11-15"><a href="#cb11-15" tabindex="-1"></a>    ))</span>
+<span id="cb11-16"><a href="#cb11-16" tabindex="-1"></a>   <span class="er">)</span></span>
+<span id="cb11-17"><a href="#cb11-17" tabindex="-1"></a></span>
+<span id="cb11-18"><a href="#cb11-18" tabindex="-1"></a><span class="do">##... other UI code...</span></span></code></pre>
 </div>
 <p>Now, if we look at our app, we’ll see we have three tabs in our main
 panel area, with <code>title</code>s as specified in our code.</p>
@@ -1102,8 +1110,8 @@ any links that you are not going to use.
   "url": "https://carpentries.github.io/r_shiny_workshop/shiny_3.html",
   "identifier": "https://carpentries.github.io/r_shiny_workshop/shiny_3.html",
   "dateCreated": "2024-07-10",
-  "dateModified": "2024-08-29",
-  "datePublished": "2024-08-29"
+  "dateModified": "2024-08-30",
+  "datePublished": "2024-08-30"
 }
 
   </script><script>
