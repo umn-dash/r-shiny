@@ -32,10 +32,10 @@ In the next lesson, we'll start building a Shiny app together. In this
 lesson, we'll tackle several important steps that'll set us up for
 success in that endeavor.
 
-### Installing packages
+### (Detour: Installing packages)
 
 In this lesson, we'll begin to use some of R's **packages**. If you
-haven't already, install those now using the following command:
+haven't already, install those now:
 
 
 ``` r
@@ -43,14 +43,8 @@ haven't already, install those now using the following command:
 install.packages("shiny", "dplyr", "ggplot2", "leaflet", "DT", "plotly", "gapminder", "countrycode", "sf")
 ```
 
-`dplyr` and `ggplot2` are part of the `tidyverse`, which can be
-installed using `install.packages('tidyverse')`. However, that
-installation takes awhile, and we won't use other `tidyverse` packages
-in these lessons, so it's faster to install just these two packages for
-now if you're in a hurry.
-
-Of course, to access their features, we need to turn all these packages
-on too, but there are some other things we must do first.
+Of course, to access their features, we need to turn these packages on
+too, but there are some other things we must do first.
 
 ## Establishing our Shiny app's Project Folder
 
@@ -73,7 +67,7 @@ Here's how to do it:
 
 4.  On the next screen, use the `Browse` button to find a location on
     your computer to place your project folder. Then, give the project a
-    name related to your app.
+    name, such as `shiny_workshop`, that befits your current project.
 
     -   There are other options on this screen that, if you're familiar
         with Git or `renv`, you might consider as well (both are
@@ -133,29 +127,29 @@ Shiny project should have:
         `www` folder. We'll put custom CSS code in this file to style
         our app's aesthetics.
 
-    -   If you plan to build complex Shiny apps, you *may* also want to
-        create a file for custom JavaScript code called `behaviors.js`
-        and place this file in `www` as well. We won't use such a file
-        in these lessons, but because there is more you can do using JS
-        than R Shiny will easily do for you, there are many instances
-        where a *little* custom JS code can *significantly* enhance your
-        app's behaviors, and having a specific file in which to put that
-        code is tidy.
+::: callout
+If you plan to build complex Shiny apps, you *may* also want to create a
+file for custom JavaScript code called `behaviors.js` and place this
+file in `www` as well. We won't use such a file in these lessons, but
+because there is more you can do using JS than R Shiny will easily do
+for you, there are many instances where a *little* custom JS code can
+*significantly* enhance your app's behaviors, and having a specific file
+in which to put that code is tidy.
 
--   Next, create a second new folder inside your Project Folder. Call it
-    `inputs`. Use this folder to store input files your app needs to
-    start up, like data sets, that *aren't* media like pictures or
-    fonts. We won't use such a sub-folder in these lessons, but, for
-    real projects, it useful to have such a folder to stay organized.
+For complex apps, I'd also recommend a folder inside your Project folder
+called `inputs`. Use this folder to store input files your app needs to
+start up, like data sets, that *aren't* media like pictures or fonts. We
+won't use such a sub-folder in these lessons, but, for real projects, it
+useful to have such a folder to stay organized.
 
--   Similarly, create a third new folder inside your Project Folder.
-    Call it `Rcode`. As an app's code base gets larger, you may want to
-    divide your app's code into smaller, more managable chunks (such as
-    by building custom functions to perform repeated tasks or by
-    dividing your app's code into "modules"). At that stage, you can
-    place R files for each chunk in this folder, then source those files
-    in your `global.R` file. We won't use any such sub-folder, but I use
-    one for all my apps.
+Similarly, I'd recommend a third new folder inside your Project folder
+called `Rcode`. As an app's code base gets larger, you may want to
+divide your app's code into smaller, more manageable chunks (such as by
+building custom functions to perform repeated tasks or by dividing your
+app's code into "modules"). At that stage, you can place R files for
+each chunk in this folder, then source those files in your `global.R`
+file. We won't use any such sub-folder, but I use one for all my apps.
+:::
 
 We now have all the files and folders we'll need, so let's work on
 getting our app to where it'll actually start up.
@@ -379,9 +373,22 @@ A couple more things to note about R Shiny boxes at this point:
     organized using comments to create sub-sections can help you keep
     things straight.
 
+::: callout
+Start up your app at this point by pressing the "Run App" button in the
+upper-right corner of the Script Pane when viewing any of your `.R`
+files.
+
+I recommend using the drop-down menu on the side of the "Run App" button
+to select the "Run External" option, which will cause your app to launch
+in your default web browser instead of in RStudio's Viewer pane or in a
+separate R window. In general, apps will perform better when run in a
+web browser, so you will get a more actionable impression of how your
+app is doing this way.
+:::
+
 ::: discussion
-Start up your app at this point. What do you see? Explain why the app
-looks the way it does so far.
+What do you see when you start up your app? Explain why the app looks
+the way it does so far.
 
 ::: solution
 Besides our title we placed as contents inside our header, our app will

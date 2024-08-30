@@ -744,7 +744,7 @@ While it's best to design apps such that observers are independent or
 don't need to watch the same reactive objects, it's sometimes
 unavoidable. In those instances, `observeEvent({},{})`'s `priority`
 parameter can be used—R will use the values specified to `priority` to
-decide the order "racing" observers should execute in.
+decide the order "racing" observers should execute in-.
 :::
 :::
 
