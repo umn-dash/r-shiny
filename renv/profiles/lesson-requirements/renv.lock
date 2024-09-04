@@ -225,16 +225,6 @@
       "Repository": "CRAN",
       "Hash": "5d8225445acb167abf7797de48b2ee3c"
     },
-    "countrycode": {
-      "Package": "countrycode",
-      "Version": "1.6.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R"
-      ],
-      "Hash": "08b7058813f13c7a1bb294fea9045e3a"
-    },
     "cpp11": {
       "Package": "cpp11",
       "Version": "0.4.7",

@@ -1,5 +1,5 @@
 ---
-title: DTs and Leaflets and Plotlys, Oh my!
+title: "Shiny Showstoppers: DTs and Leaflets and Plotlys, Oh My!"
 teaching: 60
 exercises: 10
 source: Rmd
@@ -9,98 +9,101 @@ editor_options:
 ---
 
 ::: objectives
--   Name essential tools from the `DT`, `leaflet` and `plotly` packages.
--   Experiment with the interactive features baked into the
-    plots/tables/maps produced by these packages.
--   Customize the look and feel of these complex interactive graphics.
--   Update complex interactive graphics instead of remaking them when
-    possible by using **proxies**.
--   Recognize events a user might trigger with respect to these complex
-    interactive graphics, and know how to watch for and handle them.
+-   Name the essential functions of the `DT`, `leaflet` and `plotly`
+    packages.
+-   Experiment with the standard interactive features of the
+    plots/tables/maps produced by these packages, and recognize how to
+    disable them.
+-   Customize the look and feel of these graphics.
+-   Update complex interactive graphics instead of remaking them using
+    **proxies**.
+-   Recognize some events a user might trigger on these complex
+    interactive graphics and how to watch for them.
 :::
 
 ::: questions
 -   How do I add an interactive map/table/graph to my app?
 -   What features do these widgets have?
--   How do I adjust the aesthetics of these widgets?
--   How can I modify these widgets to handle user actions without
-    "starting over?"
--   What events related to these widgets can I watch for, and how would
-    I handle them?
+-   How do I adjust their appearance?
+-   How can I modify these widgets to handle events without simply
+    rebuilding them each time?
+-   What events related to these widgets can I watch for?
 :::
 
 ### Disclaimer
 
-*At points in this lesson, the example code produces **warnings** (not
-**errors**!) when executed. These can be ignored!*
+*At a few point, this lesson's code may produce **warnings** when
+executed. Ignore these—the code works as intended!*
 
 ### Introduction
 
 While **input widgets** like drop-down menus and buttons are powerful
-ways to give users control, they aren't always transformative *by
-themselves*. There are *much* more powerful widgets out there!
+ways to give users control of your app and enable many powerful forms of
+interactive engagement, they aren't always transformative *by
+themselves*. There are *much* more powerful widgets!
 
-And, since our app's server side is powered by R—a programming language
-*designed for* data work—it make senses we'd include widgets that put
-*data* at our users' fingertips in interesting ways.
+And, since our app's server is powered by R—a programming language
+*built for* data work—it make senses we'd be able to include widgets
+that put *data* at our users' fingertips in cool ways. Of all the
+data-centered widgets, few are more familiar and enlightening than
+**tables**, **maps**, and **graphs**. Because these graphics are *so*
+ubiquitous, it probably won't surprise you that there are JavaScript
+packages for creating web-enabled, interactive versions of these graphic
+types.
 
-Of all the data-centered widgets, few are more familiar than **tables**,
-**maps**, and **graphs**. Because these are *so* ubiquitous, it probably
-won't surprise you that there are JavaScript-native packages for
-creating web-enabled, interactive versions of these graphic types.
-
-While there are other such packages, here we'll explore `DT` (for
-tables), `leaflet` (for maps), and `plotly` (for graphs), since each has
-been ported into R + R Shiny via packages of the same names.
-
-Each of these could *easily* be a course unto itself! As such, we'll
-look *only* at the cross-cutting basics—greater depth can be found
-elsewhere once you've learned the ropes.
+While there are others, in this lesson we'll use the `DT` (tables),
+`leaflet` (maps), and `plotly` (graphs) packages to produce these
+graphics; each has been ported into R + R Shiny via packages of the same
+names. Each package could *easily* be a course unto itself! As such,
+we'll look *only* at the basic idea that cut across them all—greater
+depth can be found elsewhere.
 
 Learning `leaflet` and `plotly`, specifically, come with challenges
-we'll have to skirt around:
+we'll have to negotiate:
 
 -   `leaflet` builds maps, which represent **spatial data**. These, and
     the packages that work with them (*e.g.*, `sf`), are *complicated*!
-    I'll gloss over the details, but we'll still need to occasionally
-    borrow tools from `sf` to accomplish anything at all.
+    I'll gloss over the details, but we'll need to occasionally borrow
+    tools from `sf` to accomplish anything.
 
--   If you're familiar with `ggplot2` (or a comparable data viz
-    package), you already know that learning programmatica graph-making
-    has a steep learning curve. `plotly` has the same curve (perhaps
-    even a steeper one for R users, since it's *very* JavaScript-like,
-    whereas `ggplot2` is more R-like). Again, I'll gloss over the
-    details, but even the basics may be a heavy lift for some.
+-   If you're familiar with `ggplot2` (or a comparable data
+    visualization suite), you already know that learning programmatic
+    graph-making can have a steep learning curve. `plotly` has the same
+    curve (perhaps a steeper one for R users, since it's *very*
+    JavaScript-like). Again, I'll gloss over the details, but even the
+    basics may be a lift.
 
-Let's start simple—let's swap out our functional but drab table for a
-better, `DT` table. Of the packages we're learning here, `DT` is easiest
-(IMHO), and it can introduce us to all the key concepts we'll need to
-tackle `leaflet` and `plotly`.
+Let's start simple, then, with `DT`, which will feature constructs most
+like those we're already familiar with. Let's swap out our functional
+but drab table for a better, `DT` table. Along the way, we can learn all
+the key concepts we'll need to tackle `leaflet` and `plotly` too.
 
 ## Turning the tables
 
 ### Basic table
 
-All we have to do to swap our tables is change our `renderTable({})` and
-`tableOutput()` calls into `renderDT({})` and `dataTableOutput()` calls,
-which yield a `DT` table instead:
+All we must do to swap out our old table for a new one (besides loading
+`DT` by executing `library(DT)`, if you haven't done so!) is to change
+our `renderTable({})` and `tableOutput()` calls to `renderDT({})` and
+`dataTableOutput()` calls:
 
 ```{r basic DT table server, eval=F}
 ##This code should **replace** ALL table-related code contained within your server.R file!
 
-###BASIC GAPMINDER TABLE
-  output$basic_table = renderDT({ #<--ONLY CHANGES HERE.
+#INITIAL TABLE
+  output$table1 = renderDT({ #<--CHANGE FUNCTION
     gap
   })
-  
-##TABLE OBSERVER (BUTTON)
-  observeEvent(input$go_button, { 
 
-    output$basic_table = renderDT({ #<--...AND HERE.
-      gap %>% 
-        arrange(!!sym(input$sorted_column)) 
-    })
-    
+  #UPDATE UPON BUTTON PRESS
+  observeEvent({input$go_button},
+               ignoreInit = FALSE, {
+
+   output$table1 = renderDT({ #<--CHANGE FUNCTION
+      gap %>%
+      arrange(!!sym(input$sorted_column))
+
+   })
   })
 ```
 
@@ -113,7 +116,7 @@ which yield a `DT` table instead:
     column(width = 8, tabsetPanel(
       ###TABLE TAB
       tabPanel(title = "Table", 
-               dataTableOutput("basic_table")), #<--ONLY CHANGE HERE
+        dataTableOutput(outputId = "table1")), #<--CHANGE FUNCTION
       ###MAP TAB
       tabPanel(title = "Map"),
       ###GRAPH TAB
@@ -124,72 +127,70 @@ which yield a `DT` table instead:
 ##... other UI code...
 ```
 
-Once you've made those swaps, restart your app.
+Once you've made the changes represented above, restart your app. When
+you do, you'll notice our new table looks *very* different:
 
-When you do, you'll *immediately* notice our table looks *very*
-different:
+![*DT* tables come with several interactive features, including
+pagination, searching, row selection, and column sorting (indicated by
+red arrows).](fig/DT%20table%20features.png)
 
-![The DT table above shows off several of the features that come
-standard, including pagination, searching, row selection, and column
-sorting.](fig/DT%20table%20features.png)
-
--   It's **paginated**, *i.e.*,"divided into pages." Users flip pages
-    using buttons in the bottom-right. Users can also change page length
-    using a drop-down menu in the top-left. These features allow users
-    to limit how much data is shown at once, and they also keep the
-    table from being long vertically if there's a lot of data to show.
+-   Our table is now **paginated**, *i.e.*, *divided into pages*. Users
+    can flip between pages using numbered buttons as well as "Next" and
+    "Previous" buttons in the bottom-right. Users can also change page
+    length in the upper-left. These features limit how much data is
+    shown at once when a data set has many rows, and they also keep the
+    table a more consistent height in your UI.
 
 -   It's **searchable**—users can type **strings** (chunks of
     letters/numbers/symbols) into the search box in the upper-right; the
-    table will filter to only rows containing that string in any column.
+    table will filter to only rows containing that string anywhere.
 
 -   It's **sortable**—users can click the up/down arrows next to each
-    column name to sort the table by that column. You'll note this
-    functionality makes our drop-down menu a bit redundant!
+    column's name to sort the table by that column. [You'll note this
+    functionality makes our drop-down menu widget redundant!]
 
--   It's (modestly) styled—it's snazzier than our previous table because
-    it comes with *some* automatic CSS (bolded column names and row
-    "zebra striping," as two examples).\
+-   It's (modestly) styled—it's visually more appealing than our
+    previous table because it comes with *some* automatic CSS (bold
+    column names and "zebra striping," *e.g.*).\
     \
-    [Side-note: Web developers call elements with pre-set CSS
-    **opinionated**. Opinionated elements are nice in that they often
-    require less custom styling, but if you do choose to restyle them,
-    it can be hard to overcome their "opinions."]
+    [Side-note: Web developers call elements with pre-set CSS rules
+    **opinionated**. Opinionated elements are nice in that they require
+    less styling, but if you *do* choose to restyle them, it can be hard
+    to overcome their "opinions."]
 
--   It's **selectable**—users can click to highlight ("select") rows.
-    This **event** doesn't actually do anything by default besides
-    changing the table's appearance, but it could.
+-   It's **selectable**—users can click to highlight rows. This
+    **event** doesn't actually do anything by default besides change the
+    table's appearance, but it could be **handled** in some clever way.
 
-Now that we have a `DT` table (a complex interactive graphic), there are
-four things we'll *very* commonly want to do with one (or any similarly
-complex interactive graphic):
+Now that we have a `DT` table (or any complex interactive graphic),
+there are four things we'll *very* commonly want to do to it:
 
-1.  Simplify it,
+1.  Simplify its functionality.
 
-2.  Restyle it,
+2.  Customize its style.
 
-3.  Watch it for **events**, and
+3.  Watch for relevant **events**.
 
 4.  Update it to **handle** those events.
 
-Let's tackle the first two items above first.
+Let's tackle the first two items first.
 
 ### More (or less) basic DT
 
-As we just saw, `DT`s come with many interactive features! However,
+As we saw, `DT` tables come with many interactive features! However,
 "more" is not always "better" from a **UX** (**user experience**)
 standpoint. Some users might find certain features confusing, especially
-if they aren't necessary, are poorly explained, or don't result in any
-obvious responses. Others may find having a lot of features
-overwhelming, even if they understand them all.
+if they aren't necessary, are poorly explained, or don't result in
+obvious reactions. Others may find having a lot of features
+overwhelming, even if they do understand them all.
 
-The `datatable()` function's `options` allows us to reel in the features
-our table comes with:
+The `datatable()` function's `options` parameter allows us to reduce the
+features our table:
 
 ```{r disabling DT features, eval = F}
 ##This code should **replace** ALL table-related code contained within your server.R file!
 
-###BASIC GAPMINDER TABLE
+#INITIAL TABLE
   output$basic_table = renderDT({
     gap %>% 
       datatable(
@@ -202,7 +203,7 @@ our table comes with:
       )
   })
 
-  ##TABLE OBSERVER (BUTTON)
+#UPDATE UPON BUTTON PRESS
   observeEvent(input$go_button, { 
     
     output$basic_table = renderDT({
@@ -222,583 +223,720 @@ our table comes with:
   })
 ```
 
-That's better! This version might be more digestible and intuitive for
-most users (and easier for us to explain and program around!).
+That's better! Potentially, this version is more digestible and
+intuitive for our users (and could be easier for us to explain and
+handle too!):
 
-![Notice that, in this DT, there are no sorting arrows, no search bar,
-no current page info in the bottom-left, and no row
-selection.](fig/disabled%20DT.png)
+![Notice that, in this DT, there are no sorting arrows, and there is no
+search bar or current page info in the bottom-left. Row selection is
+also disabled.](fig/disabled%20DT.png)
 
 More broadly, *if a `DT` table (or any other complex interactive
 graphic) has a feature, you should assume you can turn it off (you may
-just have to Google for the specific input needed).*
+simply have to Google for the way to do it).*
 
-Next, let's tinker with our table's aesthetics. Let's make three
-(idosyncratic) changes:
+Next, let's tinker with our table's aesthetics. Let's make three changes
+that demonstrate what's possible:
 
-1.  Round the GDP per capita data.
+1.  Let's round the `gdpPercap` column.
 
-2.  Make the `continent` column center-aligned.
+2.  Let's make the `continent` column center-aligned.
 
-3.  Highlight in pink all rows with `lifeExp` values \> `70`.
+3.  Let's highlight all rows with `lifeExp` values \> `70` in pink.
 
-We'll use functions from the `format*()` and `style*()` families for
-this: specifically, `formatRound()`, `formatStyle()`, and
+We'll use functions from the `format*()` and `style*()`
+families—specifically, `formatRound()`, `formatStyle()`, and
 `styleEqual()`:
 
 ```{r styling our DT, eval = F}
 ##This code should **replace** ALL table-related code contained within your server.R file!
 
-###BASIC GAPMINDER TABLE
-  output$basic_table = renderDT({
-    gap %>% 
+#INITIAL TABLE
+  output$table1 = renderDT({
+    gap %>%
       datatable(
-        selection = "none", #<--TURNS OFF ROW SELECTION
+        selection = "none",
         options = list(
-          info = FALSE, #<--NO BOTTOM-LEFT INFO
-          ordering = FALSE, #<--NO SORTING
-          searching = FALSE #<--NO SEARCH BAR
+          info = FALSE,
+          ordering = FALSE,
+          searching = FALSE
         )
       ) %>%
-      #IN THESE FUNCTIONS, WE WRITE 'R-LIKE' CSS CODE. WE USE camelCase FOR PROPERTIES, TEXT STRINGS FOR VALUES, AND = INSTEAD OF : TO SEPARATE THEM.
-      formatRound(columns = "gdpPercap", digits = 2) %>%
-      formatStyle(columns = "continent", textAlign = "center") %>% #<--COMPARE TO [text-align: center;]
+      #IN THE SECOND ARGUMENTS OF THESE FUNCTIONS, WE WRITE 'R-LIKE' CSS. WE USE camelCase FOR PROPERTIES, QUOTED STRINGS FOR VALUES, AND = INSTEAD OF : AND ;.
+      formatRound(columns = "gdpPercap", 
+                  digits = 2) %>%
+      formatStyle(columns = "continent", 
+                  textAlign = "center") %>% #<--COMPARE WITH text-align: center; FORMAT
       formatStyle(
-        columns = "lifeExp", #<--wHAT COLUMN WILL WE USE TO CONDITIONALLY FORMAT?
-        target = "row", #<--WILL WE STYLE ROWS OR CELLS?
+        columns = "lifeExp", #<--wHAT COLUMN WILL WE CONDITIONALLY FORMAT BY?
+        target = "row", #<--WILL WE STYLE THE WHOLE ROWS OR JUST INDIVIDUAL CELLS?
         backgroundColor = styleEqual(
           levels = gap$lifeExp, 
-          values = ifelse(gap$lifeExp > 70, "lightpink", "white") #WHAT RULE WILL WE USE, AND WHAT NEW CSS VALUES WILL WE SET TO EACH POSSIBILITY?
+          values = ifelse(gap$lifeExp > 70, "lightpink", "white") #WHAT RULE WILL WE USE, AND WHAT NEW CSS VALUES WILL WE SET FOR EACH POSSIBILITY?
         )
       )
   })
 
-  ##TABLE OBSERVER (BUTTON)
-  observeEvent(input$go_button, { 
-    
-    output$basic_table = renderDT({
-      gap %>% 
-        arrange(!!sym(input$sorted_column)) %>%
-        datatable(
-          selection = "none", 
-          options = list(
-            info = FALSE, 
-            ordering = FALSE,
-            searching = FALSE 
-          )
-        ) %>%
-        #SAME AS ABOVE
-        formatRound(columns = "gdpPercap", digits = 2) %>%
-        formatStyle(columns = "continent", textAlign = "center") %>% 
-        formatStyle(
-          columns = "lifeExp", 
-          target = "row", 
-          backgroundColor = styleEqual(
-            levels = gap$lifeExp, 
-            values = ifelse(gap$lifeExp > 70, "lightpink", "white")
-          )
+  #UPDATE UPON BUTTON PRESS
+  observeEvent({input$go_button},
+               ignoreInit = FALSE, {
+
+                 output$table1 = renderDT({
+                   gap %>%
+                     arrange(!!sym(input$sorted_column)) %>%
+                     datatable(
+                       selection = "none",
+                       options = list(
+                         info = FALSE,
+                         ordering = FALSE,
+                         searching = FALSE
+                       )
+                     ) %>%
+      #SAME AS ABOVE
+      formatRound(columns = "gdpPercap", digits = 2) %>%
+      formatStyle(columns = "continent", textAlign = "center") %>%
+      formatStyle(
+        columns = "lifeExp",
+        target = "row",
+        backgroundColor = styleEqual(
+          levels = gap$lifeExp, 
+          values = ifelse(gap$lifeExp > 70, "lightpink", "white")
         )
+      )
+
     })
   })
 ```
 
-![Now, our continent column values are center-aligned instead of
-left-aligned, our GDP data are less unruly (because we've rounded them),
-and any row with a life expectancy value \> 70 is now light pink,
-perhaps helping these rows stand out from all
-others.](fig/SPIFFY%20dt.png)
+![Note that, now, our continent column values are center-aligned, our
+GDP data have been rounded, and any row with a life expectancy value
+greater than 70 is now in light pink, perhaps helping these rows stand
+out for our users.](fig/SPIFFY%20dt.png)
 
-`format*()` functions ask us to pick 1+ columns to restyle. Then, we
-provide **property** and **value** pairings as inputs, just as we would
-using CSS code, but using "R-like" syntax instead, *e.g.*,
-`textAlign = center` versus `text-align: center;`.
+`format*()` functions ask us to pick one or more columns to restyle.
+Then, we provide **property** and **value** pairings as inputs, just as
+we would in CSS, but using "R-like" syntax, *e.g.*, `textAlign = center`
+versus `text-align: center;`.
 
-If we want to format a column **conditionally**, *i.e.*, formatting only
-*some* rows according to a rule, we use the `style*()` functions. In the
-example above, we used `styleEqual()` to apply a light pink background
-to only rows with life expectancy greater than `70`. This might now
-stand out to users in ways that enable certain workflows.
+If we want to format columns, rows, or cells **conditionally**, *i.e.*,
+formatting only *some* rows according to a rule, we use the `style*()`
+functions. In the example above, we used `styleEqual()` to apply a light
+pink background to only rows with life expectancy values greater than
+`70`. These rows might then stand out better to users, enabling new
+workflows.
 
-## Update, don't remake, DT edition!
+## Update, don't remake, *DT* edition!
 
-So far, when user actions have dictated change to the data in our table
-(*e.g.*, how it's sorted), we've re-rendered the *entire* table to
-**handle** those **events**.
+So far, when user actions have spurred a change to our table (*e.g.*,
+how it's sorted), we've re-rendered the *entire* table to **handle**
+those **events**.
 
-This works, but it's undesirable for (at least) three reasons:
+This approach works, but it's undesirable for (at least) four reasons:
 
 1.  With large data sets, it could be *slow*! Remember that, as R code
-    executes server-side, the app will become completely unresponsive,
-    so your users will have to sit around while your code finishes.
+    executes server-side, the app must remain unresponsive until that
+    execution finishes, so users will have to wait in the meantime.
 
-2.  To the user, the table may appear to "flicker" out and in again as
-    it's remade (if that's fast).
+2.  To the user, the table may "flicker" out and in again as it's remade
+    (if the process is fast), which might look "glitch-y."
 
-    1.  If it's slow, the table will instead "gray out" and the whole
-        app will "freeze" while the code completes.
+    1.  If the process is slow, however, the table will instead "gray
+        out" and the whole app will appear to "freeze" while the
+        underlying code executes.
 
-3.  If the user had customized the table in any way (they've navigated
-    to a specific page, *e.g.*), those customizations will be lost if we
-    rebuild the table.
+3.  If the user has customized the table in any way (they've navigated
+    to a specific page, *e.g.*), those customizations are lost (unless
+    we store that information and re-apply it, which is possible but
+    tedious).
 
-If you think about it, if *all* we're doing is changing the data in our
-table, there's no need to remake the *whole* table—why blow up and
-rebuild all the rows, columns, and cells when we just need to change
-what's *in* the cells? *Whenever possible,* *we should update a complex
-interactive graphic element rather than remake it.*
+4.  As we've seen, rebuilding the table often necessitates repeating the
+    same table-building code in multiple places—first when we build the
+    initial table and again when we *re-build* it. This "code bloat"
+    makes your code harder to manage and makes it more likely you will
+    introduce inconsistencies.
 
-To update complex interactive graphic elements"on the fly," we use
-**proxies.** These are like a telephone that lets R (server side) and
-JavaScript (client side) talk directly to adjust a widget without
-refashioning any aspects that don't need adjustment.
+If you think about it, if *all* we're doing is changing the *data* our
+table is displaying, there's no need to remake the *whole* table—why
+rebuild all rows, columns, and cells when we just need to change their
+*contents*?
 
-`DT`'s `dataTableProxy()` function takes as input the `outputId` of the
-table we're updating. We then pipe it into a helper function such as
-`replaceData()`, which specifically swaps out the data inside the
-table's cells (adjusting cell number as needed).
+::: callout
+*Whenever possible,* *we should update a complex interactive graphic
+rather than remake it.*
+:::
 
-Before that though, we should create a reason we'd *need* to swap data
-sets! Earlier, I mentioned that `DT` tables have a `selection` feature,
-which allows users to select rows/columns/cells, an **event** Shiny can
-watch for. Although these events are not handled by default, we can
-change that!
+To update complex interactive graphics "on the fly," we can use a
+construct called a **proxy.** A proxy is a connection that our app's
+server makes with the client's UI with respect to a specific
+element—it's like a phone call between a specific reactive context and
+the element the user is currently seeing.
 
-Let's create a system in which users can click any cell to select it.
-When they do, we'll filter the table to only rows sharing that same
-value in that column (*e.g.*, clicking a cell containing `Asia` will
-filter to only rows also containing `Asia` for `continent`).
+Through the proxy, our server code can describe what *specific* changes
+need to be made, and the user's browser can make *just* those changes
+without redrawing the table, requesting all the data again, or disabling
+the user's control over the app. Such a "direct line of communication"
+enables cleaner and snappier adjustment of complex elements than using a
+`render*({})` function.
 
-Meanwhile, when no cell is selected (or, equivalently, a selected cell
-gets deselected), no filtering is applied.
+`DT`'s proxy function, `dataTableProxy()`, takes as input the `outputId`
+of the table to update. We then pipe that proxy into a helper function
+to specify which specific changes we're requesting. For example, we'll
+use the helper function `replaceData()` to targetedly swap out some (or
+all) of the data contained with the table's cells, leaving all else
+unchanged.
 
-Sounds complicated? Well, yes and no. There are a number of steps
-involved, but none are particularly involved.
+Up until now, we handled column re-sorting using `renderDT({})`. Let's
+switch to using `dataTableProxy()` to handle these events instead:
 
-So, we'll go one step at a time. For each, implement the coding change,
-run the app, and make sure you understand any changes to the app's
-behaviors.
-
-First, let's turn on `selection` inside `datatable()` by changing the
-input from `"none"` to `list(mode = "single", target = "cell")`, which
-will enable users to select one cell at a time:
-
-```{r step 1 of cell selection, eval = F}
+```{r DT proxy, eval = F}
 ##This code should **replace** ALL table-related code contained within your server.R file!
 
 ##... other server code...
 
-###BASIC GAPMINDER TABLE
-  output$basic_table = renderDT({
-    gap %>% 
+#INITIAL TABLE
+  output$table1 = renderDT({
+    gap %>%
       datatable(
-        selection = list(mode = "single", target = "cell"), #<--TURN ON SINGLE-CELL SELECTION
+        selection = "none",
         options = list(
-          info = FALSE, 
-          ordering = FALSE, 
-          searching = FALSE 
+          info = FALSE,
+          ordering = FALSE,
+          searching = FALSE
         )
       ) %>%
       formatRound(columns = "gdpPercap", digits = 2) %>%
-      formatStyle(columns = "continent", textAlign = "center") %>% 
+      formatStyle(columns = "continent", textAlign = "center") %>%
       formatStyle(
-        columns = "lifeExp", 
-        target = "row", 
+        columns = "lifeExp",
+        target = "row",
         backgroundColor = styleEqual(
-          levels = gap$lifeExp, 
-          values = ifelse(gap$lifeExp > 70, "lightpink", "white") 
+          levels = gap$lifeExp,
+          values = ifelse(gap$lifeExp > 70, "lightpink", "white")
         )
       )
   })
 
-  ##TABLE OBSERVER (BUTTON)
-  observeEvent(input$go_button, { 
-    
-    output$basic_table = renderDT({
-      gap %>% 
-        arrange(!!sym(input$sorted_column)) %>% 
-        datatable(
-          selection = list(mode = "single", target = "cell"), #<--SAME AS ABOVE
-          options = list(
-            info = FALSE, 
-            ordering = FALSE,
-            searching = FALSE 
-          )
-        ) %>%
-        formatRound(columns = "gdpPercap", digits = 2) %>%
-        formatStyle(columns = "continent", textAlign = "center") %>% 
-        formatStyle(
-          columns = "lifeExp", 
-          target = "row", 
-          backgroundColor = styleEqual(
-            levels = gap$lifeExp, 
-            values = ifelse(gap$lifeExp > 70, "lightpink", "white")
-          )
+  #UPDATE UPON BUTTON PRESS USING PROXY
+  observeEvent({input$go_button},
+               ignoreInit = FALSE, {
+      
+  #MAKE THE NEW, SORTED VERSION OF OUR DATA SET.           
+  sorted_gap = gap %>%
+    arrange(!!sym(input$sorted_column))
+  
+  #THEN, USE OUR PROXY TO SWAP OUT THE DATA.
+  dataTableProxy(outputId = "table1") %>% 
+    replaceData(data = sorted_gap, 
+                resetPaging = FALSE) #<--OPTIONAL, BUT NICE.
+  #NO OTHER CODE IS NEEDED--EVERYTHING ABOUT THE ORIGINAL TABLE IS MAINTAINED EXCEPT FOR JUST THE PART(S) WE WANT TO ALTER.
+
+  })
+  
+  ##... other server code...
+```
+
+If you try the app with the changes outlined above made, it won't look
+or behave all that different. However, that's only because this
+particular table is so quick to rebuild! With a more complex table and a
+larger data set, this approach would be cleaner, faster, and less
+disruptive for the user. Their page choice and row selection could be
+maintained between updates, and they could continue to use the app while
+the table updated if they wanted to (it wouldn't freeze). And,
+importantly, this approach requires *far* less code overall and
+eliminates the duplicate code we've had so far!
+
+### Watch and learn
+
+Interactive graphics like our `DT` table aren't just a cool way to show
+data—they're **widgets** in their own right, and user interactions with
+them can trigger events we could handle, just as with any other widget.
+
+Let's see an example. First, recall that row selection doesn't trigger
+events by default. Let's turn selection back on by changing the
+`selection` parameter inside `datatable()` from `"none"` to
+`list(mode = "single", target = "cell")`, which'll enable users to
+select one cell at a time:
+
+```{r step 1 of cell selection, eval = F}
+##This code should **replace** the code that creates your initial table within your server.R file!
+
+##... other server code...
+
+  #INITIAL TABLE
+  output$table1 = renderDT({
+    gap %>%
+      datatable(
+        selection = list(mode = "single", target = "cell"), #<--TURN SELECTION ON, TARGETING INDIVIDUAL CELLS.
+        options = list(
+          info = FALSE,
+          ordering = FALSE,
+          searching = FALSE
         )
+      ) %>%
+      formatRound(columns = "gdpPercap", digits = 2) %>%
+      formatStyle(columns = "continent", textAlign = "center") %>%
+      formatStyle(
+        columns = "lifeExp",
+        target = "row",
+        backgroundColor = styleEqual(
+          levels = gap$lifeExp,
+          values = ifelse(gap$lifeExp > 70, "lightpink", "white")
+        )
+      )
+  })
+  
+##... other server code...
+```
+
+Next, let's create a new observer that will watch for cell selection.
+Event information regarding cell selection will be passed from the UI to
+the server via the `input` object using
+`input$[outputId]_cells_selected` format, so
+`input$table1_cells_selected` is the reactive object our observer will
+watch. For now, we'll make this observer's only operation to print the
+value of `input$table1_cells_selected` to the R Console every time a new
+cell is clicked so we can see what this object looks like:
+
+```{r new DT observer, eval = F}
+##This code should be **added to** your server.R file within the server function!
+
+##... other server code...
+
+#WATCH FOR CELL SELECTIONS
+observeEvent({input$table1_cells_selected}, {
+
+  print(input$table1_cells_selected)
+
+})
+
+##... other server code...
+```
+
+If you run the app now and select some cells, you'll observe that
+`input$table1_cells_selected` returns a matrix. Either this matrix has
+no rows (when no cell is selected, such as at app start-up) or one row
+with two values: row and column numbers for the selected cell.
+
+![By using print(), we can see that our cell selection reactive object
+is a matrix holding the row and column numbers of the cell selected by
+the user. ](fig/cell%20selection.gif)
+
+Of course, we aren't **handling** these cell selection events right now;
+the app doesn't yet respond in any new way.
+
+Let's change that. First, let's add a `renderText({})` call inside our
+new observer and a `textOutput()` call to our UI, beneath our table:
+
+```{r renderText server, eval = F}
+##This code should **replace** the observeEvent that watches for cell selections in your server.R file!
+
+##... other server code...
+
+#WATCH FOR CELL SELECTIONS
+  observeEvent({input$table1_cells_selected}, {
+
+    output$selection_text = renderText({
+      
+      ###WE'LL PUT CODE HERE IN A MOMENT.
+      
     })
-    
-  })
-```
-
-At this point, our table allows cell selection but doesn't yet respond
-to it. Perhaps more glaringly, though, we're still re-rendering the
-*entire* table every time the "Go!" button is pressed even though the
-"bones" of the table aren't changing. This requires us to duplicate a
-*lot* of code (pretty much all contents of our `renderDT({})`s—that's a
-sign we're being inefficient!
-
-Let's fix that by adjusting our `observeEvent({},{})` so that it uses
-`dataTableProxy()` and `replaceData()` to update, rather than remake,
-the table:
-
-```{r step 2 of cell selection, eval = F}
-##This code should **replace** the TABLE OBSERVER subsection of your server.R file!
-
-##... other server code...
-
-##TABLE OBSERVER (BUTTON)
-  observeEvent(input$go_button, { 
-    
-    #SORT THE DATA AS USUAL...
-   gap_sorted = gap %>% 
-      arrange(!!sym(input$sorted_column))
-    
-    #FEED THE SORTED DATA INTO A PROXY...
-    dataTableProxy("basic_table") %>%
-      #THEN, SIMPLY SWAP OUT THE OLD DATA FOR THE NEW (NO RE-RENDERING!). ALSO, KEEP CELL SELECTION AS IT WAS.
-      replaceData(data = gap_sorted, #<--NOTE CHANGE IN DF REFERENCED HERE.
-                  clearSelection = FALSE)
-    
-  })
-  ##IF YOU MAKE THIS CHANGE, THE APP SHOULD WORK AS IT HAS, EXCEPT THE CHANGES TO THE TABLE WHEN HITTING THE GO BUTTON SHOULD BE SUBTLER AND SMOOTHER THAN BEFORE.
-```
-
-This observer is now much cleaner than before. All adjustments to the
-table's features and aesthetics happen up front and then never again in
-the original `renderDT({})` call, whereas the sorting (and *only* the
-sorting) happens in the observer. We also don't re-render the table;
-instead, we use a proxy to swap in new data.
-
-...Of course, we still need to also watch for changes in cell selection.
-But how?
-
-Like others widget, *`DT`s pass information from the UI to the server
-using the `input` object*,and we can access that information server-side
-using `input$outputId_*` format.
-
-In this case, the `*` will be `cells_selected` because that's the
-**event type** of interest:
-
-```{r step 3 of cell selection, eval = F}
-##This code should be **added to** your server.R file, below all previous code but within your server function!
-
-##... other server code...
-
-##TABLE OBSERVER (CELL SELECTION)
-  observeEvent(input$basic_table_cells_selected, {
-    
-    print(input$basic_table_cells_selected) #<--PRINT TO THE R CONSOLE THE CONTENTS OF THIS OBJECT EVERY TIME THIS EXPRESSION EXECUTES.
 
   })
+  
+  ##... other server code...
 ```
 
-Here, we learn a little trick: R's `print()` function can be used to
-show the current value of a **reactive object** at specific time points.
-This is useful for seeing what reactive objects look like, as in this
-case. It can also be useful for debugging (*e.g.*, to see when an
-observer detects (or fails to detect) an event).
-
-If you run the app now and start selecting cells, you'll observe that
-`input$basic_table_cells_selected` returns a matrix when accessed.
-Either this matrix has no rows (when no cell is selected, such as on
-start-up) or one row with two values: row and column numbers for the
-selected cell.
-
-![By using print(), we can see when our observer executes its second
-expression and also what our cell selection reactive object looks like
-when that happens.](fig/cell%20selection.gif)
-
-We can use that info being tracked to find the value in the selected
-cell plus the name of the column of the selected cell. We can then
-filter our data set accordingly (this just requires some good,
-old-fashioned "R" data wrangling! If the R code here is too much for
-you, just copy-paste it and don't worry too much about what exactly it
-does):
-
-```{r step 4 of cell selection, eval = F}
-##This code should **replace** the TABLE OBSERVER subsection of your server.R file!
-
-##... other server code...
-
-##TABLE OBSERVER (CELL SELECTION)
-  observeEvent(input$basic_table_cells_selected, {
-    
-    req(input$basic_table_cells_selected) #<--THE req() FUNCTION WORKS A BIT LIKE IF--IF THE CONTENTS DON'T EXIST, NOTHING ELSE BELOW req() WILL RUN.
-    
-    #WHAT WAS THE VALUE IN THE SELECTED CELL?
-    val2match = gap[input$basic_table_cells_selected[1],
-                    input$basic_table_cells_selected[2],
-                    drop = T] #<--PRODUCE A VECTOR, NOT A DATA FRAME
-    
-    #WHAT WAS THE NAME OF THE COLUMN OF THE SELECTED CELL?
-    col2match = names(gap)[input$basic_table_cells_selected[2]]
-    
-    #FILTER THE DATA SET BY THAT COLUMN TO ONLY CELLS WITH THAT SAME VALUE.
-    gap_filtered = gap[gap[, col2match] == val2match, ]
-    
-    dataTableProxy("basic_table") %>%
-      replaceData(data = gap_filtered, #<--REFERENCE gap_filtered HERE. 
-                  clearSelection = FALSE)
-
-  })
-```
-
-Here, we meet another handy tool: `req()`. `req()` checks to make sure
-its contents exist (*i.e.*, aren't `NULL`, `NA`, blank, etc.). If they
-don't, all remaining code beneath `req()` won't run.
-
-We need it here because `input$basic_table_cells_selected` won't exist
-sometimes (like on start-up and when no cells are selected). In those
-instances, the rest of our code in this observer would break.
-
-Our observer works! ...Or does it? Try it and see:
-
-![The filtering doesn't work the way it ought to--when we click on an
-'Asia' cell, we get back 'Africa' results. What
-gives?](fig/bad%20filtering.gif)
-
-On the first click, we get the behavior we expect—if we click a cell
-containing `Asia`, we get back *only* other results from `Asia`.
-However, depending upon where we click next, we might get back the wrong
-results. Can you guess why?
-
-The issue is this command:
-
-```{r problem, eval=F}
-val2match = gap[input$basic_table_cells_selected[1], 
-                input$basic_table_cells_selected[2], 
-                drop = T]
-```
-
-We use the row and column numbers in `input$basic_table_cells_selected`
-to find the value inside the cell selected by finding that same cell in
-`gap`.
-
-This works great...the *first* time. However, the *second* time,
-`input$basic_table_cells_selected` contains row and column numbers based
-on a *filtered* version of `gap`, but we still try to use those row and
-column numbers to pull a value out of the *original* version of `gap`.
-They probably won't line up!
-
-It seems we need to track the data set so that we're always referencing
-the one users can actually see, especially if they've already filtered
-one or more times.
-
-This looks like a job for a **reactive value**! Like `input` and
-`output`, a reactive value is a "changeable object" that R knows to
-watch for events. Unlike `input` and `output`, though, we create
-reactive values ourselves and can code exactly when and how they change.
-We create a reactive value using `reactiveVal()`, placing the starting
-value inside the parentheses:
-
-```{r reactiveVal, eval=F}
-##This code should **added to** your server.R file anywhere inside your server function but outside any reactive contexts!
-
-##... other server code...
-
-current_data = reactiveVal(gap) #<--WHEN THE APP STARTS, WE STORE gap AS THE STARTING DATA SET.
-```
-
-From then on, if we want to access the reactive value's current value,
-we use its name like a function, *e.g.*, `current_data()`. If we want to
-*change* the reactive value's current value, we can put the new value
-inside the parentheses, *e.g.*, `current_data(new)`.
-
-Let's enhance both our observers so that they reference
-
-...Except there's no "undo." Once we select a cell, we filter out all
-rows that don't match, and those rows are "lost" to the user because
-there's no way to restore them. And further clicks only cause loss of
-more rows!
-
-This is because we didn't **handle** the *other* possibility: that the
-user has not selected any cell (or that they've de-selected the cell
-they just had selected, which is functionally the same).
-
-Whenever no cell is selected, we need to "return" to the original
-`gapminder` data set, albeit sorted appropriately. We can handle this
-scenario using `if()/else`:
-
-```{r step 6 of cell selection, eval = F}
-##This code should **replace** the observeEvent({},{}) we introduced in the previous example!
-
-##... other server code...
-
-  ###TABLE OBSERVER (CELL SELECTION)
-  observeEvent(list(input$go_button, input$basic_table_cells_selected), {
-    
-    ##STEP 6: WE ADD IN AN IF/ELSE PAIR. WE RESPOND ACCORDINGLY WHETHER THERE IS A CELL SELECTED OR NOT.
-    if (nrow(input$basic_table_cells_selected) > 0) {
-      
-      val2match = gap[input$basic_table_cells_selected[1], input$basic_table_cells_selected[2], drop = T]
-      
-      col2match = names(gap)[input$basic_table_cells_selected[2]]
-      
-      gap_filtered = gap[gap[, col2match] == val2match, ]
-      
-      gap_sorted = gap_filtered %>%
-        arrange(!!sym(input$sorted_column))
-      
-      dataTableProxy("basic_table") %>%
-        replaceData(data = gap_sorted, clearSelection = FALSE)
-      
-    } else {
-      #OTHERWISE, WE SIMPLY SORT THE ORIGINAL GAPMINDER DATA SET AS WE HAVE PREVIOUSLY. 
-      gap_sorted = gap %>%
-        arrange(!!sym(input$sorted_column))
-      
-      dataTableProxy("basic_table") %>%
-        replaceData(data = gap_sorted, clearSelection = FALSE)
-      
-    }
-    
-  })
-```
-
-Now, we can filter and unfilter our table with just a click! This
-functionality could empower a variety of dynamic, engaging workflows for
-your users.
-
-::: challenge
-Using if/else to handle "undoing" previous actions works really well,
-but some users could find it unintuitive. They might not even realize
-it's something they can do!
-
-A more conventional, "expected" approach might be a "reset" button that
-restores the original table when pressed.
-
-See if you can figure out how to build such a button *without* losing
-*any* of the app's current functionality.
-
-If you succeed, consider whether you, as a user, would prefer the
-"select nothing to undo" functionality or the "reset button"
-functionality, or if you'd prefer having both.
-
-::: solution
-First, we add the reset button to our UI, just below the current "Go!"
-button:
-
-```{r adding reset 1, eval = F}
-##This code should **be added to** the "sidebar" content of the Table tabPanel in the BODY section of your ui.R file!
+```{r textOutput UI, eval = F}
+##This code should **replace** the content of the "main panel" cell within the BODY section of your ui.R file!
 
 ##... other UI code...
-actionButton(inputId = "go_button",
-                        label = "Go!")),
-actionButton(inputId = "reset_button",
-                        label = "Reset!")),
-  ##... other UI code...
+
+###MAIN PANEL CELL
+    column(width = 8, tabsetPanel(
+      ###TABLE TAB
+      tabPanel(title = "Table", 
+        dataTableOutput(outputId = "table1"),
+        textOutput("selection_text")), #<--ADD textOutput HERE. 
+      ###MAP TAB
+      tabPanel(title = "Map"),
+      ###GRAPH TAB
+      tabPanel(title = "Graph")
+    )
+   )
+
+##... other UI code...
 ```
 
-Then, in our server file, we add a new observer to watch that button and
-handle when a user presses it. This is pretty simple here: we use our
-proxy to restore the original `gapminder` data set:
+`renderText({})` and `textOutput()` create and display text blocks, as
+you might guess from their names! We can use them to programmatically
+generate text and display it to users. Let's use these functions to
+generate text whenever a life expectancy, GDP per capita, or population
+value is selected. Let's have that text reference the selected value as
+well as the associated country and year. This will require a *little* "R
+elbow grease," but no new Shiny code:
 
-```{r adding reset 2, eval = F}
-##This code should be **added to** your server.R file, underneath all other contents inside of your server function!
+```{r programmatic text}
+##This code should **replace** the observeEvent that watches for cell selections in your server.R file!
 
-observeEvent(input$reset_button, {
-              
-  ##WE REWIND ALL THE WAY BACK TO THE ORIGINAL GAPMINDER DATA AND CLEAR ANY SELECTIONS THE USER MAY ALREADY HAVE MADE.
-    dataTableProxy("basic_table") %>%
-    replaceData(data = gap, 
-                clearSelection = TRUE) 
-     
- })
+##... other server code...
+
+#WATCH FOR CELL SELECTIONS
+  observeEvent({input$table1_cells_selected}, {
+
+    #MAKE SURE A CELL HAS BEEN SELECTED AT ALL--OTHERWISE, ABORT.
+    if(length(input$table1_cells_selected) > 0) {
+      
+    #CREATE CONVENIENCE OBJECTS THAT ARE SHORTER TO TYPE.
+    row_num = input$table1_cells_selected[1]
+    col_num = input$table1_cells_selected[2]
+      
+    #MAKE SURE THE SELECTED CELL WAS IN COLUMNS 4-6--OTHERWISE, ABORT.
+    if(col_num >= 4 & col_num <= 6) {
+
+    #GET THE YEAR AND COUNTRY OF THE ROW SELECTED.
+    country = gap$country[row_num]
+    year = gap$year[row_num]
+    
+    #GET THE VALUE IN THE SELECTED CELL.
+    datum = gap[row_num, col_num]
+
+    #DETERMINE THE RIGHT TEXT STRING TO USE DEPENDING ON THE COLUMN SELECTED.
+      if(col_num == 4) {
+        col_string = "life expectancy"
+      }
+      if(col_num == 5) {
+        col_string = "population"
+      }
+      if(col_num == 6) {
+        col_string = "GDP per capita"
+      }
+
+      #RENDER OUR TEXT MESSAGE.
+    output$selection_text = renderText({
+
+      #PASTE TOGETHER ALL THE CONTENT ASSEMBLED ABOVE!
+      paste0("In ", year, ", ", country, " had a ",
+             col_string, " of ", datum, ".")
+     })
+    }
+   }
+  })
+  
+  ##... other server code...
 ```
 
-As for what I prefer, I think I'd rather have both functionalities.
-Together, they make our app more accessible because, while the "click to
-undo" approach is easy and precise as an undo mechanism, not every user
-may discover or understand it (unless they're trained well!).
+If you make all the changes outlined above, you should see something
+like this when you run the app and select cells:
 
-A reset button, meanwhile, is something nearly everyone understands
-intuitively. The way we've coded it here is pretty "aggressive" in that
-it undoes *everything*, but that will at least match with the
-expectations of most users.
+![Whenever we click a value in the last three columns, some procedurally
+generated text appears on screen beneath our table.](fig/rendertext.gif)
 
-And, on the plus side, the reset button enables undoing any sorting,
-functionality that didn't previously exist in any previous version we've
-had!
+By using `renderText({})` and `textOutput()` to handle these events, we
+generate dynamic text that a user might feel is personal to them and
+their actions, even though it's procedurally generated!
+
+::: challenge
+If you've been *extra* observant, you might realize there are two issues
+with our new cell selection observer.
+
+First, if you watch the end of the clip above, you'll notice that, while
+selecting a cell will cause the rendered text message to appear or
+change, *de-selecting* a selected cell does *not* cause the rendered
+text to disappear, as the user might expect.
+
+How would you adjust the code to remove the message when a user
+de-selects a cell (or selects an inappropriate cell, such as one in the
+first three columns)? *Hint: If you leave a `render*({})` function's
+expression blank, an empty box will get rendered.*
+
+::: solution
+Our current code uses `if()`s to determine if a user has selected a cell
+at all and, if so, if that cell is appropriate. We can pair these two
+`if()`s with `else`s that eliminate the rendered text whenever no
+(appropriate) cell has been selected:
+
+```{r remove rendered text, eval=F}
+##This code should **replace** the observeEvent that watches for cell selections in your server.R file!
+
+##... other server code...
+
+  observeEvent({input$table1_cells_selected}, {
+
+    else_condition = renderText({}) #OUR ELSE CONDITION WILL BE TO RENDER NOTHING.
+
+    if(length(input$table1_cells_selected) > 0) {
+
+      row_num = input$table1_cells_selected[1]
+      col_num = input$table1_cells_selected[2]
+
+      if(col_num >= 4 & col_num <= 6) {
+
+        country = gap$country[row_num]
+        year = gap$year[row_num]
+        
+        datum = gap[row_num, col_num]
+
+        if(col_num == 4) {
+          col_string = "life expectancy"
+        }
+        if(col_num == 5) {
+          col_string = "population"
+        }
+        if(col_num == 6) {
+          col_string = "GDP per capita"
+        }
+
+        output$selection_text = renderText({
+
+          paste0("In ", year, ", ", country, " had a ",
+                 col_string, " of ", datum, ".")
+        })
+        #ADD IN OUR ELSE CONDITIONS
+      } else {
+        output$selection_text = else_condition
+      }
+    } else {
+      output$selection_text = else_condition
+    }
+  })
+  
+  ##... other server code...
+```
+
+Now, if you start your app and select a cell that yields our
+procedurally generated text, then click that cell again to de-select it,
+the text will also disappear.
 :::
 :::
 
-### Putting us on the map
+::: challenge
+**EXTRA CREDIT--THIS QUESTION IS CHALLENGING!**
 
-#### Setup
+Second, our current code does not acknowledge the possibility that the
+table the user is clicking on may have been sorted by a column other
+than `country` (the default).
 
-Before we go any further, we need to "massage" our data set to make it
-ready for mapping (spatial data are complicated!). Add the following to
-your `global.R` file at the end *verbatim*. Don't worry about what it
-does, though!
+If it has been otherwise sorted, a user will click cells based on the
+*sorted* data set they see, but our code currently assumes the row and
+column numbers are to be used for the *unsorted* data set. As such,
+it'll most likely grab values from the wrong row if the table has been
+re-sorted!
 
-```{r massaging global file, eval = F}
-###MASSAGE DATA SET FOR MAKING MAPS
-gap$country = as.character(gap$country)
-gap$continent = as.character(gap$continent)
+How could you adjust the code to *first* determine if the table is
+sorted differently than the raw data set is and, if so, reference the
+*sorted* data set instead?
 
-gap$ID = countrycode(gap$country, "country.name", "iso3c")
-world = read_sf("TM_WORLD_BORDERS_SIMPL-0.3.shp") #<--THIS FILE CAN BE DOWNLOADED VIA <https://drive.google.com/file/d/1Ta0GSnoJPyEMFjjbpzE3Z8RD0Mq18RL7/view?usp=sharing>. MAKE SURE TO UNZIP IT AND MOVE IT AND ALL ITS COMPANION FILES INTO YOUR R PROJECT FOLDER!
+::: solution
+This question is a purposeful trap; it doesn't actually have a simple
+solution you're intended to know yet!
 
-world2 = world %>% select(ISO3, geometry)
-gap_map = left_join(gap, world2, by = c("ID" = "ISO3"))
-gap_map = st_as_sf(gap_map)
+Allow me to explain: By default, the app doesn't track *if* the table is
+sorted and, if so, *how*. We can't simply ask "Hey Shiny, what column is
+the table sorted by, and is that different than what we started with?"
+At best, we'd need to use context clues and logic to figure out how the
+table the user can currently see is sorted and proceed accordingly.
+
+The first solution that came to mind for me was to take the row and
+column numbers of the cell the user has selected and get the value in
+that cell in both the original data set and in a version of the data set
+sorted according to the current selection in our drop-down menu widget.
+If these two values *don't* match, then the table is *probably* sorted
+by a different column than the original data set was:
+
+```{r fix table sorted, eval=F}
+##This code should **replace** the observeEvent that watches for cell selections in your server.R file!
+
+##... other server code...
+
+  observeEvent({input$table1_cells_selected}, {
+
+    else_condition = renderText({})
+
+    if(length(input$table1_cells_selected) > 0) {
+
+      row_num = input$table1_cells_selected[1]
+      col_num = input$table1_cells_selected[2]
+
+      if(col_num >= 4 & col_num <= 6) {
+
+        #GET BASELINE DATUM FIRST
+        datum = gap[row_num, col_num]
+
+        #GENERATE A SORTED VERSION OF THE DATA SET, BASED ON THE CURRENT SELECTION
+        sorted_gap = gap %>%
+          arrange(!!sym(input$sorted_column))
+
+        #GET THAT VERSION'S DATUM TOO.
+        sorted_datum = sorted_gap[row_num, col_num]
+
+        #COMPARE THEM. IF THEY'RE THE SAME, THE TABLE *PROBABLY* ISN'T SORTED.
+        if(sorted_datum == datum) {
+          datum = datum
+          country = gap$country[row_num]
+          year = gap$year[row_num]
+          #IF THEY'RE DIFFERENT, THE TABLE *PROBABLY* HAS BEEN SORTED, AND WE SHOULD USE THE SORTED VERSION.
+        } else {
+          datum = sorted_datum
+          country = sorted_gap$country[row_num]
+          year = sorted_gap$year[row_num]
+        }
+
+        if(col_num == 4) {
+          col_string = "life expectancy"
+        }
+        if(col_num == 5) {
+          col_string = "population"
+        }
+        if(col_num == 6) {
+          col_string = "GDP per capita"
+        }
+
+        output$selection_text = renderText({
+
+          paste0("In ", year, ", ", country, " had a ",
+                 col_string, " of ", datum, ".")
+        })
+      } else {
+        output$selection_text = else_condition
+      }
+    } else {
+      output$selection_text = else_condition
+    }
+  })
+  
+  ##... other server code...
 ```
+
+Now, this solution certainly works *better* than what we had before—the
+app seems to successfully acknowledge when the table has been sorted
+versus when it hasn't:
+
+![With the two adjustments outlined above, our app now successfully
+removes our text when a user de-selects a cell. The table also seems to
+successfully acknowledge when the table has been sorted versus when it
+hasn't when rendering our procedural text.](fig/fixingresort.gif)
+
+This solution *seems* to work—when the table is sorted by a new column,
+such as by year, our procedural text references the right row when
+procedurally generating text.
+
+However, there's a *very* likely scenario in which this "solution" would
+fail! Consider that a user can select a new column to sort by at any
+time, but they must hit "go" before the sorting actually happens. If
+they ever select a new column and then select a cell *before* hitting
+"go," they will "trick" our code into thinking the table has been
+re-sorted when, in fact, it hasn't:
+
+![This clip shows that our "solution" is easy to trick. If a user
+selects a new column in the drop-down menu but *doesn't* trigger the
+table to re-sort *before* selecting a cell, our code will think the
+table has been re-sorted when it hasn't and will reference the wrong
+row's data in our procedural text.](fig/failedsolution.gif)
+
+There's another problem with our "solution:" What about duplicate
+values? If the table has been sorted, but the two values we compare just
+so happen to be equal, our code will assume the table has not been
+sorted when perhaps it has!
+
+Yikes! This is a challenging problem. Luckily, there is at least one
+solution, but it's outside the scope of this lesson (to use
+`reactive({})` to create a new reactive object that serves as a tracker
+for what column the table has been sorted by most recently that we can
+update and access whenever we want).
+
+However, we can nonetheless learn a valuable lesson from this example:
+
+::: callout
+*Every time* you give users a new way to interact with your app, you
+*vastly* increase the number of permutations of actions users could
+perform. Will they do *this*, and then *that*? Or the reverse?
+
+That means *far* more potential circumstances to anticipate and then
+handle with your code. This is why designing your app ahead of time and
+adding interactivity judiciously is essential.
+:::
+:::
+:::
+
+## Putting us on the map
+
+### Setup
+
+`leaflet` is a package devoted to creating maps of **spatial data**,
+such as latitude-longitude coordinates. So, we need some spatial data to
+work with! In the setup instructions, we asked you to download a version
+of the `gapminder` data set with spatial data included using this link:
+[Link to the gapminder data set with attached spatial
+data.](https://drive.google.com/uc?export=download&id=1YePuKxTlBgW1hQ2uwXHi8b9UJEPUCoDh)
+If you haven't downloaded that file yet, do so now.
+
+Once you have downloaded it, move it to your R Project folder and then
+load it into R using the following command:
+
+```{r loading gap_map, eval=F}
+##Add this code in your global.R file!
+
+##... other global code...
+gap_map = readRDS("gapminder_spatial.rds")
+head(gap_map) #NOTE THE NEW GEOMETRY COLUMN CONTAINING SPATIAL POLYGON DATA.
+```
+
+```{r loading gap_map 2, echo=F}
+gap_map = readRDS("files/gapminder_spatial.rds")
+head(gap_map)
+```
+
+The rest of this lesson assumes you have an object called `gap_map`; the
+code shown here will *not* work without it!
 
 #### Preface
 
-`DT` has shown us how more complex widgets operate in R Shiny, so we can
-switch to making map widgets using `leaflet`. We'll follow the same
-roadmap we just used for `DT`:
+We'll switch to making map widgets in `leaflet`, but we'll use the same
+workflow as the one we followed for `DT`:
 
 1.  We'll start with a basic map.
 
-2.  Then, we'll adjust some features and dress up its aesthetics.
+2.  Then, we'll adjust some of the map's interactive features and dress
+    up its aesthetics a little.
 
 3.  Lastly, we'll learn about map-specific events and how to handle
-    those events *without* redrawing the entire map.
+    tthem *without* redrawing the map.
 
-The specifics will be different, but all the concepts here we've already
-been introduced to, so we can get another round of practice with them.
+The specifics will be different, but all the concepts will be ones we've
+already seen, so this section will be hopefully be closer to "practice"
+than to "learning something new."
 
-#### Basic map
+### Basic map
 
-Let's make a `leaflet` map showing the countries in our data set colored
-by their 2007 life expectancy data. We'll place the result in our UI's
-"Map" tab panel.
+Let's aim to eventually make a `leaflet` map showing the countries in
+our data set with an outlined colored according to each country's 2007
+life expectancy value.
 
 Every `leaflet` map has three building blocks:
 
-1.  A `leaflet()` call. This function is like `ggplot()` from the
-    `ggplot2` package—it "sets the stage" for the rest of the graphic,
-    and you can specify some settings here that'll apply to all
-    subsequent components.
+1.  A `leaflet()` call. This is like `ggplot()` from the `ggplot2`
+    package—it "sets the stage" for the rest of the graphic, and you can
+    specify some settings here that'll apply to all subsequent
+    components.
 
-2.  A `addTiles()` call. This function place's a "tile," or background,
-    on your map. This is that thing indicating where lakes and roads and
-    boundaries are! We'll use the default tile here, but there are many
-    others to choose from.
+2.  An `addTiles()` call. This function places a **tile**, or
+    background, into your map container. This is the familiar component
+    of a map that indicates where all the lakes and roads and county
+    boundaries and such are! We'll use the default tile, but there are
+    many other free ones to choose from.
 
 3.  At least one `add*()` function call for adding **spatial data** to
-    our map. There are others, but the three most commonly used ones
-    are:
+    our map. There are others, but the three most commonly used `add*()`
+    functions are:
 
-    1.  `addMarkers()` adds **spatial point** (0-dimensional) **data**
+    1.  `addMarkers()` for adding **point** (0-dimensional) **data**
         (like the locations of restaurants).
 
-    2.  `addLines()` adds **spatial line/curve** (1-dimensional)
+    2.  `addPolylines()` for adding **line/curve** (1-dimensional)
         **data** (like roads or rivers).
 
-    3.  `addPolygons()` adds **spatial polygon** (2-dimensional)
-        **data** (like country boundaries).
+    3.  `addPolygons()` for adding **polygon** (2-dimensional) **data**
+        (like country boundaries).
 
 Here, we'll use `addPolygons()`:
 
@@ -810,9 +948,9 @@ Here, we'll use `addPolygons()`:
 ###MAIN PANEL CELL
     column(width = 8, tabsetPanel(
       ###TABLE TAB
-      tabPanel(title = "Table", dataTableOutput("basic_table")),
+      tabPanel(title = "Table", dataTableOutput("table1")),
       ###MAP TAB
-      tabPanel(title = "Map", leafletOutput("basic_map")), #<--ADD OUR NEW MAP.
+      tabPanel(title = "Map", leafletOutput("basic_map")), #<--OUTPUT OUR NEW MAP.
       ###GRAPH TAB
       tabPanel(
         title = "Graph",
@@ -822,7 +960,7 @@ Here, we'll use `addPolygons()`:
 ```
 
 ```{r basic map server, eval=F}
-##This code should be **added to** your server.R file, underneath all other contents inside of your server function!
+##This code should be **added to** your server.R file, below all other contents but inside of your server function!
 
  ##... other server code...
 
@@ -834,35 +972,39 @@ Here, we'll use `addPolygons()`:
       filter(year == 2007)
 
     leaflet() %>% #<--GETS THINGS STARTED
-      addTiles() %>% #<--ADDS A BACKGROUND 
+      addTiles() %>% #<--ADDS A BACKGROUND TILE
       addPolygons(
-        data = gap_map2007$geometry, #SPECIFY OUR SPATIAL DATA (geometry IS AN sf PACKAGE CONSTRUCTION)
-        color = "black", #<-BLACK OUTLINE
-        weight = 2) #THICKER-THAN-DEFAULT OUTLINE.
+        data = gap_map2007$geometry) #SPECIFY OUR SPATIAL DATA (geometry IS AN sf PACKAGE WAY OF STORING THESE DATA)
     
   })
 ```
 
-The code above creates a nice, if somewhat basic, interactive map
-showing the countries for which we have data, outlined in black. Notice
-that you can **pan** the map by clicking anywhere, holding the click,
-and moving the mouse.
+The code above creates a nice, if somewhat visually muddled, interactive
+map showing the countries for which we have data outlined in blue:
 
-Notice that you can also **zoom** the map in or out using your mouse
-wheel (if you have one), or by using the plus/minus buttons in the
-top-left corner. Double-clicking on the map also zooms in.
+![A default leaflet map showing the countries for which we have data
+outlined in blue.](fig/leaflet_basic.png)
 
-If you zoom in a lot, you'll see the tile change to show greater detail.
-If you zoom out, you'll see the world actually repeat several times
-left-to-right, if your screen is wide enough...pretty weird!
+Note that you can **pan** the map by clicking anywhere on the map,
+holding the click, and moving the mouse. Note you can also **zoom** the
+map using your mouse wheel (if you have one), or by using the plus/minus
+buttons in the top-left corner. Double-clicking on the map also zooms
+in.
 
-#### More (or less) basic map
+If you zoom in a lot, you'll see the tile automatically change to show
+greater detail. If you zoom out, you'll see the world actually repeat
+several times left-to-right...which looks pretty weird!
 
-As we just saw, it often doesn't make sense to allow users to **pan**
-and **zoom** without any guardrails—they can get lost or produce
-unhelpful visual quirks to arise. As I noted earlier, `leaflet()`
-contains many global settings we can apply to our map. For example, we
-can set min and max zoom levels like so:
+### More (or less) basic map
+
+As we just saw, it often doesn't make sense from a UX standpoint to
+allow users to **pan** and **zoom** without guardrails—they can get lost
+by zooming in or out too far or panning the map around too much, and
+they can create weird visual quirks too (such as making the world
+repeat).
+
+As noted earlier, the `leaflet()` function contains many settings we can
+adjust. For example, we can set min and max zoom levels like so:
 
 ```{r adjusting zoom, eval = F}
 ##This code should be **swapped for** the renderLeaflet({}) code provided previously, inside of your server function!
@@ -875,25 +1017,23 @@ can set min and max zoom levels like so:
     gap_map2007 = gap_map %>%
       filter(year == 2007)
 
-    ##THE leaflet() FUNCTION HAS A LIST OF OPTIONS WE CAN ADJUST, SUCH AS THE MIN AND MAX ZOOM LEVELS.
+    ##THE leaflet() FUNCTION HAS OPTIONS WE CAN ADJUST, SUCH AS THE MIN AND MAX ZOOM.
     leaflet(options = tileOptions(maxZoom = 6, minZoom = 2)) %>%
       addTiles() %>%
       addPolygons(
-        data = gap_map2007$geometry,
-        color = "black", 
-        weight = 2)
+        data = gap_map2007$geometry)
     
   })
 ```
 
-A `minZoom` of 2 is one in which *almost* the entire world is visible at
-once (on my laptop, anyway!). A `maxZoom` of 6 allows users to zoom into
-specific continental regions but no further. This keeps users from
-zooming in or out to a degree that doesn't really make sense given our
-data.
+A `minZoom` of `2` is one in which *almost* the entire world is visible
+at once (on my laptop, anyway!). Meanwhile, a `maxZoom` of `6` allows
+users to zoom into specific continental regions but no further. These
+adjustments keeps users from zooming in or out more than makes sense for
+our data.
 
-We can also set **maximum bounds**—users can't **pan** the map past
-these:
+We can also set **maximum bounds**—these represent an invisible box that
+users cannot pan the map beyond:
 
 ```{r adjust bounding box, eval = F}
 ##This code should be **swapped for** the renderLeaflet({}) code provided previously, inside of your server function!
@@ -906,41 +1046,86 @@ these:
     gap_map2007 = gap_map %>%
       filter(year == 2007)
     
-    #THE SF PACKAGE'S st_bbox() FUNCTION GETS THE FOUR POINTS THAT WOULD CREATE A BOX FULLY BOUNDING ALL SPATIAL DATA WE GIVE IT AS INPUTS.
+    #THE SF PACKAGE'S st_bbox() FUNCTION GETS THE FOUR POINTS THAT WOULD CREATE A BOX FULLY BOUNDING ALL SPATIAL DATA GIVEN AS INPUTS.
+    bounds = unname(sf::st_bbox(gap_map2007))
+
+    leaflet(options = tileOptions(maxZoom = 6, minZoom = 2)) %>%
+      addTiles() %>%
+      addPolygons(
+        data = gap_map2007$geometry) %>%  
+      ##CONVENIENTLY, setMaxBounds() TAKES, AS INPUTS, THOSE EXACT SAME FOUR POINTS IN THE SAME ORDER.
+      setMaxBounds(bounds[1], bounds[2], bounds[3], bounds[4])
+    
+  })
+```
+
+When a user tries to pan past the bounds, the map "snap backS" to within
+them:
+
+![We can see that the map is now zoomed in a little more than before and
+can't zoom out any further. When we try to pan the map outside of its
+bounds, it snaps our focus back within those bounds. Lastly, we're
+unable to zoom the map in beyond a certain
+level.](fig/zoomandbounds.gif)
+
+While there are other features we could adjust or disable, setting
+bounds and minimum and maximum zoom levels are the two things you'll
+generally want to do to every `leaflet` map you make.
+
+### Adding some pizzazz
+
+Our map's aesthetics leave much to be desired. In particular, the
+default, fuzzy-blue **strokes** (outlines) are hard to interpret.
+
+Let's start by cleaning those up. A lot of basic aesthetics related to
+your spatial data can be controlled with parameters within the specific
+`add*()` function you're using. Here, we need to set new values for
+`color`, `weight`, and `opacity` to change the color, thickness, and
+transparency of the strokes:
+
+```{r updated aesthetics, eval = F}
+##This code should be **swapped for** the renderLeaflet({}) code provided previously, inside of your server function!
+
+ ##... other server code...
+
+  ###MAP
+  output$basic_map = renderLeaflet({
+
+    gap_map2007 = gap_map %>%
+      filter(year == 2007)
+
     bounds = unname(sf::st_bbox(gap_map2007))
 
     leaflet(options = tileOptions(maxZoom = 6, minZoom = 2)) %>%
       addTiles() %>%
       addPolygons(
         data = gap_map2007$geometry,
-        color = "black", 
-        weight = 2) %>%  
-      ##setMaxBounds() TAKES, AS INPUTS, THOSE EXACT SAME FOUR POINTS.
+        color = "black", #CHANGE STROKE COLOR TO BLACK
+        weight = 2, #INCREASE STROKE THICKNESS
+        opacity = 1 #MAKE FULLY OPAQUE
+        ) %>%
       setMaxBounds(bounds[1], bounds[2], bounds[3], bounds[4])
-    
+
   })
+  
+   ##... other server code...
 ```
 
-When a user tries to pan past the bounds, the map will "snap back" to a
-focus point within the bounds.
+These couple of changes make the graph much more attractive:
 
-While there are other features we could adjust or disable, setting
-bounds and a minimum and maximum zoom are two things you'll generally
-want to do to every map you make.
+![Amazing what adjusting a few stroke (outline) parameters can
+do!](fig/bettermap.png)
 
-##### Adding some pizzazz
+Now, it's time to make the map do what we *really* want—show life
+expectancy data, which we could map to the fill color of each country's
+polygon.
 
-Our map is still rather basic-looking. In fact, it doesn't even fulfill
-the minimum specifications we'd set—it doesn't show the life expectancy
-data yet.
-
-To fix that, we need to set up a **color palette** so `leaflet` knows
-*how* to fill our country polygons (it's a *little* fussy!). We can
-build a color palette using `leaflet`'s `colorNumeric()` function.
-
-This function has two required inputs: a `palette`, the name of the R
-color palette we'd like to use, and a `domain`, the set of values we'll
-need colors for in our final palette:
+This is a two-step process. First, we need to set up a **color palette**
+function, which is a tool `leaflet` can use to determine which colors go
+with which values. We can build this color palette function using the
+`colorNumeric()` function, which has two required inputs: a `palette`,
+the name of an R color palette we'd like to use, and a `domain`, the
+entire set of values we'll need to assign colors to:
 
 ```{r palette, eval = F}
 ##This code should be **swapped for** the renderLeaflet({}) code provided previously, inside of your server function!
@@ -955,22 +1140,23 @@ need colors for in our final palette:
     bounds = unname(sf::st_bbox(gap_map2007))
     
     #ESTABLISH A COLOR SCHEME TO USE FOR OUR FILLS.
-    map_palette = colorNumeric(palette = "Blues", domain = unique(gap_map2007$lifeExp))
+    map_palette = colorNumeric(palette = "Blues", 
+                               domain = unique(gap_map2007$lifeExp))
     
     leaflet(options = tileOptions(maxZoom = 6, minZoom = 2)) %>%
       addTiles() %>%
       addPolygons(
         data = gap_map2007$geometry,
         color = "black", 
-        weight = 2) %>%  
+        weight = 2, 
+        opacity = 1
+        ) %>%  
       setMaxBounds(bounds[1], bounds[2], bounds[3], bounds[4])
     
   })
 ```
 
-Once `leaflet` knows every value it'll need a color for (`domain`) and
-every color it should use (`palette`), we can add coloring instructions
-to `addPolygons()`:
+Then, we can add the polygon-coloring instructions to `addPolygons()`:
 
 ```{r fill colors, eval = F}
 ##This code should be **swapped for** the renderLeaflet({}) code provided previously, inside of your server function!
@@ -991,19 +1177,23 @@ to `addPolygons()`:
       addTiles() %>%
       addPolygons(
         data = gap_map2007$geometry,
-        color = "black", #<--NOTICE THAT THE OUTLINE ("STROKE") HAS A DIFFERENT COLOR PARAMETER THAN THE FILL.
-        weight = 2,
-        fillColor = map_palette(gap_map2007$lifeExp), #<--WE USE OUR NEW COLOR PALETTE LIKE A FUNCTION, SPECIFYING OUR DATA AS INPUTS.
+        color = "black", 
+        weight = 2, 
+        opacity = 1,
+        fillColor = map_palette(gap_map2007$lifeExp), #<--WE USE OUR NEW COLOR PALETTE FUNCTION, SPECIFYING OUR DATA AS INPUTS.
         fillOpacity = 0.75) %>%  #<--THE DEFAULT, 0.5, WASHES OUT THE COLORS TOO MUCH.
       setMaxBounds(bounds[1], bounds[2], bounds[3], bounds[4])
     
   })
 ```
 
-This is already a *much* cooler map!
+This is already a *much* cooler map:
 
-But shouldn't there be a **legend** that clarifies what colors go with
-what values? We can add one using `addLegend()`:
+![We've successfully mapped each country's 2007 life expectancy value to
+the fill color of that country's polygon.](fig/coolmap.png)
+
+...But shouldn't there be a **legend** that clarifies what colors go
+with what values? We can add one using `addLegend()`:
 
 ```{r add legend to map, eval=F}
 ##This code should be **swapped for** the renderLeaflet({}) code provided previously, inside of your server function!
@@ -1023,40 +1213,42 @@ what values? We can add one using `addLegend()`:
       addTiles() %>%
       addPolygons(
         data = gap_map2007$geometry,
-        color = "black",
-        weight = 2,
-        fillColor = map_palette(gap_map2007$lifeExp),
+        color = "black", 
+        weight = 2, 
+        opacity = 1,
+        fillColor = map_palette(gap_map2007$lifeExp), 
         fillOpacity = 0.75) %>% 
       setMaxBounds(bounds[1], bounds[2], bounds[3], bounds[4]) %>%
-      #ADD A LEGEND TO THE MAP
+      #ADD LEGEND
       addLegend(
         position = "bottomleft", #<--WHERE TO PUT IT.
-        pal = map_palette, #<--COLOR SCHEME TO USE.
+        pal = map_palette, #<--COLOR PALETTE FUNCTION TO USE.
         values = gap_map2007$lifeExp, #WHAT SCALE ANCHORS ("BREAKS") TO USE.
         opacity = 0.75, #LEGEND TRANSPARENCY.
-        bins = 5, #NUMBER OF BREAKS TO HAVE.
+        bins = 5, #NUMBER OF BREAKS.
         title = "Life<br>expectancy ('07)" #LEGEND TITLE.
       )
     
   })
 ```
 
-This is a nice looking map!
+Now that's a nice looking map!
+
+![We've added a legend so that the user can easily associated different
+fill colors with different life expectancy values.](fig/addlegend.png)
 
 ...But what if our users don't know much geography, so they don't know
-which countries are which? Or what if they wanted to know the *exact*
-life expectancy value for a country? This map couldn't easily address
-either issue.
+which countries are which? Or what if they want to know the *exact* life
+expectancy value for a given country?
 
-Adding **tooltips** would help address both. A tooltip is a small pop-up
-that might appear on mouse hover (in `leaflet`, those are called
-"labels"), on mouse click (leaflet calls these "popups"), or after some
-other action.
+Adding **tooltips** would address both these challenges. A **tooltip**
+is a small pop-up container that appears on mouse hover (in `leaflet`,
+these variants are called "labels"), on mouse click (`leaflet` calls
+these "popups"), or after some other action.
 
-Using the `popup` parameter inside `addPolygons()`, we can add tooltips
-that appear and disappear on mouse click. Inside these, we'll put the
-name of the country being clicked on, in case users don't know their
-countries well:
+Using the `popup` parameter of `addPolygons()`, we can add tooltips that
+appear and disappear on mouse click. Inside, we'll put the name of the
+country being clicked, in case users don't know their countries well:
 
 ```{r popups 1, eval = F}
 ##This code should be **swapped for** the renderLeaflet({}) code provided previously, inside of your server function!
@@ -1067,20 +1259,21 @@ countries well:
 
     gap_map2007 = gap_map %>%
       filter(year == 2007)
-    
+
     bounds = unname(sf::st_bbox(gap_map2007))
-    
+
     map_palette = colorNumeric(palette = "Blues", domain = unique(gap_map2007$lifeExp))
-    
+
     leaflet(options = tileOptions(maxZoom = 6, minZoom = 2)) %>%
       addTiles() %>%
       addPolygons(
         data = gap_map2007$geometry,
         color = "black",
         weight = 2,
+        opacity = 1,
         fillColor = map_palette(gap_map2007$lifeExp),
         fillOpacity = 0.75,
-        popup = gap_map2007$country) %>% #<--MAKE A TOOLTIP HOLDING THE RELEVANT COUNTRY APPEAR/DISAPPEAR ON MOUSE CLICK. 
+        popup = gap_map2007$country) %>% #<--MAKE A TOOLTIP HOLDING THE COUNTRY NAME THAT APPEARS/DISAPPEARS ON MOUSE CLICK. 
       setMaxBounds(bounds[1], bounds[2], bounds[3], bounds[4]) %>%
       addLegend(
         position = "bottomleft",
@@ -1090,15 +1283,17 @@ countries well:
         bins = 5,
         title = "Life<br>expectancy ('07)"
       )
-    
+
   })
 ```
 
+![Simple tooltips (pop-ups) that appear and disappear on mouse click,
+showing each country's name.](fig/countryname.png)
+
 This is a nice addition, but what if we wanted to add life expectancy
-values too? And keep the result human-readable? There are many
-approaches we could take, but one using "Normal R's" versatile
-`paste0()` function plus the HTML line break element (`<br>`) is
-straightforward:
+values too and keep the result human-readable? There are many approaches
+we could take, but using R's versatile `paste0()` function plus the HTML
+line break element (`<br>`) is a reasonable one:
 
 ```{r popups 2, eval = F}
 ##This code should be **swapped for** the renderLeaflet({}) code provided previously, inside of your server function!
@@ -1109,24 +1304,26 @@ straightforward:
 
     gap_map2007 = gap_map %>%
       filter(year == 2007)
-    
+
     bounds = unname(sf::st_bbox(gap_map2007))
-    
+
     map_palette = colorNumeric(palette = "Blues", domain = unique(gap_map2007$lifeExp))
-    
+
     leaflet(options = tileOptions(maxZoom = 6, minZoom = 2)) %>%
       addTiles() %>%
       addPolygons(
         data = gap_map2007$geometry,
         color = "black",
         weight = 2,
+        opacity = 1,
         fillColor = map_palette(gap_map2007$lifeExp),
         fillOpacity = 0.75,
-        popup = paste0("County: ", #<--WE USE R'S paste0() FUNCTION AND THE HTML LINE BREAK ELEMENT <br> TO MAKE THE TOOLTIP TEXT VERY READABLE AND INFO-RICH.
+        #EXPANDING THE INFO PRESENTED IN THE TOOLTIPS.
+        popup = paste0("County: ",
                        gap_map2007$country,
-                       "<br>Life Expectancy: ",
+                       "<br>Life expectancy: ",
                        gap_map2007$lifeExp)
-      ) %>%
+      ) %>% 
       setMaxBounds(bounds[1], bounds[2], bounds[3], bounds[4]) %>%
       addLegend(
         position = "bottomleft",
@@ -1136,17 +1333,21 @@ straightforward:
         bins = 5,
         title = "Life<br>expectancy ('07)"
       )
-    
+
   })
 ```
 
-Now, our map is both snazzy and informative!
+Now, our map is both snazzy *and* extra informative:
+
+![Now, the tooltips also contain the exact life expectancy value of each
+country. HTML line breaks are used to make the result more
+human-readable.](fig/expandedtooltip.png)
 
 ::: challenge
 In the previous example, we used `popup` to build our tooltips. Try
 using the `label` parameter instead. For whatever reason, this requires
-more "normal R" data wrangling, so here's the *exact* code you'll need
-(feel free to copy and paste it!):
+more wrangling, so here's the *exact* code you'll need to use (I
+recommend copy-pasting it):
 
 ```{r label example, eval = F}
 label = lapply(1:nrow(gap_map2007), function(x){ 
@@ -1156,37 +1357,33 @@ label = lapply(1:nrow(gap_map2007), function(x){
                                 gap_map2007$lifeExp[x]))})
 ```
 
-What changes? Which do you prefer? Which would be better if a lot of
-your users will use mobile devices, do you think?
+What changes? Which do you prefer? Which option would be better if a lot
+of your users will be using mobile devices, do you think?
 
 ::: solution
 If we use `label`, we get tooltips that appears on mouse hover instead
 of on mouse click. Actually, this is *probably* more intuitive for most
 users; many will not expect a click to do anything and may only discover
-our on-click-style tooltips by accident!
+our on-click tooltips by accident!
 
 On the other hand, tooltips that appear on hover can be annoying if a
 user is trying to, *e.g.*, trace a path with their mouse and irrelevant
-tooltips keep getting in the way or providing distractions.
+tooltips keep getting in the way or being distracting.
 
-Also, an advantage of on-click tooltips is that they *don't* disappear
-until a user is ready for them to do so, whereas tooltips that disappear
-when the mouse is moved can prevent users from consulting a tooltip
-while also using their mouse somewhere else on the page.
+Another advantage of on-click tooltips is that they *don't* disappear
+until a user is ready for them to do so, whereas tooltips that appear on
+hover also disappear when the mouse is moved, which can prevent users
+from consulting a tooltip while also using their mouse somewhere else.
 
-However, the biggest potential disadvantage of "on-hover" tooltips is
-that, while there is an equivalent to a mouse click on touchscreen
-devices (a finger press), there is no *universal* equivalent to a mouse
-hover (some browsers and platforms use a "long press" for this, but not
-all, and many users are not accustomed to taking that action anyway!).
+However, the biggest disadvantage of on-hover tooltips is that, while
+there is an equivalent to a mouse click on touchscreen devices (a finger
+press), there is no *universal* equivalent to a mouse hover (some mobile
+device browsers and platforms use a "long press" for this, but not all,
+and many users are not accustomed to performing long presses!).
 
 So, mobile users won't generally see tooltips if they appear *only* on
 hover. If we're aiming for "mobile-first" design, the `popup` option is
 better (which is why I picked it)!
-
-However, note that by using `labelOptions`, we can adjust which events
-cause tooltips to appear, *e.g.*, we can make them appear on both hover
-and on touch.
 :::
 :::
 

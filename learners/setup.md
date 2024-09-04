@@ -15,21 +15,21 @@ RStudio is an application (an integrated development environment, or IDE, to be 
 This lesson also takes advantage of several add-on packages for R that do not come bundled with R's default installation. While we will also pause to install these packages during the lesson, the process can take some time, so these packages can be installed ahead of time using the following command:
 
 ``` r
-install.packages("shiny", "dplyr", "ggplot2", "leaflet", "DT", "plotly", "gapminder", "countrycode", "sf")
+install.packages("shiny", "dplyr", "ggplot2", "leaflet", "DT", "plotly", "gapminder", "sf")
 ```
 
 ## Data Sets
 
-For the `leaflet` portion of the lesson, we'll work with **spatial data**. Download [this zipped file of spatial data containing country boundaries](data/TM_WORLD_BORDERS_SIMPL-0.3.zip). Unzip it and place it on your desktop; you'll move it later in the lessons.
-
-We'll also use the `gapminder` data set for this lesson, available via the `gapminder` package:
+We'll use the `gapminder` data set for this lesson, available via the `gapminder` package:
 
 ``` r
 library(gapminder)
-gap = gapminder #<--OR WHATEVER YOU'D PREFER TO CALL IT.
+gap = gapminder
 ```
 
 I recommend accessing it via the code above, [but you may also download it via this link](data/gapminder.csv).
+
+For the `leaflet` portion of the lesson, we'll need spatial data to work with. You can download a special version of the `gapminder` data set with spatial data attached via this link: [Link to the gapminder data set with attached spatial data](https://drive.google.com/uc?export=download&id=1YePuKxTlBgW1hQ2uwXHi8b9UJEPUCoDh).
 
 ## Disclaimers
 

@@ -1,5 +1,5 @@
 ---
-title: "R Shiny's Core Concepts: Rendering and Outputting, Input widgets, and Reactivity"
+title: "R Shiny's Core Concepts: Rendering and Outputting, Input Widgets, and Reactivity"
 teaching: 50
 exercises: 10
 source: Rmd
