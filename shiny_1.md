@@ -1,5 +1,5 @@
 ---
-title: Welcome to the Web!
+title: "Welcome to the Web! Web Development with Shiny 101"
 teaching: 40
 exercises: 5
 source: Rmd

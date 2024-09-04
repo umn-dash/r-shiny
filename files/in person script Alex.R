@@ -5,7 +5,7 @@
 
 #Install packages if they haven't already done so:
 
-install.packages("shiny", "dplyr", "ggplot2", "leaflet", "DT", "plotly", "gapminder", "countrycode", "sf")
+install.packages("shiny", "dplyr", "ggplot2", "leaflet", "DT", "plotly", "gapminder", "sf")
 
 #Set up project folder.
 #First, make root. Then add three scripts, naming them server.R, ui.R, and global.R. Then, make three subfolders: www, Rcode, and inputs.
@@ -23,13 +23,9 @@ library(DT)
 library(leaflet)
 library(gapminder)
 library(sf)
-library(countrycode)
 
 ### LOAD DATA SETS
 gap = as.data.frame(gapminder)
-#THESE LINES WILL HELP US MUCH LATER.
-gap$country = as.character(gap$country)
-gap$continent = as.character(gap$continent)
 
 ##Start setting up server.R by adding the server function:
 server = function(input, output, session) {
@@ -314,3 +310,320 @@ ui = fluidPage(
 
   tags$footer("This is my app")
 )
+
+#Swapping for DT table, in server:
+
+output$table1 = renderDT({ #<--CHANGE FUNCTION
+  gap
+})
+
+observeEvent({input$go_button},
+             ignoreInit = FALSE, {
+
+               output$table1 = renderDT({ #<--CHANGE FUNCTION
+                 gap %>%
+                   arrange(!!sym(input$sorted_column))
+
+               })
+             })
+
+#Swapping for DT table, in UI
+column(width = 8, tabsetPanel(
+  ###TABLE TAB
+  tabPanel(title = "Table",
+           dataTableOutput(outputId = "table1")), #<--CHANGE FUNCTION
+  ###MAP TAB
+  tabPanel(title = "Map"),
+  ###GRAPH TAB
+  tabPanel(title = "Graph")
+)
+)
+
+#In server, reducing the number of features of our DT table.
+output$table1 = renderDT({
+  gap %>%
+    datatable(
+      selection = "none", #<--TURNS OFF ROW SELECTION
+      options = list(
+        info = FALSE, #<--NO BOTTOM-LEFT INFO
+        ordering = FALSE, #<--NO SORTING
+        searching = FALSE #<--NO SEARCH BAR
+      )
+    )
+})
+
+observeEvent({input$go_button},
+             ignoreInit = FALSE, {
+
+               output$table1 = renderDT({
+                 gap %>%
+                   arrange(!!sym(input$sorted_column)) %>%
+                   #SAME AS ABOVE
+                   datatable(
+                     selection = "none",
+                     options = list(
+                       info = FALSE,
+                       ordering = FALSE,
+                       searching = FALSE
+                     )
+                   )
+
+               })
+             })
+
+
+#In the server, style the DT table by adding the following to both relevant places:
+%>%
+  #SAME AS ABOVE
+  formatRound(columns = "gdpPercap", digits = 2) %>%
+  formatStyle(columns = "continent", textAlign = "center") %>%
+  formatStyle(
+    columns = "lifeExp",
+    target = "row",
+    backgroundColor = styleEqual(
+      levels = gap$lifeExp,
+      values = ifelse(gap$lifeExp > 70, "lightpink", "white")
+    )
+  )
+
+#In the server, transition to using a proxy to update the table
+observeEvent({input$go_button},
+             ignoreInit = FALSE, {
+
+               sorted_gap = gap %>%
+                 arrange(!!sym(input$sorted_column))
+
+               dataTableProxy(outputId = "table1") %>%
+                 replaceData(data = sorted_gap,
+                             resetPaging = FALSE)
+
+})
+
+
+#In the server, turn on cell selection
+output$table1 = renderDT({
+  gap %>%
+    datatable(
+      selection = list(mode = "single", target = "cell"), #<--TURN SELECTION ON, TARGET INDIVIDUAL CELLS.
+      options = list(
+        info = FALSE,
+        ordering = FALSE,
+        searching = FALSE
+      )
+    ) %>%
+    formatRound(columns = "gdpPercap", digits = 2) %>%
+    formatStyle(columns = "continent", textAlign = "center") %>%
+    formatStyle(
+      columns = "lifeExp",
+      target = "row",
+      backgroundColor = styleEqual(
+        levels = gap$lifeExp,
+        values = ifelse(gap$lifeExp > 70, "lightpink", "white")
+      )
+    )
+})
+
+#In the server, wire up new observer to watch for cell selections
+#WATCH FOR CELL SELECTIONS
+observeEvent({input$table1_cells_selected}, {
+
+  print(input$table1_cells_selected)
+
+})
+
+
+#In the UI, add our new map:
+column(width = 8, tabsetPanel(
+  ###TABLE TAB
+  tabPanel(title = "Table", dataTableOutput("table1")),
+  ###MAP TAB
+  tabPanel(title = "Map",
+           leafletOutput("basic_map")), #<--OUTPUT OUR NEW MAP.
+  ###GRAPH TAB
+  tabPanel(
+    title = "Graph",
+  )
+))
+
+#In the server, add the new map code:
+output$basic_map = renderLeaflet({
+
+  gap_map2007 = gap_map %>%
+    filter(year == 2007)
+
+  leaflet() %>%
+    addTiles() %>%
+    addPolygons(
+      data = gap_map2007$geometry
+    )
+})
+
+#In the server, set min and max zoom levels
+output$basic_map = renderLeaflet({
+
+  gap_map2007 = gap_map %>%
+    filter(year == 2007)
+
+  ##THE leaflet() FUNCTION HAS OPTIONS WE CAN ADJUST, SUCH AS THE MIN AND MAX ZOOM.
+  leaflet(options = tileOptions(maxZoom = 6, minZoom = 2)) %>%
+    addTiles() %>%
+    addPolygons(
+      data = gap_map2007$geometry)
+
+})
+
+#In the server, set max bounds
+###MAP
+output$basic_map = renderLeaflet({
+
+  gap_map2007 = gap_map %>%
+    filter(year == 2007)
+
+  #THE SF PACKAGE'S st_bbox() FUNCTION GETS THE FOUR POINTS THAT WOULD CREATE A BOX FULLY BOUNDING ALL SPATIAL DATA GIVEN AS INPUTS.
+  bounds = unname(sf::st_bbox(gap_map2007))
+
+  leaflet(options = tileOptions(maxZoom = 6, minZoom = 2)) %>%
+    addTiles() %>%
+    addPolygons(
+      data = gap_map2007$geometry) %>%
+    ##CONVENIENTLY, setMaxBounds() TAKES, AS INPUTS, THOSE EXACT SAME FOUR POINTS IN THE SAME ORDER.
+    setMaxBounds(bounds[1], bounds[2], bounds[3], bounds[4])
+
+})
+
+#In server, update map aesthetics
+###MAP
+output$basic_map = renderLeaflet({
+
+  gap_map2007 = gap_map %>%
+    filter(year == 2007)
+
+  bounds = unname(sf::st_bbox(gap_map2007))
+
+  leaflet(options = tileOptions(maxZoom = 6, minZoom = 2)) %>%
+    addTiles() %>%
+    addPolygons(
+      data = gap_map2007$geometry,
+      color = "black", #CHANGE STROKE COLOR TO BLACK
+      weight = 2, #INCREASE STROKE THICKNESS
+      opacity = 1 #MAKE FULLY OPAQUE
+    ) %>%
+    setMaxBounds(bounds[1], bounds[2], bounds[3], bounds[4])
+
+})
+
+#In server, establish a color palette function for leaflet to use:
+###MAP
+output$basic_map = renderLeaflet({
+
+  gap_map2007 = gap_map %>%
+    filter(year == 2007)
+
+  bounds = unname(sf::st_bbox(gap_map2007))
+
+  #ESTABLISH A COLOR SCHEME TO USE FOR OUR FILLS.
+  map_palette = colorNumeric(palette = "Blues",
+                             domain = unique(gap_map2007$lifeExp))
+
+  leaflet(options = tileOptions(maxZoom = 6, minZoom = 2)) %>%
+    addTiles() %>%
+    addPolygons(
+      data = gap_map2007$geometry,
+      color = "black",
+      weight = 2) %>%
+    setMaxBounds(bounds[1], bounds[2], bounds[3], bounds[4])
+
+})
+
+#In server, attach the color palette function and data to our polygons:
+###MAP
+output$basic_map = renderLeaflet({
+
+  gap_map2007 = gap_map %>%
+    filter(year == 2007)
+
+  bounds = unname(sf::st_bbox(gap_map2007))
+
+  map_palette = colorNumeric(palette = "Blues", domain = unique(gap_map2007$lifeExp))
+
+  leaflet(options = tileOptions(maxZoom = 6, minZoom = 2)) %>%
+    addTiles() %>%
+    addPolygons(
+      data = gap_map2007$geometry,
+      color = "black",
+      weight = 2,
+      opacity = 1,
+      fillColor = map_palette(gap_map2007$lifeExp), #<--WE USE OUR NEW COLOR PALETTE FUNCTION, SPECIFYING OUR DATA AS INPUTS.
+      fillOpacity = 0.75) %>%  #<--THE DEFAULT, 0.5, WASHES OUT THE COLORS TOO MUCH.
+    setMaxBounds(bounds[1], bounds[2], bounds[3], bounds[4])
+
+})
+
+#In server, add a tooltip for country name
+output$basic_map = renderLeaflet({
+
+  gap_map2007 = gap_map %>%
+    filter(year == 2007)
+
+  bounds = unname(sf::st_bbox(gap_map2007))
+
+  map_palette = colorNumeric(palette = "Blues", domain = unique(gap_map2007$lifeExp))
+
+  leaflet(options = tileOptions(maxZoom = 6, minZoom = 2)) %>%
+    addTiles() %>%
+    addPolygons(
+      data = gap_map2007$geometry,
+      color = "black",
+      weight = 2,
+      opacity = 1,
+      fillColor = map_palette(gap_map2007$lifeExp),
+      fillOpacity = 0.75,
+      popup = gap_map2007$country) %>% #<--MAKE A TOOLTIP HOLDING THE COUNTRY NAME THAT APPEARS/DISAPPEARS ON MOUSE CLICK.
+    setMaxBounds(bounds[1], bounds[2], bounds[3], bounds[4]) %>%
+    addLegend(
+      position = "bottomleft",
+      pal = map_palette,
+      values = gap_map2007$lifeExp,
+      opacity = 0.75,
+      bins = 5,
+      title = "Life<br>expectancy ('07)"
+    )
+
+})
+
+#In server, expand the tooltip to also contain life expectancy data:
+output$basic_map = renderLeaflet({
+
+  gap_map2007 = gap_map %>%
+    filter(year == 2007)
+
+  bounds = unname(sf::st_bbox(gap_map2007))
+
+  map_palette = colorNumeric(palette = "Blues", domain = unique(gap_map2007$lifeExp))
+
+  leaflet(options = tileOptions(maxZoom = 6, minZoom = 2)) %>%
+    addTiles() %>%
+    addPolygons(
+      data = gap_map2007$geometry,
+      color = "black",
+      weight = 2,
+      opacity = 1,
+      fillColor = map_palette(gap_map2007$lifeExp),
+      fillOpacity = 0.75,
+      #EXPANDING THE INFO PRESENTED IN THE TOOLTIPS.
+      popup = paste0("County: ",
+                     gap_map2007$country,
+                     "<br>Life expectancy: ",
+                     gap_map2007$lifeExp)
+    ) %>%
+    setMaxBounds(bounds[1], bounds[2], bounds[3], bounds[4]) %>%
+    addLegend(
+      position = "bottomleft",
+      pal = map_palette,
+      values = gap_map2007$lifeExp,
+      opacity = 0.75,
+      bins = 5,
+      title = "Life<br>expectancy ('07)"
+    )
+
+})

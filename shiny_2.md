@@ -1,5 +1,5 @@
 ---
-title: Building the Ground Floor of a Shiny App
+title: "Building the Ground Floor of a Shiny App"
 teaching: 15
 exercises: 0
 source: Rmd
@@ -40,7 +40,7 @@ haven't already, install those now:
 
 ``` r
 ##RUN THIS CODE IN YOUR CONSOLE PANE--**DON'T** INCLUDE IT INSIDE YOUR SHINY FILES. YOU ONLY NEED TO INSTALL PACKAGES **ONCE**.
-install.packages("shiny", "dplyr", "ggplot2", "leaflet", "DT", "plotly", "gapminder", "countrycode", "sf")
+install.packages("shiny", "dplyr", "ggplot2", "leaflet", "DT", "plotly", "gapminder", "sf")
 ```
 
 Of course, to access their features, we need to turn these packages on
@@ -178,13 +178,9 @@ library(DT)
 library(leaflet)
 library(gapminder)
 library(sf)
-library(countrycode)
 
 ### LOAD DATA SETS 
 gap = gapminder
-#THESE LINES WILL HELP US MUCH LATER.
-gap$country = as.character(gap$country)
-gap$continent = as.character(gap$continent)
 ```
 
 By having a `global.R` file, we can place things like `library()` calls

@@ -20,14 +20,16 @@ ui = fluidPage(
              inputId = "go_button",
              label = "Go!")
            ), #SIDEBAR
-    column(width = 8,
-           tabsetPanel(
-             tabPanel(title = "Table",
-                      tableOutput(outputId = "table1")),
-             tabPanel(title = "Map"),
-             tabPanel(title = "Graph")
-           )
-    ) #MAIN PANEL
+    column(width = 8, tabsetPanel(
+      ###TABLE TAB
+      tabPanel(title = "Table", dataTableOutput("table1")),
+      ###MAP TAB
+      tabPanel(title = "Map", leafletOutput("basic_map")), #<--OUTPUT OUR NEW MAP.
+      ###GRAPH TAB
+      tabPanel(
+        title = "Graph",
+      )
+    ))
   ),
 
   tags$footer("This is my app")
