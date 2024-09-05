@@ -673,7 +673,8 @@ the contents of one tab:
 
 ###MAIN PANEL CELL
 ##NEST UI ELEMENTS HERE **CAREFULLY**!
-    column(width = 8, tabsetPanel(
+    column(width = 8, 
+     tabsetPanel(
       ###TABLE TAB
       tabPanel(title = "Table", 
                tableOutput("basic_table")),#RELOCATE THE TABLE INTO THIS NEW TAB.
@@ -681,8 +682,8 @@ the contents of one tab:
       tabPanel(title = "Map"),
       ###GRAPH TAB
       tabPanel(title = "Graph")
-    ))
-   )
+     )
+    ),
 
 ##... other UI code...
 ```

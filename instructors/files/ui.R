@@ -15,20 +15,31 @@ ui = fluidPage(
              inputId = "sorted_column",
              label = "Select a column to sort the table by.",
              choices = names(gap)
-            ),
+           ),
            actionButton(
              inputId = "go_button",
-             label = "Go!")
-           ), #SIDEBAR
+             label = "Go!"),
+           sliderInput(
+             inputId = "year_slider",
+             label = "Pick what year's data are shown in the map.",
+             value = 2007,
+             min = min(gap$year),
+             max = max(gap$year),
+             step = 5,
+             sep = ""
+           ),
+           selectInput(
+             inputId = "color_scheme",
+             label = "Pick a color palette for the graph.",
+             choices = c("viridis", "plasma", "Spectral", "Dark2")
+           )
+    ),
     column(width = 8, tabsetPanel(
-      ###TABLE TAB
       tabPanel(title = "Table", dataTableOutput("table1")),
-      ###MAP TAB
-      tabPanel(title = "Map", leafletOutput("basic_map")), #<--OUTPUT OUR NEW MAP.
-      ###GRAPH TAB
-      tabPanel(
-        title = "Graph",
-      )
+      tabPanel(title = "Map", leafletOutput("basic_map")),
+      tabPanel(title = "Graph",
+               plotlyOutput("basic_graph"),
+               textOutput("point_clicked")) #<--ADD TEXTOUTPUT TO UI.
     ))
   ),
 

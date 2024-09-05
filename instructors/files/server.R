@@ -106,14 +106,13 @@ server = function(input, output, session) {
   })
 
   ###MAP
+  #RENDERLEAFLET GOES BACK TO MAKING JUST THE BASE, 2007 VERSION.
   output$basic_map = renderLeaflet({
 
     gap_map2007 = gap_map %>%
-      filter(year == 2007)
+      filter(year == 2007) #<--CHANGE BACK
 
     bounds = unname(sf::st_bbox(gap_map2007))
-
-    map_palette = colorNumeric(palette = "Blues", domain = unique(gap_map2007$lifeExp))
 
     leaflet(options = tileOptions(maxZoom = 6, minZoom = 2)) %>%
       addTiles() %>%
@@ -136,8 +135,104 @@ server = function(input, output, session) {
         values = gap_map2007$lifeExp,
         opacity = 0.75,
         bins = 5,
-        title = "Life<br>expectancy ('07)"
+        title = paste0("Life<br>expectancy ('07)") #<--CHANGE BACK
       )
+
+  })
+
+  #A NEW OBSERVER WATCHES FOR EVENTS INVOLVING OUR SLIDER.
+  observeEvent({input$year_slider}, {
+
+    gap_map2007 = gap_map %>%
+      filter(year == as.numeric(input$year_slider)) #FILTER BY SELECTED YEAR
+
+    #WE USE leafletProxy({}) TO UPDATE OUR MAP INSTEAD OF RE-RENDERING IT.
+    leafletProxy("basic_map") %>%
+      clearMarkers() %>% #REMOVE THE OLD POLYGONS ("MARKERS")--THEIR FILLS MUST CHANGE.
+      clearControls() %>% #REMOVE THE LEGEND ("CONTROL")--ITS TITLE MUST CHANGE.
+      addPolygons( #REBUILD THE POLYGONS EXACTLY AS BEFORE.
+        data = gap_map2007$geometry,
+        color = "black",
+        weight = 2,
+        opacity = 1,
+        fillColor = map_palette(gap_map2007$lifeExp),
+        fillOpacity = 0.75,
+        popup = paste0("County: ",
+                       gap_map2007$country,
+                       "<br>Life expectancy: ",
+                       gap_map2007$lifeExp)
+      ) %>%
+      addLegend( #REBUILD THE LEGEND EXACTLY AS BEFORE.
+        position = "bottomleft",
+        pal = map_palette,
+        values = gap_map2007$lifeExp,
+        opacity = 0.75,
+        bins = 5,
+        title = paste0("Life<br>expectancy ('",
+                       substr(input$year_slider, 3, 4),
+                       ")") #<-RETAIN THE TRICK HERE.
+      )
+
+  })
+
+  ###MAP OBSERVER (POLYGON CLICKS)
+  observeEvent(input$basic_map_shape_click, {
+
+    leafletProxy("basic_map") %>%
+      flyTo(
+        lat = input$basic_map_shape_click$lat,
+        lng = input$basic_map_shape_click$lng,
+        zoom = 5
+      )
+
+  })
+
+  ###GRAPH
+  output$basic_graph = renderPlotly({
+
+    p2 %>%
+      layout(
+        xaxis = list(fixedrange = TRUE),
+        yaxis = list(fixedrange = TRUE),
+        legend = list(itemclick = FALSE,
+                      y = 0.5,
+                      yanchor = "middle"
+                      )
+      ) %>%
+      config(modeBarButtonsToRemove = list("lasso2d"))
+
+  })
+
+  ##THIS OBSERVER UPDATES THE GRAPH WHEN EVENTS ARE TRIGGERED.
+  observeEvent(input$color_scheme, {
+
+    #WE FIRST DESIGN AN APPROPRIATE COLOR PALETTE FOR THE DATA, GIVEN THE USER'S CHOICE
+    new_pal = colorFactor(palette = input$color_scheme,
+                          domain = unique(gap2007$continent))
+
+    plotlyProxy("basic_graph", session) %>% #<--WE HAVE TO INCLUDE session THIS TIME TOO.
+      plotlyProxyInvoke("restyle", #<-THE TYPE OF CHANGE WE PLAN TO MAKE
+                        list(marker = list(
+                          color = new_pal(gap2007$continent), #FOR OUR MARKERS, USE THESE COLORS.
+                          size = 11.3 #AND THIS SIZE.
+      )),
+      0:4) #APPLY THIS CHANGE TO ALL 5 GROUPS OF MARKERS WE HAVE.
+
+  })
+
+  #WE USE THE event_data() CALL LIKE ANY OTHER REACTIVE OBJECT.
+  observeEvent(event_data(event = "plotly_click",
+                          source = "our_graph"), {
+
+    output$point_clicked = renderText({
+      paste0(
+        "The exact population for this point was: ",
+        prettyNum(round(exp(
+          event_data(event = "plotly_click", source = "our_graph")$x
+          )), big.mark = ",") #<--WE CAN ACCESS THE X VALUE OF THE POINT CLICKED THIS WAY.
+      )
+
+    })
 
   })
 
