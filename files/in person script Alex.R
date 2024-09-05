@@ -627,3 +627,345 @@ output$basic_map = renderLeaflet({
     )
 
 })
+
+
+#In UI, add slider widget
+column(width = 4,
+       selectInput(
+         inputId = "sorted_column",
+         label = "Select a column to sort the table by.",
+         choices = names(gap)
+       ),
+       actionButton(
+         inputId = "go_button",
+         label = "Go!"),
+       sliderInput(
+         inputId = "year_slider",
+         label = "Pick what year's data are shown in the map.",
+         value = 2007, #<--SET THE DEFAULT CHOICE
+         min = min(gap$year), #<--MIN AND MAX OPTIONS
+         max = max(gap$year),
+         step = 5, #<--HOW FAR APART CAN CHOICES BE? HERE, 5 IS THE SAME AS THOSE IN THE DATA.
+         sep = "" #<--DON'T USE COMMAS TO SEPARATE THE THOUSANDS PLACE (WE DON'T DO THAT FOR YEARS).
+       )
+)
+
+#In the server, wire up our renderLeaflet to handle slider events
+
+output$basic_map = renderLeaflet({
+
+  ##KEEP THE PRODUCT NAMED AFTER 2007 FOR NOW.
+  gap_map2007 = gap_map %>%
+    filter(year == as.numeric(input$year_slider)) #<--INTRODUCE THE SLIDER'S CURRENT VALUE TO FILTER BY WHATEVER YEAR HAS BEEN CHOSEN. EVERY CHANGE IS AN EVENT THAT WILL TRIGGER'S renderLeaflet({})'S EXPRESSION TO RERUN.
+
+  bounds = unname(sf::st_bbox(gap_map2007))
+
+  map_palette = colorNumeric(palette = "Blues", domain = unique(gap_map2007$lifeExp))
+
+  leaflet(options = tileOptions(maxZoom = 6, minZoom = 2)) %>%
+    addTiles() %>%
+    addPolygons(
+      data = gap_map2007$geometry,
+      color = "black",
+      weight = 2,
+      opacity = 1,
+      fillColor = map_palette(gap_map2007$lifeExp),
+      fillOpacity = 0.75,
+      popup = paste0("County: ",
+                     gap_map2007$country,
+                     "<br>Life expectancy: ",
+                     gap_map2007$lifeExp)
+    ) %>%
+    setMaxBounds(bounds[1], bounds[2], bounds[3], bounds[4]) %>%
+    addLegend(
+      position = "bottomleft",
+      pal = map_palette,
+      values = gap_map2007$lifeExp,
+      opacity = 0.75,
+      bins = 5,
+      #HERE, WE'LL PULL A LITTLE TRICK TO ENSURE THE LEGEND'S TITLE IS ALWAYS ACCURATE.
+      title = paste0("Life<br>expectancy ('",
+                     substr(input$year_slider, 3, 4),
+                     ")")
+    )
+
+})
+
+#In global.R, generize by making one global map palette
+map_palette = colorNumeric(palette = "Blues",
+                           domain = unique(gap_map$lifeExp)) #<--CHANGE TO REFERENCE THE WHOLE DATA SET.
+
+
+#In server, switch to using a proxy system for updates:
+#RENDERLEAFLET GOES BACK TO MAKING JUST THE BASE, 2007 VERSION.
+output$basic_map = renderLeaflet({
+
+  gap_map2007 = gap_map %>%
+    filter(year == 2007) #<--CHANGE BACK
+
+  bounds = unname(sf::st_bbox(gap_map2007))
+
+  leaflet(options = tileOptions(maxZoom = 6, minZoom = 2)) %>%
+    addTiles() %>%
+    addPolygons(
+      data = gap_map2007$geometry,
+      color = "black",
+      weight = 2,
+      opacity = 1,
+      fillColor = map_palette(gap_map2007$lifeExp),
+      fillOpacity = 0.75,
+      popup = paste0("County: ",
+                     gap_map2007$country,
+                     "<br>Life expectancy: ",
+                     gap_map2007$lifeExp)
+    ) %>%
+    setMaxBounds(bounds[1], bounds[2], bounds[3], bounds[4]) %>%
+    addLegend(
+      position = "bottomleft",
+      pal = map_palette,
+      values = gap_map2007$lifeExp,
+      opacity = 0.75,
+      bins = 5,
+      title = paste0("Life<br>expectancy ('07)") #<--CHANGE BACK
+    )
+
+})
+
+#A NEW OBSERVER WATCHES FOR EVENTS INVOLVING OUR SLIDER.
+observeEvent({input$year_slider}, {
+
+  gap_map2007 = gap_map %>%
+    filter(year == as.numeric(input$year_slider)) #FILTER BY SELECTED YEAR
+
+  #WE USE leafletProxy({}) TO UPDATE OUR MAP INSTEAD OF RE-RENDERING IT.
+  leafletProxy("basic_map") %>%
+    clearMarkers() %>% #REMOVE THE OLD POLYGONS ("MARKERS")--THEIR FILLS MUST CHANGE.
+    clearControls() %>% #REMOVE THE LEGEND ("CONTROL")--ITS TITLE MUST CHANGE.
+    addPolygons( #REBUILD THE POLYGONS EXACTLY AS BEFORE.
+      data = gap_map2007$geometry,
+      color = "black",
+      weight = 2,
+      opacity = 1,
+      fillColor = map_palette(gap_map2007$lifeExp),
+      fillOpacity = 0.75,
+      popup = paste0("County: ",
+                     gap_map2007$country,
+                     "<br>Life expectancy: ",
+                     gap_map2007$lifeExp)
+    ) %>%
+    addLegend( #REBUILD THE LEGEND EXACTLY AS BEFORE.
+      position = "bottomleft",
+      pal = map_palette,
+      values = gap_map2007$lifeExp,
+      opacity = 0.75,
+      bins = 5,
+      title = paste0("Life<br>expectancy ('",
+                     substr(input$year_slider, 3, 4),
+                     ")") #<-RETAIN THE TRICK HERE.
+    )
+
+})
+
+
+##In global.R, add the following to create a ggplot and plotly graph:
+gap2007 = gap %>%
+  filter(year == 2007)
+
+###BASE GGPLOT FOR CONVERSION TO PLOTLY
+#IF GGPLOT IS FAMILIAR TO YOU, STUDY THE SPECIFICS HERE TO GET A SENSE OFTHE GRAPH WE'RE BUILDING. IF NOT, DON'T WORRY ABOUT THE DETAILS! JUST COPY-PASTE THIS CODE INTO PLACE.
+p1 = ggplot(
+  gap2007,
+  aes(
+    x = log(pop),
+    y = gdpPercap,
+    color = continent,
+    group = continent
+  )
+) +
+  geom_point(size = 3) +
+  geom_smooth(method = "lm", se = F) +
+  theme(
+    text = element_text(
+      size = 16,
+      color = "black",
+      face = "bold"
+    ),
+    panel.background = element_rect(fill = "white"),
+    panel.grid.major = element_line(color = "gray"),
+    panel.grid.minor = element_blank(),
+    axis.line = element_line(color = "black", linewidth = 1.5)
+  ) +
+  scale_y_continuous("GDP per capita\n") +
+  scale_x_continuous("\nPopulation size (log)") +
+  scale_color_discrete("Continent\n")
+
+
+p2 = ggplotly(p1)
+
+
+##In server, modify plotly graph to disable certain features:
+gap2007 = gap %>%
+  filter(year == 2007)
+
+###BASE GGPLOT FOR CONVERSION TO PLOTLY
+#IF GGPLOT IS FAMILIAR TO YOU, STUDY THE SPECIFICS HERE TO GET A SENSE OFTHE GRAPH WE'RE BUILDING. IF NOT, DON'T WORRY ABOUT THE DETAILS! JUST COPY-PASTE THIS CODE INTO PLACE.
+p1 = ggplot(
+  gap2007,
+  aes(
+    x = log(pop),
+    y = gdpPercap,
+    color = continent,
+    group = continent
+  )
+) +
+  geom_point(size = 3) +
+  geom_smooth(method = "lm", se = F) +
+  theme(
+    text = element_text(
+      size = 16,
+      color = "black",
+      face = "bold"
+    ),
+    panel.background = element_rect(fill = "white"),
+    panel.grid.major = element_line(color = "gray"),
+    panel.grid.minor = element_blank(),
+    axis.line = element_line(color = "black", linewidth = 1.5)
+  ) +
+  scale_y_continuous("GDP per capita\n") +
+  scale_x_continuous("\nPopulation size (log)") +
+  scale_color_discrete("Continent\n")
+
+
+p2 = ggplotly(p1)
+
+
+#In UI, add plotly output.
+column(width = 8, tabsetPanel(
+  tabPanel(title = "Table", dataTableOutput("table1")),
+  tabPanel(title = "Map", leafletOutput("basic_map")),
+  tabPanel(title = "Graph", plotlyOutput("basic_graph"))
+))
+
+#In server, add plotly rendering.
+
+output$basic_graph = renderPlotly({
+
+  p2
+
+})
+
+#In server, disable/remove some interactive features:
+output$basic_graph = renderPlotly({
+
+  p2 %>%
+    layout(
+      xaxis = list(fixedrange = TRUE),
+      yaxis = list(fixedrange = TRUE),
+      legend = list(itemclick = FALSE)
+    ) %>%
+    config(modeBarButtonsToRemove = list("lasso2d"))
+
+})
+
+#In the server, adjust the legend location to be more like original graph:
+legend = list(itemclick = FALSE,
+              y = 0.5,
+              yanchor = "middle"
+)
+
+
+#In global, adjust the graph-making code to pass along custom tooltip text:
+gap2007 = gap %>%
+  filter(year == 2007) %>%
+  mutate(tooltip_text = paste0( #<--HERE, WE GENERATE A NEW COLUMN CALLED tooltip_text USING paste0() TO MAKE A TEXT STRING CONTAINING THE GDP AND POPULATION DATA IN A READABLE FORMAT.
+    "GDP: ",
+    round(gdpPercap, 1),
+    "<br>",
+    "Log population: ",
+    round(log(pop), 3)
+  ))
+
+###BASE GGPLOT FOR CONVERSION TO PLOTLY
+p1 = ggplot(
+  gap2007,
+  aes(
+    x = log(pop),
+    y = gdpPercap,
+    color = continent,
+    group = continent,
+    text = tooltip_text #<--HERE, WE PASS OUR CUSTOM TOOLTIP TEXT IN TO THE TEXT AESTHETIC. EVEN THOUGH OUR GGPLOT NEVER USES THIS INFO, IT'LL BE PASSED TO OUR PLOTLY GRAPH BY ggplotly() ANYHOW.
+  )
+) +
+  geom_point(size = 3) +
+  geom_smooth(method = "lm", se = F) +
+  theme(
+    text = element_text(
+      size = 16,
+      color = "black",
+      face = "bold"
+    ),
+    panel.background = element_rect(fill = "white"),
+    panel.grid.major = element_line(color = "gray"),
+    panel.grid.minor = element_blank(),
+    axis.line = element_line(color = "black", linewidth = 1.5)
+  ) +
+  scale_y_continuous("GDP per capita\n") +
+  scale_x_continuous("\nPopulation size (log)") +
+  scale_color_discrete("Continent\n")
+
+###PLOTLY CONVERSION
+p2 = ggplotly(p1,
+              tooltip = "text") %>% #<--HERE, WE TELL GGPLOTLY() TO POPULATE TOOLTIPS WITH ONLY TEXT DATA AND NOT ALSO X/Y/COLOR INFO.
+  style(hoverinfo = "text") #<--HERE, WE USE style() TO REQUEST THAT ONLY OUR CUSTOM TOOL-TIPS BE SHOWN, OR ELSE WE'D GET PLOTLY'S DEFAULT ONES TOO!
+
+
+#In the UI, add the color scheme selector:
+selectInput( #ADD A COLOR PALETTE SELECTOR
+  inputId = "color_scheme",
+  label = "Pick a color palette for the graph.",
+  choices = c("viridis", "plasma", "Spectral", "Dark2")
+)
+
+#In the server, add the new color scheme observer:
+observeEvent(input$color_scheme, {
+
+  #WE FIRST DESIGN AN APPROPRIATE COLOR PALETTE FOR THE DATA, GIVEN THE USER'S CHOICE
+  new_pal = colorFactor(palette = input$color_scheme,
+                        domain = unique(gap2007$continent))
+
+  plotlyProxy("basic_graph", session) %>% #<--WE HAVE TO INCLUDE session THIS TIME TOO.
+    plotlyProxyInvoke("restyle", #<-THE TYPE OF CHANGE WE PLAN TO MAKE
+                      list(marker = list(
+                        color = new_pal(gap2007$continent), #FOR OUR MARKERS, USE THESE COLORS.
+                        size = 11.3 #AND THIS SIZE.
+                      )),
+                      0:4) #APPLY THIS CHANGE TO ALL 5 GROUPS OF MARKERS WE HAVE.
+
+})
+
+#In the UI, add the textOutput
+textOutput("point_clicked")
+
+#In the global.R, add the source and event registration
+p2 = ggplotly(p1,
+              tooltip = "text",
+              source = "our_graph") %>%
+  style(hoverinfo = "text") %>%
+  event_register("plotly_click")
+
+#In the server, add the new observer
+observeEvent(event_data(event = "plotly_click",
+                        source = "our_graph"), {
+
+                          output$point_clicked = renderText({
+                            paste0(
+                              "The exact population for this point was: ",
+                              prettyNum(round(exp(
+                                event_data(event = "plotly_click", source = "our_graph")$x
+                              )), big.mark = ",") #<--WE CAN ACCESS THE X VALUE OF THE POINT CLICKED THIS WAY.
+                            )
+
+                          })
+
+                        })
+

@@ -40,7 +40,7 @@ haven't already, install those now:
 
 ``` r
 ##RUN THIS CODE IN YOUR CONSOLE PANE--**DON'T** INCLUDE IT INSIDE YOUR SHINY FILES. YOU ONLY NEED TO INSTALL PACKAGES **ONCE**.
-install.packages("shiny", "dplyr", "ggplot2", "leaflet", "DT", "plotly", "gapminder", "sf")
+install.packages(c("shiny", "dplyr", "ggplot2", "leaflet", "DT", "plotly", "gapminder", "sf"))
 ```
 
 Of course, to access their features, we need to turn these packages on

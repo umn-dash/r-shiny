@@ -15,7 +15,7 @@ RStudio is an application (an integrated development environment, or IDE, to be 
 This lesson also takes advantage of several add-on packages for R that do not come bundled with R's default installation. While we will also pause to install these packages during the lesson, the process can take some time, so these packages can be installed ahead of time using the following command:
 
 ``` r
-install.packages("shiny", "dplyr", "ggplot2", "leaflet", "DT", "plotly", "gapminder", "sf")
+install.packages(c("shiny", "dplyr", "ggplot2", "leaflet", "DT", "plotly", "gapminder", "sf"))
 ```
 
 ## Data Sets
@@ -33,4 +33,6 @@ For the `leaflet` portion of the lesson, we'll need spatial data to work with. Y
 
 ## Disclaimers
 
-This lesson assumes a working understanding of the R programming language and of the RStudio IDE. [This workshop is **not** an introduction to R or RStudio, and it is *not* recommended for users who need either thing]{.underline}. Those who do are *strongly* encouraged to complete, at a minimum, [the "R for Reproducible Scientific Analysis" workshop](https://umn-dash.github.io/r-novice-gapminder/index.html) *before* engaging with in this lesson.
+This lesson assumes a working understanding of the R programming language and of the RStudio IDE. [This workshop is **not** an introduction to R or RStudio, and it is *not* recommended for users who need either thing]{.underline}. Those who do are *strongly* encouraged to complete, at a minimum, [the "Welcome to R" and "Control Flow" lessons available on our website](https://umn-dash.github.io/r-novice-gapminder/welcome-to-r.html) *before* engaging with in this lesson.
+
+A familiarity with the `dplyr`, `ggplot2`, and `sf` packages and their syntax will be helpful later in the lesson, but it is not required.
