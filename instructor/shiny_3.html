@@ -313,7 +313,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>R Shiny's Core Concepts: Rendering and Outputting, Input Widgets, and Reactivity</h1>
-        <p>Last updated on 2024-09-04 |
+        <p>Last updated on 2024-09-05 |
 
         <a href="https://github.com/carpentries/r_shiny_workshop/edit/main/episodes/shiny_3.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -1015,18 +1015,19 @@ which creates a box for the contents of one tab:</p>
 <span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a></span>
 <span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="do">###MAIN PANEL CELL</span></span>
 <span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="do">##NEST UI ELEMENTS HERE **CAREFULLY**!</span></span>
-<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>    <span class="fu">column</span>(<span class="at">width =</span> <span class="dv">8</span>, <span class="fu">tabsetPanel</span>(</span>
-<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>      <span class="do">###TABLE TAB</span></span>
-<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>      <span class="fu">tabPanel</span>(<span class="at">title =</span> <span class="st">"Table"</span>, </span>
-<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a>               <span class="fu">tableOutput</span>(<span class="st">"basic_table"</span>)),<span class="co">#RELOCATE THE TABLE INTO THIS NEW TAB.</span></span>
-<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a>      <span class="do">###MAP TAB</span></span>
-<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a>      <span class="fu">tabPanel</span>(<span class="at">title =</span> <span class="st">"Map"</span>),</span>
-<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a>      <span class="do">###GRAPH TAB</span></span>
-<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a>      <span class="fu">tabPanel</span>(<span class="at">title =</span> <span class="st">"Graph"</span>)</span>
-<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a>    ))</span>
-<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a>   <span class="er">)</span></span>
-<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a></span>
-<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a><span class="do">##... other UI code...</span></span></code></pre>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>    <span class="fu">column</span>(<span class="at">width =</span> <span class="dv">8</span>, </span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>     <span class="fu">tabsetPanel</span>(</span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>      <span class="do">###TABLE TAB</span></span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a>      <span class="fu">tabPanel</span>(<span class="at">title =</span> <span class="st">"Table"</span>, </span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a>               <span class="fu">tableOutput</span>(<span class="st">"basic_table"</span>)),<span class="co">#RELOCATE THE TABLE INTO THIS NEW TAB.</span></span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a>      <span class="do">###MAP TAB</span></span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a>      <span class="fu">tabPanel</span>(<span class="at">title =</span> <span class="st">"Map"</span>),</span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a>      <span class="do">###GRAPH TAB</span></span>
+<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a>      <span class="fu">tabPanel</span>(<span class="at">title =</span> <span class="st">"Graph"</span>)</span>
+<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a>     )</span>
+<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a>    ),</span>
+<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a></span>
+<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a><span class="do">##... other UI code...</span></span></code></pre>
 </div>
 <p>Now, if we look at our app, we’ll see we have three tabs in our main
 panel area, with <code>title</code>s in their tab headings that we
@@ -1199,8 +1200,8 @@ any links that you are not going to use.
   "url": "https://carpentries.github.io/r_shiny_workshop/instructor/shiny_3.html",
   "identifier": "https://carpentries.github.io/r_shiny_workshop/instructor/shiny_3.html",
   "dateCreated": "2024-07-10",
-  "dateModified": "2024-09-04",
-  "datePublished": "2024-09-04"
+  "dateModified": "2024-09-05",
+  "datePublished": "2024-09-05"
 }
 
   </script><script>
