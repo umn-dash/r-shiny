@@ -862,15 +862,16 @@ adding interactivity judiciously is essential.
 
 ### Setup
 
-`leaflet` is a package devoted to creating maps of **spatial data**,
-such as latitude-longitude coordinates. So, we need some spatial data to
-work with! In the setup instructions, we asked you to download a version
-of the `gapminder` data set with spatial data included using this link:
-[Link to the gapminder data set with attached spatial
+`leaflet` is a JS (and now R) package for creating web-enabled,
+interactive maps of **spatial data**, such as latitude-longitude
+coordinates. So, we need some spatial data! In the setup instructions,
+we asked you to download a version of the `gapminder` data set we've
+prepared containing spatial data using this link: [Link to the gapminder
+data set with attached spatial
 data.](https://drive.google.com/uc?export=download&id=1YePuKxTlBgW1hQ2uwXHi8b9UJEPUCoDh)
-If you haven't downloaded that file yet, do so now.
+If you haven't downloaded that yet, do so now.
 
-Once you have downloaded it, move it to your R Project folder and then
+Once you've downloaded it, move it to your R Project folder and then
 load it into R using the following command:
 
 ```{r loading gap_map, eval=F}
@@ -878,39 +879,32 @@ load it into R using the following command:
 
 ##... other global code...
 gap_map = readRDS("gapminder_spatial.rds")
-head(gap_map) #NOTE THE NEW GEOMETRY COLUMN CONTAINING SPATIAL POLYGON DATA.
 ```
 
-```{r loading gap_map 2, echo=F}
-gap_map = readRDS("files/gapminder_spatial.rds")
-head(gap_map)
-```
-
-The rest of this lesson assumes you have an object called `gap_map`; the
-code shown here will *not* work without it!
+The rest of this lesson assumes you have `gap_map`; the code shown will
+*not* work without it!
 
 #### Preface
 
-We'll switch to making map widgets in `leaflet`, but we'll use the same
-workflow as the one we followed for `DT`:
+In this section we switch from making tables to making maps, but we'll
+use the same workflow we followed for `DT` in the last section:
 
-1.  We'll start with a basic map.
+1.  We'll start by making a basic map.
 
 2.  Then, we'll adjust some of the map's interactive features and dress
-    up its aesthetics a little.
+    up its aesthetics a bit.
 
-3.  Lastly, we'll learn about map-specific events and how to handle
-    tthem *without* redrawing the map.
+3.  Lastly, we'll learn about map-specific events and how to handle them
+    *without* redrawing the entire map.
 
-The specifics will be different, but all the concepts will be ones we've
-already seen, so this section will be hopefully be closer to "practice"
-than to "learning something new."
+The specifics will be different, but we've already seen all the
+concepts, so this section will hopefully feel like a chance to practice
+of familiar concepts rather than an introduction to entirely new ones.
 
 ### Basic map
 
-Let's aim to eventually make a `leaflet` map showing the countries in
-our data set with an outlined colored according to each country's 2007
-life expectancy value.
+Let's make a `leaflet` map showing the countries in our data set marked
+by a colored outline.
 
 Every `leaflet` map has three building blocks:
 
@@ -919,24 +913,23 @@ Every `leaflet` map has three building blocks:
     specify some settings here that'll apply to all subsequent
     components.
 
-2.  An `addTiles()` call. This function places a **tile**, or
-    background, into your map container. This is the familiar component
-    of a map that indicates where all the lakes and roads and county
-    boundaries and such are! We'll use the default tile, but there are
-    many other free ones to choose from.
+2.  An `addTiles()` call. This places a **tile**, or background image,
+    into your map. This is the familiar component that indicates where
+    all the lakes and roads and country boundaries and such are! We'll
+    use the default tile, but there are many other free ones available.
 
-3.  At least one `add*()` function call for adding **spatial data** to
-    our map. There are others, but the three most commonly used `add*()`
+3.  At least one `add*()` function call for adding our **spatial data**.
+    There are several others, but the three most commonly used `add*()`
     functions are:
 
-    1.  `addMarkers()` for adding **point** (0-dimensional) **data**
-        (like the locations of restaurants).
+    1.  `addMarkers()` for adding **point** (0-dimensional) **spatial**
+        **data** (like restaurant locations).
 
     2.  `addPolylines()` for adding **line/curve** (1-dimensional)
-        **data** (like roads or rivers).
+        **spatial** **data** (like roads or rivers).
 
-    3.  `addPolygons()` for adding **polygon** (2-dimensional) **data**
-        (like country boundaries).
+    3.  `addPolygons()` for adding **polygonal** (2-dimensional)
+        **spatial** **data** (like country boundaries).
 
 Here, we'll use `addPolygons()`:
 
@@ -950,12 +943,10 @@ Here, we'll use `addPolygons()`:
       ###TABLE TAB
       tabPanel(title = "Table", dataTableOutput("table1")),
       ###MAP TAB
-      tabPanel(title = "Map", leafletOutput("basic_map")), #<--OUTPUT OUR NEW MAP.
+      tabPanel(title = "Map", leafletOutput("basic_map")), #<--OUTPUT NEW MAP.
       ###GRAPH TAB
-      tabPanel(
-        title = "Graph",
-      )
-    ))
+      tabPanel(title = "Graph")
+    )),
   ##... other UI code...
 ```
 
@@ -971,40 +962,39 @@ Here, we'll use `addPolygons()`:
     gap_map2007 = gap_map %>%
       filter(year == 2007)
 
-    leaflet() %>% #<--GETS THINGS STARTED
-      addTiles() %>% #<--ADDS A BACKGROUND TILE
+    leaflet() %>% #<--GET THINGS STARTED
+      addTiles() %>% #<--ADD BACKGROUND TILE
       addPolygons(
-        data = gap_map2007$geometry) #SPECIFY OUR SPATIAL DATA (geometry IS AN sf PACKAGE WAY OF STORING THESE DATA)
+        data = gap_map2007$geometry) #SPECIFY OUR SPATIAL DATA (geometry IS AN sf PACKAGE WAY OF STORING SUCH DATA)
     
   })
 ```
 
-The code above creates a nice, if somewhat visually muddled, interactive
-map showing the countries for which we have data outlined in blue:
+This code creates a nice, if somewhat fuzzy-looking, interactive map
+showing the countries for which we have data outlined in blue:
 
-![A default leaflet map showing the countries for which we have data
-outlined in blue.](fig/leaflet_basic.png)
+![A default leaflet map showing the countries in our data set using
+fuzzy blue outlines.](fig/leaflet_basic.png)
 
-Note that you can **pan** the map by clicking anywhere on the map,
-holding the click, and moving the mouse. Note you can also **zoom** the
-map using your mouse wheel (if you have one), or by using the plus/minus
-buttons in the top-left corner. Double-clicking on the map also zooms
-in.
+Note that you can **pan** the map by clicking anywhere on it, holding
+the click, and moving your mouse. Note you can also **zoom** the map
+using your mouse wheel (if you have one), or by using the plus/minus
+buttons in the upper-left. Double-clicking the map also zooms in.
 
-If you zoom in a lot, you'll see the tile automatically change to show
-greater detail. If you zoom out, you'll see the world actually repeat
-several times left-to-right...which looks pretty weird!
+If you zoom in, you'll see the tile automatically change to show greater
+detail. If you zoom in really far, you can actually lose any sense of
+where you are and, if you zoom way out, you'll see the world repeat
+several times left-to-right, which looks pretty weird!
 
 ### More (or less) basic map
 
-As we just saw, it often doesn't make sense from a UX standpoint to
-allow users to **pan** and **zoom** without guardrails—they can get lost
-by zooming in or out too far or panning the map around too much, and
-they can create weird visual quirks too (such as making the world
-repeat).
+As we just saw, it often doesn't make sense to allow users to **pan**
+and **zoom** a map with no guardrails—they can get lost by zooming in or
+out too far or panning the map around too much, and they can create
+weird visual quirks, such as making the world repeat.
 
-As noted earlier, the `leaflet()` function contains many settings we can
-adjust. For example, we can set min and max zoom levels like so:
+The `leaflet()` function can be used to set min and max zoom levels like
+so:
 
 ```{r adjusting zoom, eval = F}
 ##This code should be **swapped for** the renderLeaflet({}) code provided previously, inside of your server function!
@@ -1017,7 +1007,7 @@ adjust. For example, we can set min and max zoom levels like so:
     gap_map2007 = gap_map %>%
       filter(year == 2007)
 
-    ##THE leaflet() FUNCTION HAS OPTIONS WE CAN ADJUST, SUCH AS THE MIN AND MAX ZOOM.
+    ##THE leaflet() FUNCTION HAS MANY OPTIONS, SUCH AS THE MIN AND MAX ZOOM LEVELS.
     leaflet(options = tileOptions(maxZoom = 6, minZoom = 2)) %>%
       addTiles() %>%
       addPolygons(
@@ -1026,14 +1016,15 @@ adjust. For example, we can set min and max zoom levels like so:
   })
 ```
 
-A `minZoom` of `2` is one in which *almost* the entire world is visible
-at once (on my laptop, anyway!). Meanwhile, a `maxZoom` of `6` allows
-users to zoom into specific continental regions but no further. These
-adjustments keeps users from zooming in or out more than makes sense for
-our data.
+A `minZoom` of `2` makes it so *almost* the entire world is visible at
+once (on my laptop screen, anyway!). Meanwhile, a `maxZoom` of `6`
+allows users to zoom into continental regions but no further. These
+adjustments should keep users from zooming in or out more than makes
+sense for our data.
 
-We can also set **maximum bounds**—these represent an invisible box that
-users cannot pan the map beyond:
+We can also set **maximum bounds**—these are an invisible box that users
+cannot pan the map beyond. If they try, the map will snap the focus
+(center of the map) back inside the bounds:
 
 ```{r adjust bounding box, eval = F}
 ##This code should be **swapped for** the renderLeaflet({}) code provided previously, inside of your server function!
@@ -1046,42 +1037,43 @@ users cannot pan the map beyond:
     gap_map2007 = gap_map %>%
       filter(year == 2007)
     
-    #THE SF PACKAGE'S st_bbox() FUNCTION GETS THE FOUR POINTS THAT WOULD CREATE A BOX FULLY BOUNDING ALL SPATIAL DATA GIVEN AS INPUTS.
+    #sf'S st_bbox() FUNCTION RETRIEVES THE FOUR POINTS THAT WOULD CREATE A BOX THAT WOULD FULLY SURROUND THE SPATIAL DATA GIVEN AS INPUTS.
     bounds = unname(sf::st_bbox(gap_map2007))
 
     leaflet(options = tileOptions(maxZoom = 6, minZoom = 2)) %>%
       addTiles() %>%
       addPolygons(
         data = gap_map2007$geometry) %>%  
-      ##CONVENIENTLY, setMaxBounds() TAKES, AS INPUTS, THOSE EXACT SAME FOUR POINTS IN THE SAME ORDER.
+      ##CONVENIENTLY, setMaxBounds() TAKES THOSE EXACT FOUR POINTS IN THE SAME ORDER.
       setMaxBounds(bounds[1], bounds[2], bounds[3], bounds[4])
     
   })
 ```
 
-When a user tries to pan past the bounds, the map "snap backS" to within
-them:
+When a user tries to pan past the bounds we've set, the map now "snaps
+back" to within them:
 
-![We can see that the map is now zoomed in a little more than before and
-can't zoom out any further. When we try to pan the map outside of its
-bounds, it snaps our focus back within those bounds. Lastly, we're
-unable to zoom the map in beyond a certain
+![We can see that the map is now zoomed in a little more than before on
+start-up, and can't zoom out any further. When we try to pan the map
+outside of its bounds, it snaps our focus back within those bounds.
+Lastly, we're unable to zoom the map in beyond a certain
 level.](fig/zoomandbounds.gif)
 
 While there are other features we could adjust or disable, setting
-bounds and minimum and maximum zoom levels are the two things you'll
-generally want to do to every `leaflet` map you make.
+bounds and minimum and maximum zoom levels are two things you'll often
+want to do to every `leaflet` map.
 
 ### Adding some pizzazz
 
-Our map's aesthetics leave much to be desired. In particular, the
-default, fuzzy-blue **strokes** (outlines) are hard to interpret.
+Our map's aesthetics leave something to be desired right now. In
+particular, the default, fuzzy-blue **strokes** (outlines) are hard to
+look at.
 
 Let's start by cleaning those up. A lot of basic aesthetics related to
-your spatial data can be controlled with parameters within the specific
+your spatial data can be controlled with parameters of the specific
 `add*()` function you're using. Here, we need to set new values for
-`color`, `weight`, and `opacity` to change the color, thickness, and
-transparency of the strokes:
+`color`, `weight`, and `opacity` inside `addPolygons()` to change the
+color, thickness, and transparency of the strokes:
 
 ```{r updated aesthetics, eval = F}
 ##This code should be **swapped for** the renderLeaflet({}) code provided previously, inside of your server function!
@@ -1111,21 +1103,21 @@ transparency of the strokes:
    ##... other server code...
 ```
 
-These couple of changes make the graph much more attractive:
+These couple of changes make the graph *much* cleaner:
 
 ![Amazing what adjusting a few stroke (outline) parameters can
 do!](fig/bettermap.png)
 
-Now, it's time to make the map do what we *really* want—show life
-expectancy data, which we could map to the fill color of each country's
-polygon.
+But the map still won't engage our users very much because it's not
+showing any *data*. Let's have it show our life expectancy data by
+mapping those values to the fill color of each country's polygon.
 
-This is a two-step process. First, we need to set up a **color palette**
-function, which is a tool `leaflet` can use to determine which colors go
-with which values. We can build this color palette function using the
-`colorNumeric()` function, which has two required inputs: a `palette`,
-the name of an R color palette we'd like to use, and a `domain`, the
-entire set of values we'll need to assign colors to:
+This'll be a two-step process. First, we need to set up a **color
+palette** function, which `leaflet` can use to determine which colors go
+with which values (it can't do this itself). We can build this color
+palette function using the `colorNumeric()` function, which needs two
+inputs: a `palette`, the name of an R color palette we'd like to use,
+and a `domain`, the entire set of values we'll need to assign colors to:
 
 ```{r palette, eval = F}
 ##This code should be **swapped for** the renderLeaflet({}) code provided previously, inside of your server function!
@@ -1139,7 +1131,7 @@ entire set of values we'll need to assign colors to:
     
     bounds = unname(sf::st_bbox(gap_map2007))
     
-    #ESTABLISH A COLOR SCHEME TO USE FOR OUR FILLS.
+    #ESTABLISH A COLOR SCHEME TO USE FOR OUR FILL COLORS.
     map_palette = colorNumeric(palette = "Blues", 
                                domain = unique(gap_map2007$lifeExp))
     
@@ -1156,7 +1148,8 @@ entire set of values we'll need to assign colors to:
   })
 ```
 
-Then, we can add the polygon-coloring instructions to `addPolygons()`:
+Then, we can add the polygon-coloring instructions and the life
+expectancy data to `addPolygons()`:
 
 ```{r fill colors, eval = F}
 ##This code should be **swapped for** the renderLeaflet({}) code provided previously, inside of your server function!
@@ -1180,14 +1173,14 @@ Then, we can add the polygon-coloring instructions to `addPolygons()`:
         color = "black", 
         weight = 2, 
         opacity = 1,
-        fillColor = map_palette(gap_map2007$lifeExp), #<--WE USE OUR NEW COLOR PALETTE FUNCTION, SPECIFYING OUR DATA AS INPUTS.
-        fillOpacity = 0.75) %>%  #<--THE DEFAULT, 0.5, WASHES OUT THE COLORS TOO MUCH.
+        fillColor = map_palette(gap_map2007$lifeExp), #<--WE USE OUR NEW COLOR PALETTE FUNCTION, SPECIFYING OUR DATA AS ITS INPUTS.
+        fillOpacity = 0.75) %>%  #<--THE DEFAULT HERE, 0.5, WOULD WASH OUT THE COLORS TOO MUCH.
       setMaxBounds(bounds[1], bounds[2], bounds[3], bounds[4])
     
   })
 ```
 
-This is already a *much* cooler map:
+This is already a *much* cooler and more engaging map:
 
 ![We've successfully mapped each country's 2007 life expectancy value to
 the fill color of that country's polygon.](fig/coolmap.png)
@@ -1222,33 +1215,34 @@ with what values? We can add one using `addLegend()`:
       #ADD LEGEND
       addLegend(
         position = "bottomleft", #<--WHERE TO PUT IT.
-        pal = map_palette, #<--COLOR PALETTE FUNCTION TO USE.
-        values = gap_map2007$lifeExp, #WHAT SCALE ANCHORS ("BREAKS") TO USE.
-        opacity = 0.75, #LEGEND TRANSPARENCY.
+        pal = map_palette, #<--COLOR PALETTE FUNCTION TO USE (AGAIN).
+        values = gap_map2007$lifeExp, #WHAT SCALE BREAKS TO USE.
+        opacity = 0.75, #TRANSPARENCY.
         bins = 5, #NUMBER OF BREAKS.
-        title = "Life<br>expectancy ('07)" #LEGEND TITLE.
+        title = "Life<br>expectancy ('07)" #TITLE.
       )
     
   })
 ```
 
-Now that's a nice looking map!
+Now that's a nice map!
 
-![We've added a legend so that the user can easily associated different
-fill colors with different life expectancy values.](fig/addlegend.png)
+![We've added a legend so that users can easily associate different fill
+colors with different life expectancy values.](fig/addlegend.png)
 
 ...But what if our users don't know much geography, so they don't know
 which countries are which? Or what if they want to know the *exact* life
-expectancy value for a given country?
+expectancy value for a given country? Can we somehow add even more data
+to this map cleanly?
 
-Adding **tooltips** would address both these challenges. A **tooltip**
-is a small pop-up container that appears on mouse hover (in `leaflet`,
-these variants are called "labels"), on mouse click (`leaflet` calls
-these "popups"), or after some other action.
+Yes! Adding **tooltips** would address both aims. A **tooltip** is a
+small pop-up container that appears on mouse hover (in `leaflet`, these
+variants are called "labels"), on mouse click (`leaflet` calls these
+"popups"), or some other action.
 
 Using the `popup` parameter of `addPolygons()`, we can add tooltips that
-appear and disappear on mouse click. Inside, we'll put the name of the
-country being clicked, in case users don't know their countries well:
+appear and disappear on mouse click. Inside them, we'll put the name of
+the country being clicked:
 
 ```{r popups 1, eval = F}
 ##This code should be **swapped for** the renderLeaflet({}) code provided previously, inside of your server function!
@@ -1291,9 +1285,9 @@ country being clicked, in case users don't know their countries well:
 showing each country's name.](fig/countryname.png)
 
 This is a nice addition, but what if we wanted to add life expectancy
-values too and keep the result human-readable? There are many approaches
-we could take, but using R's versatile `paste0()` function plus the HTML
-line break element (`<br>`) is a reasonable one:
+values too and also keep the result human-readable? There are many
+approaches we could take, but using R's versatile `paste0()` function
+plus the HTML line break element (`<br>`) works pretty well:
 
 ```{r popups 2, eval = F}
 ##This code should be **swapped for** the renderLeaflet({}) code provided previously, inside of your server function!
@@ -1340,14 +1334,13 @@ line break element (`<br>`) is a reasonable one:
 Now, our map is both snazzy *and* extra informative:
 
 ![Now, the tooltips also contain the exact life expectancy value of each
-country. HTML line breaks are used to make the result more
+country. Raw HTML line breaks are used to make the result more
 human-readable.](fig/expandedtooltip.png)
 
 ::: challenge
 In the previous example, we used `popup` to build our tooltips. Try
 using the `label` parameter instead. For whatever reason, this requires
-more wrangling, so here's the *exact* code you'll need to use (I
-recommend copy-pasting it):
+more wrangling, so here's the *exact* code you'll need:
 
 ```{r label example, eval = F}
 label = lapply(1:nrow(gap_map2007), function(x){ 
@@ -1358,40 +1351,49 @@ label = lapply(1:nrow(gap_map2007), function(x){
 ```
 
 What changes? Which do you prefer? Which option would be better if a lot
-of your users will be using mobile devices, do you think?
+of users will use mobile devices, do you think?
 
 ::: solution
 If we use `label`, we get tooltips that appears on mouse hover instead
-of on mouse click. Actually, this is *probably* more intuitive for most
-users; many will not expect a click to do anything and may only discover
-our on-click tooltips by accident!
+of on mouse click.
+
+This behavior is *probably* more intuitive for most users; many will not
+expect a click to do anything cool and so they may only discover our
+on-click tooltips by accident!
 
 On the other hand, tooltips that appear on hover can be annoying if a
-user is trying to, *e.g.*, trace a path with their mouse and irrelevant
-tooltips keep getting in the way or being distracting.
+user is trying to, *e.g.*, trace a path with their mouse, and irrelevant
+tooltips keep getting in the way.
 
 Another advantage of on-click tooltips is that they *don't* disappear
 until a user is ready for them to do so, whereas tooltips that appear on
 hover also disappear when the mouse is moved, which can prevent users
-from consulting a tooltip while also using their mouse somewhere else.
+from consulting a tooltip while also using their mouse somewhere else on
+the page.
 
 However, the biggest disadvantage of on-hover tooltips is that, while
-there is an equivalent to a mouse click on touchscreen devices (a finger
-press), there is no *universal* equivalent to a mouse hover (some mobile
-device browsers and platforms use a "long press" for this, but not all,
-and many users are not accustomed to performing long presses!).
+there *is* an equivalent event to a mouse click on touchscreen devices
+(a finger press), there is no *universal* equivalent to a mouse hover
+(some mobile device browsers and platforms use a "long press" for this,
+but not all, and many users are not accustomed to performing long
+presses!).
 
 So, mobile users won't generally see tooltips if they appear *only* on
 hover. If we're aiming for "mobile-first" design, the `popup` option is
 better (which is why I picked it)!
+
+This hypothetical also demonstrates why **there is no substitute for
+asking your users for input when building your app**; without it, you'll
+just be guessing as to what their needs, expectations, and workflows
+will be!
 :::
 :::
 
 ### Update, don't remake, `leaflet` edition!
 
-At this stage, our users have *no* control over *which* data are shown
-in our map. Let's give them control by adding a **slider input widget**
-that will let them select which year's data is plotted:
+At this stage, our users have *no* control over our map. Let's adds a
+**slider input widget** that will let users select which year's data get
+plotted:
 
 ```{r ui for sliderInput, eval=F}
 ##This code should **replace** the "sidebar" cell's content within the BODY section of your ui.R file!
@@ -1411,28 +1413,30 @@ that will let them select which year's data is plotted:
            sliderInput(
              inputId = "year_slider",
              label = "Pick what year's data are shown in the map.",
-             value = 2007, #<--SET THE DEFAULT CHOICE
-             min = min(gap$year), #<--MIN AND MAX OPTIONS
+             value = 2007, #<--THE DEFAULT CHOICE
+             min = min(gap$year), #<--MIN AND MAX CHOICES
              max = max(gap$year),
-             step = 5, #<--HOW FAR APART CAN CHOICES BE? HERE, 5 IS THE SAME AS THOSE IN THE DATA.
-             sep = "" #<--DON'T USE COMMAS TO SEPARATE THE THOUSANDS PLACE (WE DON'T DO THAT FOR YEARS).
+             step = 5, #<--HOW FAR APART ARE CHOICES?
+             sep = "" #<--DON'T USE COMMAS AS SEPARATORS)
            )
     )
   ##... other UI code...
 ```
 
-This adds the UI component of the input to our app's sidebar:
+This adds the UI component of our input widget to our app's sidebar
+cell:
 
-![A slider input widget for allowing users to select which year's data
-to show in the map.](fig/sliderinput.png)
+![A slider input widget allowing users to select which year's data to
+show in the map.](fig/sliderinput.png)
 
-But, as we now know all too well, this isn't enough—we also need to
-incorporate this widget's **reactive object** (`input$year_slider`) into
-a **reactive context** in our server code somehow if we want to
-**handle** this widget's **events**. In this case, that isn't too hard;
-we already have code that filters the data set down to the year 2007,
-and we can just modify this code so that it filters the data by whatever
-year has been chosen instead:
+But, as we now appreciate, adding the widget to the UI isn't enough—we
+also need to incorporate its **reactive object** (`input$year_slider`)
+into a **reactive context** in our server code somehow if we want to
+**handle** this widget's **events**.
+
+In this case, that isn't actually too hard; we already have code that
+filters the data set down to the year 2007; we can modify this code so
+it filters the data by whichever year has been chosen instead:
 
 ```{r server for sliderInput, eval = F}
 ##This code should be **swapped for** the renderLeaflet({}) code provided previously, inside of your server function!
@@ -1443,7 +1447,7 @@ year has been chosen instead:
 
     ##KEEP THE PRODUCT NAMED AFTER 2007 FOR NOW.
     gap_map2007 = gap_map %>%
-      filter(year == as.numeric(input$year_slider)) #<--INTRODUCE THE SLIDER'S CURRENT VALUE TO FILTER BY WHATEVER YEAR HAS BEEN CHOSEN. EVERY CHANGE IS AN EVENT THAT WILL TRIGGER'S renderLeaflet({})'S EXPRESSION TO RERUN.
+      filter(year == as.numeric(input$year_slider)) #<--INTRODUCE THE SLIDER'S CURRENT VALUE TO FILTER BY WHATEVER YEAR IS CHOSEN.
 
     bounds = unname(sf::st_bbox(gap_map2007))
 
@@ -1470,7 +1474,7 @@ year has been chosen instead:
         values = gap_map2007$lifeExp,
         opacity = 0.75,
         bins = 5,
-        #HERE, WE'LL PULL A LITTLE TRICK TO ENSURE THE LEGEND'S TITLE IS ALWAYS ACCURATE. 
+        #HERE, A LITTLE TRICK TO ENSURE THE LEGEND'S TITLE IS ALWAYS ACCURATE. 
         title = paste0("Life<br>expectancy ('",
                        substr(input$year_slider, 3, 4),
                        ")")
@@ -1479,11 +1483,13 @@ year has been chosen instead:
   })
 ```
 
-The only other change we'll want to make here is to make our
-`map_palette` function more generic so that just one version of it works
-no matter which year gets picked. Since the code to produce this
-function will need to run only once ever, this is a good opportunity to
-relocate it to `global.R`:
+Above, notice I made a change to the map's legend title to make it more
+"generic" and less specific to any one year. There's another, similar
+change we should make: We should make our `map_palette` function more
+generic so that just one version of it is used no matter which year is
+picked. Since the code to produce this function will then need to run
+only once ever, this is a good opportunity to relocate that code to
+`global.R`:
 
 ```{r map_palette move, eval=F}
 ##This code should be **added to** your global.R file, below all other code!
@@ -1491,40 +1497,39 @@ relocate it to `global.R`:
  ##... other global code...
 
 map_palette = colorNumeric(palette = "Blues", 
-                           domain = unique(gap_map$lifeExp)) #<--CHANGE TO REFERENCE THE WHOLE DATA SET.
+                           domain = unique(gap_map$lifeExp)) #<--CHANGE TO REFERENCE THE WHOLE DATA SET INSTEAD OF JUST THOSE FROM ONE YEAR.
 ```
 
 This new functionality gives users a new and exciting way to explore the
 data:
 
-![With our new slider input's events being handled by our server code,
-the map rebuilds each time a new year is chosen, showing data from that
-year (and the legend title changes accordingly). Changes from year to
-year are more noticeable because a single palette is used rather than a
-new one being built fresh for a single year's
-data.](fig/sliderchanges.gif)
+![The map rebuilds each time a new year is chosen in the slider widget
+to show data from that year (and the legend title changes too).
+Within-country shifts in life expectancy over time are more noticeable
+because a single palette is used for all years rather than a new one
+being built for each year's data.](fig/sliderchanges.gif)
 
-If you watch the video clip above closely, you'll notice the "freeze"
-that occurs every time a user selects a new year. As we saw with `DT`,
-handling events by entirely rebuilding our graphic is not ideal. With
-maps, it can be *especially* problematic because spatial data tend be
-voluminous, so re-rendering maps can cause long loading times for our
-users and make the app look "buggy."
+If you watch the video above closely, you'll notice the "freeze" that
+occurs every time a user selects a new year. As we saw with `DT`,
+handling events by rebuilding our graphic is *not* ideal. With maps, it
+can be *especially* problematic because spatial data tend be voluminous,
+so re-rendering maps can cause long loading times for our users and make
+the app look "buggy."
 
-Fortunatley, just as with `DT`, `leaflet` features a **proxy** that lets
+Fortunately, just as with `DT`, `leaflet` features a **proxy** that lets
 us update our rendered map in real time, changing only those features
 that *need* changing.
 
-Let's switch to that proxy system the same way we did with `DT`:
+Let's switch to that system the same way we did with `DT`:
 
-1.  We use `renderLeaflet({})` to produce *just* the "starting" version
-    of the map that users sees at start-up.
+1.  We'll now use `renderLeaflet({})` to produce *just* the version of
+    the map that users sees at start-up.
 
 2.  We use a new `observeEvent({},{})` to watch for relevant events
     (here, our slider changing).
 
 3.  Inside the observer, we use a proxy, built using `leafletProxy()`,
-    to update only our map's pertinent features:
+    to make only the updates that need making:
 
 ```{r server changes for leafletProxy, eval=F}
 ##This code should be **swapped for** the renderLeaflet({}) code provided previously, inside of your server function!
@@ -1536,7 +1541,7 @@ Let's switch to that proxy system the same way we did with `DT`:
   output$basic_map = renderLeaflet({
 
     gap_map2007 = gap_map %>%
-      filter(year == 2007) #<--CHANGE BACK
+      filter(year == 2007) #<--CHANGE
 
     bounds = unname(sf::st_bbox(gap_map2007))
 
@@ -1561,7 +1566,7 @@ Let's switch to that proxy system the same way we did with `DT`:
         values = gap_map2007$lifeExp,
         opacity = 0.75,
         bins = 5,
-        title = paste0("Life<br>expectancy ('07)") #<--CHANGE BACK
+        title = paste0("Life<br>expectancy ('07)") #<--CHANGE
       )
 
   })
@@ -1596,17 +1601,18 @@ Let's switch to that proxy system the same way we did with `DT`:
         bins = 5,
         title = paste0("Life<br>expectancy ('",
                        substr(input$year_slider, 3, 4),
-                       ")") #<-RETAIN THE TRICK HERE.
+                       ")") #<-RETAIN OUR TRICK HERE.
       )
 
   })
 ```
 
 In the code above, we still need to repeat quite a lot of code to handle
-these particular events, so the updating process isn't much faster.
-However, we at least don't need to touch the map window itself or its
-zoom behavior, or bounds because those aspects don't need to change. The
-result is a cleaner, less buggy-looking transition between map versions:
+these particular events, so the updating process isn't *much* faster
+than before. However, we at least don't need to touch the map window
+itself, its zoom behavior, or bounds because those aspects don't need to
+change. The result is a cleaner, less buggy-looking transition between
+map versions:
 
 ![By using the proxy system, key components of the map needn't be
 rebuilt each time, and the app needn't freeze while the updates occur,
@@ -1616,39 +1622,40 @@ versions.](fig/cleanerupdates.gif)
 There are ways we could have made these updates even more efficient,
 such as:
 
--   Pre-building all possible data set versions in `global.R` so we
-    didn't need to (re-)make them on the fly during each update.
+-   Pre-building all possible filtered versions of the data set in
+    `global.R` so we didn't need to (re-)make them on the fly during
+    each update.
 
--   Making the legend title generic enough that it didn't need
+-   Making the legend title generic enough that it doesn't need
     rebuilding each time.
 
 -   Considering whether the user should be able to view and change the
-    entire world's data. Perhaps they should only be able to view and
-    control a single continent at one time.
+    entire world's data at once. Perhaps they should only be able to
+    view and control a single continent's data at a time.
 
--   Using a discrete rather than continuous color palette (*e.g.*, 6
-    possible colors), assigning every country's polygon to a group
+-   Using a discrete rather than continuous color palette (*e.g.*, only
+    six possible colors), assigning every country's polygon to a group
     (using the `group` parameter inside `addPolygons()`) according to
     the "bin" their data falls into, determining whether a country's
     "bin" should change during an update, and redrawing only those
-    polygons whose "bins" do change.
+    polygons whose "bins" do need to change.
 
-However, you may deem the current solution to be "good enough" for your
-users, and that's ok!
+However, you may deem the current solution "good enough" for your
+users—I would!
 
 ### Watch and learn
 
-`leaflet` maps are **widgets** just like any other, so information about
-user interactions with them are passed from the UI to the server by
-`input`.
+`leaflet` maps are **widgets** like any other, so information about user
+interactions with them are passed from the UI to the server by `input`
+where they can be watched and **handled**.
 
-For example, whenever a user **clicks** a country polygon in our map,
-this can trigger a "click event," and we can access information about
-that event using `input$[outputId]_shape_click` format server-side.
+For example, whenever a user **clicks** a country's polygon, this could
+trigger a "click event," and we can access information about that event
+using `input$[outputId]_shape_click` format server-side.
 
 We can combine that functionality with another cool feature of `leaflet`
-maps: `flyTo()`. This function which will **pan** and **zoom** the map
-to center on a specific location, such as where the user clicked.
+maps: `flyTo()`. This function will **pan** and **zoom** the map to
+center on a specific location, such as where the user clicked.
 
 So, let's create a new observer that watches for clicks, and, when one
 happens, a `leafletProxy()` will fly our map to that location:
@@ -1662,7 +1669,7 @@ happens, a `leafletProxy()` will fly our map to that location:
 
     leafletProxy("basic_map") %>%
       flyTo(
-        lat = input$basic_map_shape_click$lat, #LAT AND LONG DATA ON THE CLICKED LOCATION ARE TRACKED.
+        lat = input$basic_map_shape_click$lat, #LAT AND LONG DATA ON THE CLICKED LOCATION ARE ACCESSED THUSLY.
         lng = input$basic_map_shape_click$lng,
         zoom = 5
       )
@@ -1677,56 +1684,60 @@ particular country:
 ![A proxy is used to update a map's focus point; we "fly to" a location
 clicked on by the user.](fig/flyto.gif)
 
-Obviously, we only want to add features like this if they enhance our
-**UX** in some way, but this example should show you what's possible.
+Obviously, we should only add features like this if they enhance our
+**UX**, which this one arguably doesn't, but this example demonstrates
+what's possible.
 
 ## Getting graphic
 
 We'll close out this lesson by considering `plotly`, a package for
-producing interactive, web-enabled **graphs**, similar to the static
-ones produced by `ggplot2`.
+producing interactive, web-enabled **graphs**, similar in quality and
+complexity to the (static) ones produced by `ggplot2`.
 
-Frequent R users who already know `ggplot2` understand that learning
-graphics packages is like learning a new language! The learning curve is
-*significant*; because these packages give users *all* the tools needed
-to design a complex graph piece by piece, there's a lot of functions and
-parameters to keep straight!
+R users who know `ggplot2` understand that learning graphics packages is
+like learning a new language! The learning curve is *significant*;
+because these packages give users *all* the tools needed to design a
+complex graph piece by piece, there are lots of functions and parameters
+and jargon to keep straight!
 
 `plotly` is no different—you can create ultra-detailed,
 publication-quality graphics with it, but you'll need to learn a new
-vernacular, one that may only sometimes feel similar to `ggplot2`'s.
+vernacular to do so, one that may only sometimes feel similar to
+`ggplot2`'s.
 
-As such, covering `plotly` in depth is outside the scope of this lesson.
-Thankfully, we don't actually *need* to learn `plotly` in depth! That's
-because it comes with an *incredible* "cheat code" that, while
-imperfect, will work suit our needs here wonderfully: the `ggplotly()`
-function.
+As such, covering `plotly` in any depth is outside the scope of this
+lesson. Thankfully, we don't actually *need* to learn `plotly` to
+appreciate what it can offer our users; it comes with an *incredible*
+"cheat code" that, while imperfect, will work suit our needs here
+wonderfully: the `ggplotly()` function.
 
 `ggplotly()` takes a complete `ggplot`, breaks it down into its
 components, and rebuilds those components using `plotly`'s system
-instead (as best as it can). Because the two systems are similar in many
+instead (as best it can). Because the two systems are similar in many
 ways, you'll get a *similar* graph as a product, but one with all the
 interactive features of a `plotly` graph.
 
 However, because the two systems don't map 1-to-1, the result will
-rarely look *exactly* the same as the `ggplot`. In particular, complex
-customizations using `ggplot`'s `theme()`, text-related components,
-advanced or new features, and so on don't make generally transition
-well.
+rarely look *exactly* the same as the `ggplot` you put in. In
+particular, complex customizations using `ggplot`'s `theme()`,
+text-related components, advanced or new features in `ggplot`'s dialect,
+and so on don't generally transition well.
 
 So, it's probably more correct to say that `ggplotly()` produces a
-`plotly` graph *in the spirit of* the template `ggplot2` graph. Still,
-that means we *don't* need to learn how to produce a `plotly` graph
-using `plotly`'s own system to be able to explore the package's features
-and use cases.
+`plotly` graph *in the spirit of* the `ggplot2` graph used. Still, that
+means we *don't* need to learn how to produce a `plotly` graph using
+`plotly`'s own system to be able to explore the package's features and
+use cases.
 
-To get started, let's build a `ggplot2` graph we can use as an input.
-Let's make it a scatterplot of GDP vs. population for a given year
-(we'll start with 2007), with each continent getting a different color.
-Additionally, we'll plot a best-fit regression line for each continent.
-This may sound complicated, and that's because it kind of is! I want you
-to see how `ggplotly()` performs on a graph with many components and
-customizations:
+To start, let's build a `ggplot2` graph to use as an input. Let's make
+it a scatterplot of GDP vs. log(population) for 2007, with each
+continent getting a different color too. Additionally, we'll plot a
+best-fit line for each continent's data. And, to top it off, we'll
+customize the appearance of the graph in several ways.
+
+This *probably* sounds like it'll be a complicated graph, and that's
+because it will be! I want you to see how `ggplotly()` performs on a
+graph with many components:
 
 ```{r our base ggplot graph, eval = F}
 ##This code should be **added** to the bottom of your global.R file!
@@ -1765,30 +1776,33 @@ p1 = ggplot(
 ```
 
 If you don't know `ggplot2`, the above code will probably look daunting!
-If so, don't worry; you don't need to know what it's doing! Just
-copy-paste it into your app.
+If so, don't worry; you *don't* need to know what it's doing at all!
+Just copy-paste it into your app's `global.R` file.
 
 For those who *do* know `ggplot2`, you'll hopefully agree that this
-looks halfway decent:
+graph looks halfway decent:
 
-![The ggplot produced by the code outlined above.](fig/baseggplot.png)
+![The ggplot graph produced by the code above.](fig/baseggplot.png)
 
-More importantly, though, it's complex to be a good test for
-`ggplotly()`. Let's see how it does at convert it to a `plotly` graph:
+More importantly, though, it's complex enough to be a good test for
+`ggplotly()`. Let's see how it does at converting it to a `plotly`
+graph:
 
 ```{r ggplotly call, eval = F}
 ##This code should be **added** to the bottom of your global.R file!
 p2 = ggplotly(p1)
 ```
 
-![The same graph as before but now rendered using plotly's system via
-ggplotly().](fig/baseplotly.png)
+![The same graph as before (more or less) but now rendered using
+*plotly*'s system via ggplotly().](fig/baseplotly.png)
 
-Now that we have our `plotly` version, I hope you'll agree that it looks
+Now that we have our `plotly` version, I hope you'll agree it looks
 pretty similar to our original `ggplot`, although there are some
-differences—we'll talk about those in a moment. First, let's insert this
-graph into our app. For this, it hopefully won't surprise you that there
-are `renderPlotly({})` and `plotlyOutput()` functions we can use:
+differences—we'll talk about those in a moment.
+
+First, though, let's insert this graph into our app. For this, it
+hopefully won't surprise you that there are `renderPlotly({})` and
+`plotlyOutput()` functions we can use:
 
 ```{r rendering plotly ui, eval=F}
 ##This code should **swapped** for the the "main panel" content in the BODY section of your ui.R file!
@@ -1800,7 +1814,7 @@ column(width = 8, tabsetPanel(
       tabPanel(title = "Map", leafletOutput("basic_map")),
       tabPanel(title = "Graph", 
                plotlyOutput("basic_graph")) #<--ADD THE RENDERED GRAPH HERE.
-    ))
+    )),
 ##... other UI code...
 ```
 
@@ -1823,36 +1837,35 @@ tab panel:
 tooltips, legend key filtering, and the modebar of
 buttons.](fig/plotlyfeatures.gif)
 
-Now, for me, the only difference between our original `ggplot` and our
-new `plotly` graph that stands out is the legend placement; while
+The only aesthetic difference between our original `ggplot` and our new
+`plotly` graph that stands out to me is the legend's placement; while
 `ggplot`s vertically center their legends by default, `plotly` graphs
 top-align them instead.
 
-We'll adjust that in a moment! Meanwhile, let's focus on all the new
-interactive features this graph comes with (it's a lot!):
+We'll fix that in a moment! Beforehand, let's focus on all the new
+interactive features this graph comes with that the old one lacks (it's
+a lot!):
 
 -   **Tooltips**: If you hover over a point, you'll get a **tooltip**
-    showing the data point's associated `x`, `y`, and `group`
-    (continent) values. These tooltips aren't super human-readable by
-    default, but that too we'll soon change.
+    showing the point's associated `x`, `y`, and `group` (continent)
+    values. These tooltips aren't super human-readable by default, but
+    that too we'll soon change.
 
 -   **Click+drag to zoom**: If you click anywhere, drag your cursor to
     highlight a region, and let go, you will zoom the graph to show
-    *only* the highlighted region. Double-clicking will restore the
-    original zoom level.
+    *only* the highlighted region and data. Double-clicking will restore
+    the original zoom level.
 
 -   **Interactive "modebar:"** `plotly` graphs come with a toolbar in
-    the top-right (when hovering over the graph) that features several
-    buttons. These allow you to download an image of the graph, zoom and
-    pan, select specific data, reset the graph, and change how tooltips
-    work.
+    the upper-right that features several buttons. These allow you to
+    download an image of the graph, zoom and pan, select specific data,
+    reset the graph, and change how tooltips work.
 
 -   **Legend group filtering**: If you click any of the legend keys
     (such as "Asia"), all data points from that group will be redacted,
     and the axes will readjust as though those data weren't present.
-    Double-clicking a legend key, meanwhile, will exclude all data but
-    those from that group. This functionality might enable a variety of
-    workflows for users.
+    Double-clicking a legend key, meanwhile, will exclude all data *but*
+    those from that group.
 
 That's a *lot* of interactivity!
 
@@ -1860,14 +1873,15 @@ That's a *lot* of interactivity!
 
 ...which means we should discuss how to disable some of these features.
 Unfortunately, disabling features in `plotly` is not *as* easy as in
-`DT` or `leaflet`; to do so, we must engage with two of functions used
-to build `plotly` graphs from scratch: `layout()` and `config()`.
+`DT` or `leaflet`; to do so, we must engage with two of the core
+functions used to build `plotly` graphs from scratch: `layout()` and
+`config()`.
 
-`layout()` is *sort of* like `ggplot2`'s `theme()` in that it controls
-how much of the plot looks. Inside `layout()` are `xaxis` and `yaxis`
-parameters, which we can provide with specific instructions. If we give
-both a list containing the instruction `fixedrange = TRUE`, this will
-prohibit zooming:
+`layout()` is *sort of* like `ggplot2`'s `scale_*()` functions in that
+it controls how much of the plot's mapped aesthetics work. Inside
+`layout()` are `xaxis` and `yaxis` parameters; if we give both a list
+containing the instruction `fixedrange = TRUE`, this will disable
+zooming functionality:
 
 ```{r no zooming, eval=F}
 ##This code should **replace** the renderPlotly({}) code in your server.R file, inside of your server function!
@@ -1876,8 +1890,8 @@ prohibit zooming:
 ###GRAPH
   output$basic_graph = renderPlotly({
     p2 %>%
-      layout( #<--layout() ADJUSTS AESTHETICS.
-        #PLOTLY CODE LOOKS VERY JS-Y, HENCE AN OBSESSION WITH LISTS!
+      layout( 
+        #PLOTLY CODE LOOKS VERY JS-Y, HENCE LOTSA LISTS!
         xaxis = list(fixedrange = TRUE),
         yaxis = list(fixedrange = TRUE))
     
@@ -1885,12 +1899,12 @@ prohibit zooming:
 ```
 
 In my experience, zooming isn't a useful feature in most contexts, and
-some users find it hard to reverse an accidental zoom, so it's one of
-the first things I tend to disable.
+some users find it hard to figure out how to reverse an accidental zoom,
+so it's one of the first features I tend to disable.
 
 We can also use `layout()` to adjust how the legend responds to clicks.
 For example, if we want to turn off the functionality that redacts a
-group when its legend key is clicked on, we can set the `itemclick`
+group when its legend key is clicked, we can set the `itemclick`
 instruction for the `legend` parameter to `FALSE`:
 
 ```{r no item clicking, eval = F}
@@ -1911,9 +1925,9 @@ instruction for the `legend` parameter to `FALSE`:
 ```
 
 The double-click functionality can be similarly disabled. In my
-experience so far, though it seems useful, I've struggled to adequately
-explain the legend key filtering functionality to my users, so it's
-another feature I regularly disable.
+experience, though it seems useful, I've struggled to adequately explain
+the legend key filtering functionality to my users, so it's another
+feature I regularly disable.
 
 The `config()` function, meanwhile, can remove buttons from the modebar,
 although you may need to Google for the names of the specific buttons
@@ -1937,13 +1951,15 @@ you want to remove:
   })
 ```
 
+::: callout
 I'll stress here again that, when considering **UX**, "less" is often
-"more." If your user might not understand it or won't use it, consider
-removing or disabling it!
+"more." If your users might not understand it or won't use it, consider
+removing or disabling it.
+:::
 
 ### Making some adjustments
 
-Earlier, we identified two dissatisfying aspects of our graph. First,
+Earlier, I identified two dissatisfying aspects about our graph. First,
 the legend isn't centered vertically, like in our original graph and,
 second, the tooltip text could be easier to read.
 
@@ -1971,16 +1987,16 @@ The first issue is solved using the `legend` parameter inside of
   })
 ```
 
-For the tooltip issue, the best way to beautify our tooltips' contents
-will be to use a third core `plotly` function: `style()`.
+The best way to beautify our tooltips' contents, meanwhile, will be to
+use a third core `plotly` function: `style()`.
 
 This'll be a multi-step process:
 
-1.  First, let's "pre-generate" the text we want for each tooltip,
+1.  First, let's "pre-generate" the text we want each tooltip to contain
     (using `dplyr`'s `mutate()`).
 
 2.  Second, let's pass this text into our original `ggplot` call so it
-    gets packaged up with everything else being passed to `ggplotly()`.
+    gets packaged up with everything else passed to `ggplotly()`.
 
 3.  Lastly, let's use `style()` to make the contents of our tooltips
     *only* the custom text we've cooked up:
@@ -1992,7 +2008,7 @@ This'll be a multi-step process:
 ###FILTERED DATA SET FOR GRAPH
 gap2007 = gap %>%
   filter(year == 2007) %>%
-  mutate(tooltip_text = paste0( #<--HERE, WE GENERATE A NEW COLUMN CALLED tooltip_text USING paste0() TO MAKE A TEXT STRING CONTAINING THE GDP AND POPULATION DATA IN A READABLE FORMAT. 
+  mutate(tooltip_text = paste0( #<--HERE, GENERATE A NEW COLUMN CALLED tooltip_text USING paste0() TO MAKE A TEXT STRING CONTAINING THE GDP AND POPULATION DATA IN A MORE READABLE FORMAT. 
     "GDP: ",
     round(gdpPercap, 1),
     "<br>",
@@ -2008,7 +2024,7 @@ p1 = ggplot(
     y = gdpPercap,
     color = continent,
     group = continent,
-    text = tooltip_text #<--HERE, WE PASS OUR CUSTOM TOOLTIP TEXT IN TO THE TEXT AESTHETIC. EVEN THOUGH OUR GGPLOT NEVER USES THIS INFO, IT'LL BE PASSED TO OUR PLOTLY GRAPH BY ggplotly() ANYHOW. 
+    text = tooltip_text #<--HERE, PASS OUR CUSTOM TOOLTIP TEXT TO THE TEXT AESTHETIC. EVEN THOUGH OUR GGPLOT NEVER USES THIS AESTHETIC, IT'LL PASS IT TO OUR PLOTLY GRAPH ANYHOW. 
   )
 ) +
   geom_point(size = 3) +
@@ -2030,28 +2046,30 @@ p1 = ggplot(
 
 ###PLOTLY CONVERSION
 p2 = ggplotly(p1, 
-              tooltip = "text") %>% #<--HERE, WE TELL GGPLOTLY() TO POPULATE TOOLTIPS WITH ONLY TEXT DATA AND NOT ALSO X/Y/COLOR INFO. 
-  style(hoverinfo = "text") #<--HERE, WE USE style() TO REQUEST THAT ONLY OUR CUSTOM TOOL-TIPS BE SHOWN, OR ELSE WE'D GET PLOTLY'S DEFAULT ONES TOO!
+              tooltip = "text") %>% #<--HERE, TELL GGPLOTLY() TO POPULATE TOOLTIPS WITH ONLY TEXT DATA, NOT ALSO X/Y/GROUP DATA 
+  style(hoverinfo = "text") #<--HERE, USE style() TO REQUEST THAT ONLY OUR CUSTOM TOOLTIPS BE SHOWN, OR ELSE WE'D GET PLOTLY'S DEFAULTS ALSO!
 ```
 
 Now our tooltips are looking great:
 
-![Our plotly graph now has a centered legend, like the source graph did,
-and tooltips that are more human-readable.](fig/legendandtooltips.png)
+![Our *plotly* graph now has a centered legend, like the source graph
+did, and tooltips that are more
+human-readable.](fig/legendandtooltips.png)
 
 The morale of the story is that, between `layout()`, `style()`, and
 `config()`, you can adjust virtually any aspect of a `plotly` graph,
-much as in `ggplot2`. However, it may require some Googling and
-experimentation to figure out *exactly* how to do any specific thing!
+much as in `ggplot2` using `theme()` and the `scale_*()` functions.
+However, it may require some Googling and experimentation to figure out
+*exactly* how to do any specific thing!
 
 ### Update, don't remake, `plotly` edition!
 
 Once again, it's time to see how to update a `plotly` graph "on the fly"
 in response to user actions without re-rendering it!
 
-That again first means giving users a means of affecting the graph in
-some way. Let's create a drop-down selector that lets users pick a new
-color palette for the graph:
+That again first means giving users a fun way to affect the graph. Let's
+create a drop-down widget that lets users pick a new color palette for
+the graph:
 
 ```{r color scheme selector, eval = F}
 ##This code should **replace** the "sidebar panel" cell's content within the BODY section of your ui.R file!
@@ -2086,9 +2104,9 @@ color palette for the graph:
 ```
 
 In `plotly`, color scheme is generally specified inside the `plot_ly()`
-call (the equivalent of `ggplot()`) or inside an `add_*()` function call
-(the equivalent of a `geom*` call in `ggplot2`). However, one can be
-specified or modified using `style()` too.
+call (the equivalent of `ggplot()` in `ggplot2`) or inside an `add_*()`
+function call (the equivalent of a `geom_*` call in `ggplot2`). However,
+one can be specified or modified using `style()` too.
 
 To update rather than remake our graph, we'll use the `plotly` functions
 `plotlyProxy()` and `plotlyProxyInvoke()`, which are like
@@ -2099,7 +2117,7 @@ Specifically, we'll use the `"restyle"` method inside
 
 As before, we make a new observer that watches `input$color_scheme` and
 triggers restyling using `plotlyProxy()`, leaving `renderPlotly({})` to
-produce only the first version of the graph we see on start-up:
+produce only the version of the graph we see on start-up:
 
 ```{r plotlyProxyInvoke, eval=F}
 ##This code should **replace** all your plotly-related code to date in your server.R file!
@@ -2110,15 +2128,15 @@ produce only the first version of the graph we see on start-up:
   #THIS OBSERVER UPDATES THE GRAPH WHEN EVENTS ARE TRIGGERED.
   observeEvent(input$color_scheme, {
 
-    #WE FIRST DESIGN AN APPROPRIATE COLOR PALETTE FOR THE DATA, GIVEN THE USER'S CHOICE
+    #WE FIRST DESIGN AN APPROPRIATE COLOR PALETTE FOR THE DATA, GIVEN THE USER'S COLOR SCHEME CHOICE
     new_pal = colorFactor(palette = input$color_scheme,
                           domain = unique(gap2007$continent))
 
-    plotlyProxy("basic_graph", session) %>% #<--WE HAVE TO INCLUDE session THIS TIME TOO.
-      plotlyProxyInvoke("restyle", #<-THE TYPE OF CHANGE WE PLAN TO MAKE
+    plotlyProxy("basic_graph", session) %>% #<--WE HAVE TO INCLUDE session HERE TOO.
+      plotlyProxyInvoke("restyle", #<-THE TYPE OF CHANGE WE WANT
                         list(marker = list(
-                          color = new_pal(gap2007$continent), #FOR OUR MARKERS, USE THESE COLORS.
-                          size = 11.3 #AND THIS SIZE.
+                          color = new_pal(gap2007$continent), #FOR OUR MARKERS, USE THESE NEW COLORS.
+                          size = 11.3 #AND THIS POINT SIZE.
       )),
       0:4) #APPLY THIS CHANGE TO ALL 5 GROUPS OF MARKERS WE HAVE.
 
@@ -2126,37 +2144,39 @@ produce only the first version of the graph we see on start-up:
 ```
 
 The inputs to `plotlyProxyInvoke()` are a little complicated, so let's
-go over them. The first is a method name. Here, we're using `"restyle"`
-to adjust things the `style()` function would regulate, such as the
-graph's color scheme. There's also a `"relayout"` method for adjusting
-things that `layout()` controls, such as the legend.
+go over them. The first is the name of a **method** the proxy should
+use. Here, we use the `"restyle"` method because we want to adjust
+things the `style()` function regulates, such as the graph's color
+scheme. There's also a `"relayout"` method for adjusting things that
+`layout()` controls, such as the legend.
 
 The second input is a list of lists—this is where we're *very nearly*
-writing JavaScript code, because if there's one thing JS loves, it's
-lists! The outermost list contains the aspects of the graph we want to
-re-style (here, `marker`s are the only thing we want to restyle).
+writing JavaScript code; if there's one thing JS loves, it's lists! The
+outermost list contains the aspects of the graph we want to re-style
+(here, `marker`s are the only such thing).
 
-Then, we provide a list for each aspect—what specific features do we
-want to change about that aspect? Here, we're changing the `color`s of
-our markers, setting them equal to the new colors we've generated using
-`colorFactor()` from `leaflet`.
+Then, we provide a list to each such aspect—what *specific* features do
+we want to change about that aspect? Here, we're changing the `color`s
+of our markers, setting them equal to the new colors we've generated
+using `colorFactor()` from `leaflet`.
 
-However, we also specify point `size`s. Why? Because, if `plotlyProxy()`
-redraws our graph's markers, it will do so "from scratch," using
-`plotly` defaults for any properties we don't specify. Since our
-original graph featured custom-sized points, we need to "override the
-defaults" to arrive at the same size points as before.
+However, we also specify point `size`s. Why? If `plotlyProxy()` is asked
+to redraw our graph's markers, it'll do so "from scratch," using
+`plotly` default values for any properties we don't specifically
+specify. Since our original graph featured custom-sized points, we need
+to "override the defaults" to get the same point sizes after the redraw
+as we had before it.
 
 The last input to `plotlyProxyInvoke()` is a set of **trace numbers**. A
 `plotly` **trace** is one "set" of data being graphed. In our case, we
 have five traces, one for each continent, and we're modifying all five,
-so you'd *think* we'd put `1:5` here. However, JS starts counting things
-at 0, not 1 (it's a "zero-indexed language," whereas R is a "one-indexed
-language"), so we need to use `0:4` instead.
+so you'd *think* we'd need to put `1:5` here. However, JS starts
+counting things at 0, not 1 (it's a "zero-indexed language," whereas R
+is a "one-indexed language"), so we actually need `0:4` instead.
 
 You'll notice that, with this new proxy in place, our points change
 colors as we adjust our new selector. However, our lines don't, and our
-legend keys also change to the wrong colors:
+legend keys do change but to the wrong colors:
 
 ![We've added a drop-down menu widget that allows users to select a new
 color palette for our graph. However, not all aspects of the graph
@@ -2165,24 +2185,26 @@ change colors, but incorrectly.](fig/recoloring.gif)
 
 These *are* fixable problems, but not without *some* grief—in simple
 terms, the graph conversion performed by `ggplotly()` comes with baggage
-that we're running up against here. If we really want to allow users to
-choose our graph's color palette, we'd have an easier time if we rebuilt
-our graph in `plotly` instead.
+that we're running into here. If we really want to allow users to choose
+our graph's color palette, we'd have an easier time if we rebuilt our
+graph in `plotly`.
 
 ### **Point and click**
 
 As with all other widgets, user interactions with `plotly` graphs can
 trigger events.
 
-However, `plotly` is unusual in that info about these events is *not*
-passed from the UI to the server via `input`. Instead, `plotly` has an
-alternative system that uses the functions `event_register()` to specify
-which events to track and `event_data()` to pass the relevant event data
-to the server. This *sounds* more complicated than what we're used to,
-but it's the same idea with more and different parts.
+However, `plotly` is unusual in that info about events is *not* passed
+from the UI to the server via `input`. Instead, `plotly` has an
+alternative (but equivalent) system that uses the functions
+`event_register()` to specify which events to track and `event_data()`
+to pass the relevant event data to the server as a **reactive object**.
+This *sounds* more complicated than what we're used to, but it's really
+the same idea with differently named parts.
 
 First, let's create a `textOutput()` in our UI, beneath our graph. We
-will report a message there that we will build server-side:
+will report a message to the user there abiut the point they've clicked
+that we will build server-side:
 
 ```{r new textOutputs, eval=F}
 ##This code should **replace** the "main panel" cell's content within the BODY section of your ui.R file!
@@ -2199,10 +2221,10 @@ will report a message there that we will build server-side:
 ##... other UI code...
 ```
 
-Next, let's register, with our graph, that we want to be watching for
-mouse click events in our `global.R` file. At the same time, we'll give
-our graph a special attribute (a `source`) that is used just to make
-this system work:
+Next, let's "register" with our graph that we want to watch for mouse
+click events. At the same time, we'll give our graph a special attribute
+(a `source`) that is used just to make this system work, sort of how an
+`inputId` is used for tracking event data normally:
 
 ```{r event registering in global, eval=F}
 ##This code should **replace** the ggplotly() call within your global.R file!
@@ -2211,17 +2233,17 @@ this system work:
 ###PLOTLY CONVERSION
 p2 = ggplotly(p1,
               tooltip = "text",
-              source = "our_graph") %>% #<-A SPECIAL ID JUST FOR THIS SYSTEM.
+              source = "our_graph") %>% #<--A SPECIAL ID JUST FOR THIS SYSTEM.
   style(hoverinfo = "text") %>% 
-  event_register("plotly_click") #<-WATCH FOR USER CLICK EVENTS
+  event_register("plotly_click") #<--WATCH FOR USER CLICK EVENTS
 ```
 
 Lastly, let's create a new observer in our `server.R` file to watch for
-these clicks, referencing the `source` and event type data we just
+clicks, referencing the `source` and event type data we just
 established. When a user clicks a point in our graph, a text message
 will appear telling them the raw population count for that point, which
-might be helpful given that we are currently log-transforming those data
-currently:
+might be helpful given that we are currently log-transforming those
+data:
 
 ```{r new server observer for clicks, eval=F}
 ##This code should **added to** the bottom of your server.R file, within the server function!
@@ -2249,21 +2271,21 @@ If you run the app at this point and click on any of the points, you
 should see something like this:
 
 ![When users click on specific points, a message appears to give them
-more detailed population information.](fig/textpoints.gif)
+more detailed population data information.](fig/textpoints.gif)
 
 In this setup, we aren't using `input` like we have before, but we are
-creating something equivalent to it—a single reactive object tracking
-one type of event data for one UI component.
+creating something equivalent—a single reactive object that passes one
+type of event data for one UI component to the server for use in event
+handling.
 
 Whenever an event triggers, we use `renderText({})` and `textOutput()`
-to print into the UI some specific information about the population
-datum of the point clicked. This is admittedly not a thrilling use of
-this functionality, but it hopefully shows what's possible, and it might
-be of value to some users.
+to show the population datum of the point clicked. This is admittedly
+not a thrilling use of this functionality, but it hopefully shows what's
+possible, and it could be of value to some users.
 
 Ultimately, this system of event watching and handling is not *much*
-harder than the one involving `input`; it's more difficult only really
-in that it's *different*.
+harder to learn and use than the typical one involving `input`; it's
+more difficult only in that it's *different*.
 
 ::: keypoints
 -   The `DT`, `leaflet`, and `plotly` packages can be used to produce
