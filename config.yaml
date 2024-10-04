@@ -27,7 +27,7 @@ life_cycle: 'pre-alpha'
 license: 'CC-BY 4.0'
 
 # Link to the source repository for this lesson
-source: 'https://github.com/carpentries/r_shiny_workshop'
+source: 'https://github.com/umn-dash/r-shiny'
 
 # Default branch of your lesson
 branch: 'main'
