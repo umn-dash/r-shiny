@@ -376,7 +376,7 @@ web browser, so you will get a more actionable impression of how your
 app is doing this way.
 :::
 
-::: discussion
+:::: discussion
 What do you see when you start up your app? Explain why the app looks
 the way it does so far.
 
@@ -396,7 +396,7 @@ That is to say that HTML boxes are empty until we provide them with
 **contents** that *aren't* other boxes. That's what we will do in the
 next lesson!
 :::
-:::
+::::
 
 By most standards, our app also looks *very* basic—just a white screen
 with a generic-looking title. This is because the default CSS applied to
@@ -408,7 +408,7 @@ What about our CSS file we linked in, though? Sure, we've linked to our
 CSS stylesheet, but we haven't actually put any code in it yet. Until we
 do, Shiny's default, bland rules will be used.
 
-::: challenge
+:::: challenge
 Let's make our first style rules! Since there's nothing else to style
 yet, though, let's style our title. In your `styles.css` file (which you
 can open in RStudio), write a **rule** that will make the title of our
@@ -435,7 +435,7 @@ And this is what our app should look like once you apply the change:
 ![We've restyled our title to make it a *little* more snazzy using
 CSS.](fig/postcss.png)
 :::
-:::
+::::
 
 If your app doesn't look like this, there are two things you should try:
 

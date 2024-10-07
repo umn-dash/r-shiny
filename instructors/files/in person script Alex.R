@@ -26,51 +26,48 @@ gap = as.data.frame(gapminder)
 
 
 
-##Start setting up server.R by adding the server function:
+##Start setting up server.R by adding our server function:
 server = function(input, output, session) {
-  #ALL OUR EVENTUAL SERVER-SIDE CODE WILL GO INSIDE HERE.
+  #ALL EVENTUAL SERVER CODE GOES INSIDE THIS.
 }
 
 
 
 
-##Start setting up ui.R by adding the outermost fluidPage():
+##Start setting up ui.R by adding our outermost fluidPage():
 ui = fluidPage(
-  #ALL OUR EVENTUAL CLIENT-SIDE CODE WILL GO INSIDE HERE
+  #ALL EVENTUAL CLIENT-SIDE CODE GOES INSIDE THIS.
 )
 
 
 
-#Adjusting the head box:
+#Adjusting the head box--adding a title:
 tags$head(
   tags$title("Check this out!")
 ),
 
 
 
-#And linking to a stylesheet:
+#Adjusting the head box--linking to a stylesheet:
   tags$link(href = "styles.css",
             rel = "stylesheet"),
 
 
 
+#Begin fleshing out our UI's structure by adding elements in a mobile-first design:
 
-#Begin fleshing out our UI's structure:
-ui = fluidPage(
-h1("Our amazing Shiny app!",
-   id = "header"),
+h1("Our amazing Shiny app!", #CUSTOM HEADER
+   id = "header"), #SEPARATE ALL UI ELEMENTS FROM THE NEXT W/ COMMAS.
 
-fluidRow(
-  column(width = 4), #SIDEBAR
-  column(width = 8) #MAIN PANEL
+fluidRow( #MAIN CONTENT AREA.
+  column(width = 4), #SIDEBAR CELL
+  column(width = 8) #MAIN PANEL CELL
 ),
 
-tags$footer("This is my app")
-)
+tags$footer("This is my app") #CUSTOM FOOTER
 
 
-
-#In CSS file
+#IN CSS FILE, MODIFY TITLE.
 #header {
 color: green;
 font-weight: bold;
@@ -79,120 +76,88 @@ font-weight: bold;
 
 # Lesson 3 (Shiny Core Concepts) ------------------------------------------
 
-#Adding the table to the UI
-column(width = 8,
-       tableOutput(outputId = "table1")) #MAIN PANEL
-),
+#FIRST, RENDER THE TABLE SERVER-SIDE, DOING ANY "WORK" INSIDE.
+output$table1 = renderTable({
+  gap
+})
+
+
+#THEN, PLACE THAT TABLE IN THE UI BY OUTPUTTING IT WITHIN A SPECIFY BOX.
+tableOutput(outputId = "table1") #MAIN PANEL CELL
 
 
 
-#Outputting a basic table of the gapminder data set.
-server = function(input, output, session) {
-
-  #TABLE
-  output$table1 = renderTable({
-    gap
-  })
-}
+#ADD INPUT WIDGET FOR SORTING TABLE
+selectInput(
+  inputId = "sorted_column",
+  label = "Select a column to sort the table by.",
+  choices = names(gap)
+)
 
 
 
-#Next, adding an input widget
-    column(width = 4,
-           selectInput(
-             inputId = "sorted_column",
-             label = "Select a column to sort the table by.",
-             choices = names(gap)
-            )
-           ), #SIDEBAR
-
-
-
-
-#Now, wire the input server side
-  output$table1 = renderTable({
+#WIRE UP INPUT WIDGET BY USING ITS CURRENT VALUE SERVER-SIDE WITHIN A REACTIVE CONTEXT.
     gap %>%
-      arrange(!!sym(input$sorted_column)) #DON'T WORRY ABOUT WHAT THE !!sym() PART DOES HERE!
-  })
-
-
-
-#Demonstrate the value of print:
-  output$table1 = renderTable({
-    print(input$sorted_column)
-    gap %>%
-      arrange(!!sym(input$sorted_column))
-  })
+      arrange(!!sym(input$sorted_column)) #DON'T WORRY ABOUT WHAT !!sym() DOES HERE!
 
 
 
 
-#Demonstrate how reactive contexts work:
-server = function(input, output, session) {
-
-  input$sorted_column #CAN'T DO THIS! NOT IN A REACTIVE CONTEXT!
-
-}
+#DEMONSTRATE VALUE OF USING print() INSIDE REACTIVE CONTEXTS.
+print(input$sorted_column)
 
 
-#Adding a go button
+
+#DEMONSTRATE THAT REACTIVE OBJECTS MUST GO ONLY INSIDE REACTIVE CONTEXTS.
+input$sorted_column
+
+
+
+#ADDING A GO BUTTON INPUT WIDGET TO THE UI
            actionButton(
              inputId = "go_button",
-             label = "Go!") #NEW
-    ), #SIDEBAR
+             label = "Go!")
+    ),
+
+
+
+#MAKING THE GO BUTTON TRIGGER REBUILDS
+input$go_button #WILL BE REACTIVE TO THIS NOW TOO.
 
 
 
 
-#wiring the go button
-  output$table1 = renderTable({
-
-    input$go_button #WILL BE REACTIVE TO THIS NOW TOO.
-
-    gap %>%
-      arrange(!!sym(input$sorted_column))
-  })
+#USING ISOLATION TO PREVENT EVENTS BUT STILL ALLOW ACCESS TO CURRENT VALUES
+arrange(!!sym(isolate(input$sorted_column)))
 
 
+#RE-CONFIGURING TO USE OBSERVEEVENT.
 
-
-#Isolating
-  output$table1 = renderTable({
-
-    input$go_button #WILL BE REACTIVE TO THIS NOW TOO.
-    gap %>%
-      arrange(!!sym(isolate(input$sorted_column)))
-  })
-
-
-
-#Re-configuring to make this an observeEvent instead.
   #MAKE INITIAL TABLE ON START-UP
   output$table1 = renderTable({
     gap
   })
 
-  #THEN WATCH FOR EVENTS AND UPDATE WHEN THEY OCCUR.
-  observeEvent({input$go_button},
+  #THEN, WATCH FOR EVENTS AND UPDATE WHEN THEY OCCUR.
+  observeEvent(input$go_button, #ONLY THE FIRST CONTEXT IS REACTIVE
                ignoreInit = FALSE, {
 
                  output$table1 = renderTable({
                    gap %>%
-                     arrange(!!sym(input$sorted_column)) #NO NEED TO ISOLATE
+                     arrange(!!sym(input$sorted_column)) #NO ISOLATION NEEDED; THIS CONTEXT ISN'T REACTIVE.
 
                  })
                })
 
-#Adding the tabset panel
-    column(width = 8, #MAIN PANEL
+
+
+#TURN MAIN CELL INTO TABSET PANEL INSTEAD.
            tabsetPanel(
              tabPanel(title = "Table",
                       tableOutput(outputId = "table1")),
              tabPanel(title = "Map"),
              tabPanel(title = "Graph")
             )
-           )
-  ),
 
 
 
@@ -205,39 +170,17 @@ server = function(input, output, session) {
 
 #Swapping for DT table, in server:
 output$table1 = renderDT({ #<--CHANGE FUNCTION
-  gap
-})
 
-observeEvent({input$go_button},
-             ignoreInit = FALSE, {
-
-               output$table1 = renderDT({ #<--CHANGE FUNCTION
-                 gap %>%
-                   arrange(!!sym(input$sorted_column))
-
-               })
-             })
-
+  output$table1 = renderDT({ #<--CHANGE FUNCTION
 
 
 
 #Swapping for DT table, in UI
-column(width = 8, tabsetPanel(
-  ###TABLE TAB
-  tabPanel(title = "Table",
-           dataTableOutput(outputId = "table1")), #<--CHANGE FUNCTION
-  ###MAP TAB
-  tabPanel(title = "Map"),
-  ###GRAPH TAB
-  tabPanel(title = "Graph")
-)
-)
+           dataTableOutput(outputId = "table1") #<--CHANGE FUNCTION
 
 
 
-
-#In server, reducing the number of features of our DT table.
-output$table1 = renderDT({
+#Reducing number of features of our DT table.
   gap %>%
     datatable(
       selection = "none", #<--TURNS OFF ROW SELECTION
@@ -247,13 +190,8 @@ output$table1 = renderDT({
         searching = FALSE #<--NO SEARCH BAR
       )
     )
-})
 
-observeEvent({input$go_button},
-             ignoreInit = FALSE, {
-
-               output$table1 = renderDT({
-                 gap %>%
+#MUST DO TWICE
                    arrange(!!sym(input$sorted_column)) %>%
                    #SAME AS ABOVE
                    datatable(
@@ -265,30 +203,29 @@ observeEvent({input$go_button},
                      )
                    )
 
-               })
-             })
 
 
 
-
-#In the server, style the DT table by adding the following to both relevant places:
-  formatRound(columns = "gdpPercap", digits = 2) %>%
-  formatStyle(columns = "continent", textAlign = "center") %>%
+#In server, style DT  by adding the following in both relevant places:
+  formatRound(columns = "gdpPercap",
+              digits = 2) %>%
+  formatStyle(columns = "continent",
+              textAlign = "center") %>%
   formatStyle(
     columns = "lifeExp",
     target = "row",
     backgroundColor = styleEqual(
       levels = gap$lifeExp,
-      values = ifelse(gap$lifeExp > 70, "lightpink", "white")
+      values = ifelse(gap$lifeExp > 70,
+                      "lightpink",
+                      "white")
     )
   )
 
 
 
-#In the server, transition to using a proxy to update the table
-observeEvent({input$go_button},
-             ignoreInit = FALSE, {
 
+#In server, transition to using a proxy system to update table instead of rebuilding it
                sorted_gap = gap %>%
                  arrange(!!sym(input$sorted_column))
 
@@ -296,25 +233,15 @@ observeEvent({input$go_button},
                  replaceData(data = sorted_gap,
                              resetPaging = FALSE)
 
-})
-
 
 
 
 #In the server, turn on cell selection
-output$table1 = renderDT({
-  gap %>%
-    datatable(
       selection = list(mode = "single", target = "cell"), #<--TURN SELECTION ON, TARGET INDIVIDUAL CELLS.
-      options = list(
-        info = FALSE,
-        ordering = FALSE,
-        searching = FALSE
-      ))
-  ...
-})
 
-#In the server, wire up new observer to watch for cell selections
+
+
+#In server, wire up new observer to watch for cell selections
 observeEvent({input$table1_cells_selected}, {
 
   print(input$table1_cells_selected)
@@ -322,27 +249,16 @@ observeEvent({input$table1_cells_selected}, {
 })
 
 
+
+
 ## leaflet -----------------------------------------------------------------
 
-
-
-#In the UI, add our new map:
-column(width = 8, tabsetPanel(
-  ###TABLE TAB
-  tabPanel(title = "Table", dataTableOutput("table1")),
-  ###MAP TAB
-  tabPanel(title = "Map",
-           leafletOutput("basic_map")), #<--OUTPUT OUR NEW MAP.
-  ###GRAPH TAB
-  tabPanel(
-    title = "Graph",
-  )
-))
+#In global.R, load in our spatial data set version
+gap_map = readRDS("gapminder_spatial.rds")
 
 
 
-
-#In the server, add the new map code:
+#In server, add new map code:
 output$basic_map = renderLeaflet({
 
   gap_map2007 = gap_map %>%
@@ -357,18 +273,21 @@ output$basic_map = renderLeaflet({
 
 
 
-#In the server, set min and max zoom levels
+
+#In UI, add our new map:
+leafletOutput("basic_map"), #<--OUTPUT OUR NEW MAP.
+
+
+
+#In server, set min and max zoom levels on leaflet map
 
   leaflet(options = tileOptions(maxZoom = 6, minZoom = 2))
 
 
 
-#In the server, set max bounds
-
+#In server, set max bounds on leaflet map for panning
   bounds = unname(sf::st_bbox(gap_map2007))
 
-  leaflet(options = tileOptions(maxZoom = 6, minZoom = 2)) %>%
-    addTiles() %>%
     addPolygons(
       data = gap_map2007$geometry) %>%
     ##CONVENIENTLY, setMaxBounds() TAKES, AS INPUTS, THOSE EXACT SAME FOUR POINTS IN THE SAME ORDER.
@@ -377,9 +296,7 @@ output$basic_map = renderLeaflet({
 
 
 
-#In server, update map aesthetics
-  leaflet(options = tileOptions(maxZoom = 6, minZoom = 2)) %>%
-    addTiles() %>%
+#In server, crisp up map polygons
     addPolygons(
       data = gap_map2007$geometry,
       color = "black", #CHANGE STROKE COLOR TO BLACK
@@ -389,26 +306,21 @@ output$basic_map = renderLeaflet({
 
 
 
-#In server, establish a color palette function for leaflet to use:
-
-  #ESTABLISH A COLOR SCHEME TO USE FOR OUR FILLS.
+#In server, establish a color palette function for leaflet to use to fill country polgyons by lifeExp values:
   map_palette = colorNumeric(palette = "Blues",
                              domain = unique(gap_map2007$lifeExp))
 
 
-#In server, attach the color palette function and data to our polygons:
-  leaflet(options = tileOptions(maxZoom = 6, minZoom = 2)) %>%
-    addTiles() %>%
+
+#In server, attach color palette function and data to our polygons:
     addPolygons(
-      data = gap_map2007$geometry,
-      color = "black",
-      weight = 2,
-      opacity = 1,
-      fillColor = map_palette(gap_map2007$lifeExp), #<--WE USE OUR NEW COLOR PALETTE FUNCTION, SPECIFYING OUR DATA AS INPUTS.
+      ...,
+      fillColor = map_palette(gap_map2007$lifeExp), #<--USE NEW COLOR PALETTE FUNCTION, SPECIFYING DATA AS ITS INPUTS.
       fillOpacity = 0.75) %>%  #<--THE DEFAULT, 0.5, WASHES OUT THE COLORS TOO MUCH.
 
 
-#In server, add a legend
+
+#In server, add a legend TO THE MAP
     addLegend(
       position = "bottomleft",
       pal = map_palette,
@@ -420,39 +332,22 @@ output$basic_map = renderLeaflet({
 
 
 
-#In server, add a tooltip for country name
-  leaflet(options = tileOptions(maxZoom = 6, minZoom = 2)) %>%
-    addTiles() %>%
+
+#In server, add tooltips for country name
     addPolygons(
-      data = gap_map2007$geometry,
-      color = "black",
-      weight = 2,
-      opacity = 1,
-      fillColor = map_palette(gap_map2007$lifeExp),
-      fillOpacity = 0.75,
+      ...
       popup = gap_map2007$country)
-})
 
 
 
-
-#In server, expand the tooltip to also contain life expectancy data:
-  leaflet(options = tileOptions(maxZoom = 6, minZoom = 2)) %>%
-    addTiles() %>%
+#In server, expand tooltip to also contain life expectancy data:
     addPolygons(
-      data = gap_map2007$geometry,
-      color = "black",
-      weight = 2,
-      opacity = 1,
-      fillColor = map_palette(gap_map2007$lifeExp),
-      fillOpacity = 0.75,
-      #EXPANDING THE INFO PRESENTED IN THE TOOLTIPS.
+      ...,
       popup = paste0("County: ",
                      gap_map2007$country,
                      "<br>Life expectancy: ",
                      gap_map2007$lifeExp)
-    )
-
+      )
 
 
 
@@ -460,10 +355,10 @@ output$basic_map = renderLeaflet({
        sliderInput(
          inputId = "year_slider",
          label = "Pick what year's data are shown in the map.",
-         value = 2007, #<--SET THE DEFAULT CHOICE
+         value = 2007, #<--DEFAULT CHOICE
          min = min(gap$year), #<--MIN AND MAX OPTIONS
          max = max(gap$year),
-         step = 5, #<--HOW FAR APART CAN CHOICES BE? HERE, 5 IS THE SAME AS THOSE IN THE DATA.
+         step = 5, #<--HOW FAR APART ARE CHOICES ? HERE, 5 IS THE SAME AS THOSE IN THE DATA.
          sep = "" #<--DON'T USE COMMAS TO SEPARATE THE THOUSANDS PLACE (WE DON'T DO THAT FOR YEARS).
        )
 
@@ -471,89 +366,45 @@ output$basic_map = renderLeaflet({
 
 #In the server, wire up our renderLeaflet to handle slider events
 
-output$basic_map = renderLeaflet({
-  ##KEEP THE PRODUCT NAMED AFTER 2007 FOR NOW.
   gap_map2007 = gap_map %>%
-    filter(year == as.numeric(input$year_slider)) #<--INTRODUCE THE SLIDER'S CURRENT VALUE TO FILTER BY WHATEVER YEAR HAS BEEN CHOSEN. EVERY CHANGE IS AN EVENT THAT WILL TRIGGER'S renderLeaflet({})'S EXPRESSION TO RERUN.
+    filter(year == as.numeric(input$year_slider)) #<--INTRODUCE SLIDER'S CURRENT VALUE TO FILTER BY WHATEVER YEAR CHOSEN. EVERY CHANGE IS AN EVENT THAT WILL TRIGGER'S renderLeaflet({})'S EXPRESSION TO RERUN.
 
-  bounds = unname(sf::st_bbox(gap_map2007))
+  ...
 
-  map_palette = colorNumeric(palette = "Blues", domain = unique(gap_map2007$lifeExp))
-
-  leaflet(options = tileOptions(maxZoom = 6, minZoom = 2)) %>%
-    addTiles() %>%
-    addPolygons(
-      data = gap_map2007$geometry,
-      color = "black",
-      weight = 2,
-      opacity = 1,
-      fillColor = map_palette(gap_map2007$lifeExp),
-      fillOpacity = 0.75,
-      popup = paste0("County: ",
-                     gap_map2007$country,
-                     "<br>Life expectancy: ",
-                     gap_map2007$lifeExp)
-    ) %>%
-    setMaxBounds(bounds[1], bounds[2], bounds[3], bounds[4]) %>%
     addLegend(
-      position = "bottomleft",
-      pal = map_palette,
-      values = gap_map2007$lifeExp,
-      opacity = 0.75,
-      bins = 5,
-      #HERE, WE'LL PULL A LITTLE TRICK TO ENSURE THE LEGEND'S TITLE IS ALWAYS ACCURATE.
+      ...,
+      #HERE, A LITTLE TRICK TO ENSURE THE LEGEND'S TITLE IS ALWAYS ACCURATE.
       title = paste0("Life<br>expectancy ('",
                      substr(input$year_slider, 3, 4),
                      ")")
     )
 
-})
 
 
 
-
-#In global.R, generize by making one global map palette
+#In global.R, generalize by making one global map palette
 map_palette = colorNumeric(palette = "Blues",
                            domain = unique(gap_map$lifeExp)) #<--CHANGE TO REFERENCE THE WHOLE DATA SET.
+#THEN, REMOVE map_palette CODE THRUOUT SERVER.
+
 
 
 
 #In server, switch to using a proxy system for updates:
 #RENDERLEAFLET GOES BACK TO MAKING JUST THE BASE, 2007 VERSION.
 output$basic_map = renderLeaflet({
-
   gap_map2007 = gap_map %>%
     filter(year == 2007) #<--CHANGE BACK
 
-  bounds = unname(sf::st_bbox(gap_map2007))
+  ...
 
-  leaflet(options = tileOptions(maxZoom = 6, minZoom = 2)) %>%
-    addTiles() %>%
-    addPolygons(
-      data = gap_map2007$geometry,
-      color = "black",
-      weight = 2,
-      opacity = 1,
-      fillColor = map_palette(gap_map2007$lifeExp),
-      fillOpacity = 0.75,
-      popup = paste0("County: ",
-                     gap_map2007$country,
-                     "<br>Life expectancy: ",
-                     gap_map2007$lifeExp)
-    ) %>%
-    setMaxBounds(bounds[1], bounds[2], bounds[3], bounds[4]) %>%
     addLegend(
-      position = "bottomleft",
-      pal = map_palette,
-      values = gap_map2007$lifeExp,
-      opacity = 0.75,
-      bins = 5,
+      ...,
       title = paste0("Life<br>expectancy ('07)") #<--CHANGE BACK
     )
-
 })
 
-#A NEW OBSERVER WATCHES FOR EVENTS INVOLVING OUR SLIDER.
+#NEW OBSERVER WATCHES FOR EVENTS INVOLVING SLIDER.
 observeEvent({input$year_slider}, {
 
   gap_map2007 = gap_map %>%
@@ -564,23 +415,10 @@ observeEvent({input$year_slider}, {
     clearMarkers() %>% #REMOVE THE OLD POLYGONS ("MARKERS")--THEIR FILLS MUST CHANGE.
     clearControls() %>% #REMOVE THE LEGEND ("CONTROL")--ITS TITLE MUST CHANGE.
     addPolygons( #REBUILD THE POLYGONS EXACTLY AS BEFORE.
-      data = gap_map2007$geometry,
-      color = "black",
-      weight = 2,
-      opacity = 1,
-      fillColor = map_palette(gap_map2007$lifeExp),
-      fillOpacity = 0.75,
-      popup = paste0("County: ",
-                     gap_map2007$country,
-                     "<br>Life expectancy: ",
-                     gap_map2007$lifeExp)
+      ...
     ) %>%
     addLegend( #REBUILD THE LEGEND EXACTLY AS BEFORE.
-      position = "bottomleft",
-      pal = map_palette,
-      values = gap_map2007$lifeExp,
-      opacity = 0.75,
-      bins = 5,
+      ...,
       title = paste0("Life<br>expectancy ('",
                      substr(input$year_slider, 3, 4),
                      ")") #<-RETAIN THE TRICK HERE.
@@ -590,8 +428,24 @@ observeEvent({input$year_slider}, {
 
 
 
+#NEW OBSERVER TO USE FLY_TO IN RESPONSE TO MAP CLICKS
+observeEvent(input$basic_map_shape_click, {
+
+  leafletProxy("basic_map") %>% #USE THE PROXY SYSTEM FOR EFFICIENCY
+    flyTo( #USE FLY_TO TO ONLY UPDATE FOCUS (WHERE THE CAMERA CENTERS) AND ZOOM LEVEL.
+      lat = input$basic_map_shape_click$lat,
+      lng = input$basic_map_shape_click$lng,
+      zoom = 5
+    )
+
+})
+
+
+
 ## plotly ------------------------------------------------------------------
 
+
+https://z.umn.edu/Rshiny
 
 
 ##In global.R, add the following to create a ggplot and plotly graph:
@@ -627,22 +481,33 @@ p1 = ggplot(
   scale_color_discrete("Continent\n")
 
 
+#SHOW, THEN CONVERT, THEN SHOW AGAIN
 p2 = ggplotly(p1)
 
 
 
-#In server, disable/remove some interactive features:
-output$basic_graph = renderPlotly({
 
+#IN SERVER, RENDER THE PLOTLY GRAPH
+output$basic_graph = renderPlotly({
+  p2
+})
+
+
+
+#IN ui, ADD NEW PLOTLY GRAPH
+plotlyOutput("basic_graph")
+
+
+
+#In server, disable/remove some interactive features in our plotly graph:
   p2 %>%
     layout(
-      xaxis = list(fixedrange = TRUE),
+      xaxis = list(fixedrange = TRUE), #DISABLE ZOOM
       yaxis = list(fixedrange = TRUE),
-      legend = list(itemclick = FALSE)
+      legend = list(itemclick = FALSE) #STOP SINGLE-CLICK LEGEND EVENTS
     ) %>%
-    config(modeBarButtonsToRemove = list("lasso2d"))
+    config(modeBarButtonsToRemove = list("lasso2d")) #REMOVE LASSOING BUTTON
 
-})
 
 
 
@@ -666,6 +531,7 @@ gap2007 = gap %>%
     round(log(pop), 3)
   ))
 
+
 p1 = ggplot(
   gap2007,
   aes(
@@ -677,6 +543,8 @@ p1 = ggplot(
   )
 )
 
+
+
 p2 = ggplotly(p1,
               tooltip = "text") %>% #<--HERE, WE TELL GGPLOTLY() TO POPULATE TOOLTIPS WITH ONLY TEXT DATA AND NOT ALSO X/Y/COLOR INFO.
   style(hoverinfo = "text") #<--HERE, WE USE style() TO REQUEST THAT ONLY OUR CUSTOM TOOL-TIPS BE SHOWN, OR ELSE WE'D GET PLOTLY'S DEFAULT ONES TOO!
@@ -685,7 +553,7 @@ p2 = ggplotly(p1,
 
 
 #In the UI, add the color scheme selector:
-selectInput( #ADD A COLOR PALETTE SELECTOR
+selectInput(
   inputId = "color_scheme",
   label = "Pick a color palette for the graph.",
   choices = c("viridis", "plasma", "Spectral", "Dark2")
@@ -700,7 +568,7 @@ observeEvent(input$color_scheme, {
   new_pal = colorFactor(palette = input$color_scheme,
                         domain = unique(gap2007$continent))
 
-  plotlyProxy("basic_graph", session) %>% #<--WE HAVE TO INCLUDE session THIS TIME TOO.
+  plotlyProxy("basic_graph", session) %>% #<--WE HAVE TO INCLUDE session THIS TIME.
     plotlyProxyInvoke("restyle", #<-THE TYPE OF CHANGE WE PLAN TO MAKE
                       list(marker = list(
                         color = new_pal(gap2007$continent), #FOR OUR MARKERS, USE THESE COLORS.
@@ -711,21 +579,23 @@ observeEvent(input$color_scheme, {
 })
 
 
+
+
 #In the UI, add the textOutput
 textOutput("point_clicked")
 
 
 
-#In the global.R, add the source and event registration
+#In global.R, add the source and event registration for our plotly event tracking
 p2 = ggplotly(p1,
               tooltip = "text",
-              source = "our_graph") %>%
+              source = "our_graph") %>% #<--UNIQUE ID JUST FOR THIS SYSTEM
   style(hoverinfo = "text") %>%
-  event_register("plotly_click")
+  event_register("plotly_click") #WHAT TYPE OF EVENT WE WANT TO WATCH FOR.
 
 
 
-#In the server, add the new observer
+#In server, add new observer for tracking plotly clicks
 observeEvent(event_data(event = "plotly_click",
                         source = "our_graph"), {
 
