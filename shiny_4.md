@@ -35,6 +35,87 @@ editor_options:
 *At a few point, this lesson's code may produce **warnings** when
 executed. Ignore these—the code works as intended!*
 
+### Catching up
+
+In case you need it, here is the complete `ui.R`, `global.R`, and
+`server.R` code up to this point:
+
+
+``` r
+#ui.r
+ui = fluidPage(
+
+  tags$head(
+    tags$link(href = "styles.css",
+              rel = "stylesheet"),
+    tags$title("Check this out!")
+  ),
+
+  h1("Our amazing Shiny app!",
+     id = "header"),
+
+  fluidRow(
+    column(width = 4,
+           selectInput(
+             inputId = "sorted_column",
+             label = "Select a column to sort the table by.",
+             choices = names(gap)
+           ),
+           actionButton(
+             inputId = "go_button",
+             label = "Go!")
+    ),
+    column(width = 8, tabsetPanel(
+      tabPanel(title = "Table", tableOutput("table1")),
+      tabPanel(title = "Map"),
+      tabPanel(title = "Graph") 
+    ))
+  ),
+
+  tags$footer("This is my app")
+)
+```
+
+
+``` r
+#global.R
+library(shiny)
+library(dplyr)
+library(ggplot2)
+library(plotly)
+library(DT)
+library(leaflet)
+library(gapminder)
+library(sf)
+
+gap = as.data.frame(gapminder)
+```
+
+
+``` r
+#server.R
+server = function(input, output, session) {
+
+  #INITIAL TABLE
+  output$table1 = renderTable({
+    gap 
+  })
+
+  #UPDATE UPON BUTTON PRESS USING PROXY
+  observeEvent(input$go_button,
+               ignoreInit = FALSE, {
+
+      output$table1 = renderTable({
+      
+        gap %>%
+        arrange(!!sym(input$sorted_column)) 
+    
+    })
+  })
+
+}
+```
+
 ### Introduction
 
 While **input widgets** like drop-down menus and buttons are powerful
@@ -194,7 +275,7 @@ features our table:
 ##This code should **replace** ALL table-related code contained within your server.R file!
 
 #INITIAL TABLE
-  output$basic_table = renderDT({
+  output$table1 = renderDT({
     gap %>% 
       datatable(
         selection = "none", #<--TURNS OFF ROW SELECTION
@@ -209,7 +290,7 @@ features our table:
 #UPDATE UPON BUTTON PRESS
   observeEvent(input$go_button, { 
     
-    output$basic_table = renderDT({
+    output$table1 = renderDT({
       gap %>% 
         arrange(!!sym(input$sorted_column)) %>% 
         #SAME AS ABOVE
@@ -526,7 +607,7 @@ with two values: row and column numbers for the selected cell.
 
 ![By using print(), we can see that our cell selection reactive object
 is a matrix holding the row and column numbers of the cell selected by
-the user. ](fig/cell%20selection.gif)
+the user.](fig/cell%20selection.gif)
 
 Of course, we aren't **handling** these cell selection events right now;
 the app doesn't yet respond in any new way.
@@ -651,7 +732,7 @@ By using `renderText({})` and `textOutput()` to handle these events, we
 generate dynamic text that a user might feel is personal to them and
 their actions, even though it's procedurally generated!
 
-::: challenge
+:::: challenge
 If you've been *extra* observant, you might realize there are two issues
 with our new cell selection observer.
 
@@ -724,9 +805,9 @@ Now, if you start your app and select a cell that yields our
 procedurally generated text, then click that cell again to de-select it,
 the text will also disappear.
 :::
-:::
+::::
 
-::: challenge
+::::: challenge
 **EXTRA CREDIT--THIS QUESTION IS CHALLENGING!**
 
 Second, our current code does not acknowledge the possibility that the
@@ -743,7 +824,7 @@ How could you adjust the code to *first* determine if the table is
 sorted differently than the raw data set is and, if so, reference the
 *sorted* data set instead?
 
-::: solution
+:::: solution
 This question is a purposeful trap; it doesn't actually have a simple
 solution you're intended to know yet!
 
@@ -873,8 +954,8 @@ That means *far* more potential circumstances to anticipate and then
 handle with your code. This is why designing your app ahead of time and
 adding interactivity judiciously is essential.
 :::
-:::
-:::
+::::
+:::::
 
 ## Putting us on the map
 
@@ -1366,7 +1447,7 @@ Now, our map is both snazzy *and* extra informative:
 country. Raw HTML line breaks are used to make the result more
 human-readable.](fig/expandedtooltip.png)
 
-::: challenge
+:::: challenge
 In the previous example, we used `popup` to build our tooltips. Try
 using the `label` parameter instead. For whatever reason, this requires
 more wrangling, so here's the *exact* code you'll need:
@@ -1417,7 +1498,7 @@ asking your users for input when building your app**; without it, you'll
 just be guessing as to what their needs, expectations, and workflows
 will be!
 :::
-:::
+::::
 
 ### Update, don't remake, `leaflet` edition!
 

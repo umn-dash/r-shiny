@@ -155,7 +155,7 @@ website *actually* works:
     dialogue with the server continues—new requests are sent, and new
     files are received and deciphered.
 
-::: discussion
+:::: discussion
 Have you ever had to clear your browser's **cache**? What do you think
 gets deleted when you do that?
 
@@ -167,7 +167,7 @@ can be *very* bulky), files for special fonts that website wanted you to
 use (perhaps because their logo uses them), and JSON files (text files
 that can store data), among others.
 :::
-:::
+::::
 
 #### Where R Shiny sits
 
@@ -200,7 +200,7 @@ handling server-side tasks, such as Python or PHP, *especially* when
 those tasks revolve around data manipulation, management, or display—R
 excels at all things "data!"
 
-::: discussion
+:::: discussion
 Hopefully, you now recognize that websites can be built both with and
 without R Shiny. What is *different* about building a website using R
 Shiny, then?
@@ -232,7 +232,7 @@ think the two most important are:
     website using the "look and feel," at least, of just *one* general
     programming language.
 :::
-:::
+::::
 
 ## Let's meet HTML and CSS
 
@@ -322,7 +322,7 @@ div(id = "my box",
 It's through this nesting of boxes that the complex visual structure of
 a typical website is born.
 
-::: challenge
+:::: challenge
 Below is some HTML code containing some (nested) HTML boxes. Rewrite the
 code below in R Shiny UI code instead using the `div()` function:
 
@@ -362,7 +362,7 @@ practice among everyday R users, it's certainly not universal, but it's
 essential to coding in HTML, so some find the amount of nesting found in
 R Shiny UI code to be unfamiliar.
 :::
-:::
+::::
 
 #### Key concept #2: Websites have heads and bodies
 
@@ -499,7 +499,7 @@ according to the size of the user's screen. For example:
     screen narrows such that, if all elements are arranged vertically,
     their order is more logical to a user encountering them in that way.
 
-::: challenge
+:::: challenge
 Try it: Go to
 [dictionary.com](www.dictionary.com "A link to dictionary.com, a good site for demonstrating the HTML concept of the "flow."")
 and vary the width of your browser window by pulling its edges inward.
@@ -513,7 +513,7 @@ search bar, the word of the day box shrank to take up less room, and the
 games sidebar teleported to much further down on the page. You may have
 noticed many other changes!
 :::
-:::
+::::
 
 In line with this, R Shiny comes with custom boxes that are "fluid,"
 meaning their size is flexible and changes automatically to fit the size
@@ -590,7 +590,7 @@ simultaneously, with those two targets separated with a comma:
         specify the class to target all those elements with the same CSS
         rule (*e.g.*, `.intro`).
 
-::: challenge
+:::: challenge
 Consider the following elements. Which ones do you think would be
 affected by a CSS selector of `p.intro?`
 
@@ -615,7 +615,7 @@ p(id = "intro", "ids and classes are different attributes, so this p element wou
 a(class = "intro", "An a (link) element is different from a p element, so the selector p.intro won't affect this element even though the element does have the 'intro' class. It would be affected by the selectors .intro and a.intro though.")
 ```
 :::
-:::
+::::
 
 Inside of our rule's braces, meanwhile, we have a list. Each list item
 is a **property name** (*e.g.*, `font-style`) and a new **value**
@@ -627,7 +627,7 @@ rules carefully!
 CSS rules get more complex than this one, but they can be simpler than
 this one too, so if this rule makes sense to you, you're in great shape!
 
-::: challenge
+:::: challenge
 Try it: W3Schools is a *fantastic* resource for learning HTML and CSS.
 [Go to their CSS page and check out some of the tutorial pages on the
 left-hand
@@ -652,7 +652,7 @@ classes or ids. Don't forget your colons, braces, commas (if needed), or
 semi-colons! Also, notice that, unlike in R, text values in CSS (like
 "red" and "center") *aren't* **quoted**.
 :::
-:::
+::::
 
 If you're thinking "This sounds complicated/tedious/off-topic! Why are
 we bothering to learn any CSS, when R is going to translate my Shiny
@@ -741,7 +741,7 @@ you'll make when building a Shiny app are deciding:
 While the list above is not exhaustive, it should help you begin to make
 those decisions.
 
-::: challenge
+:::: challenge
 Consider the webpage below:
 
 ![](fig/clipboard-1560346890.png)
@@ -761,7 +761,7 @@ Here's what I noticed and identified:
 
 You may have noticed more, fewer, or different things—that's ok!
 :::
-:::
+::::
 
 ::: keypoints
 -   Classically, websites are built using HTML, CSS, and JavaScript to

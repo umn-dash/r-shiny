@@ -365,7 +365,7 @@ there and those might change. It makes sense that we can only put these
 kinds of "changeable" objects inside code blocks that R knows might
 contain such objects!
 
-::: challenge
+:::: challenge
 **Try it:** Pause here to prove the previous point. Copy
 `input$sorted_column` and paste it anywhere *inside* your server
 function but *outside* of `renderTable({})`'s braces. Then, run your
@@ -385,7 +385,7 @@ calling it a reactive consumer, which is also not an important
 distinction). R is not prepared to be watching for such an object in the
 place we've put it.
 :::
-:::
+::::
 
 How do we recognize reactive contexts so we know where we can and can't
 put entities like `input$sorted_column`? *Generally speaking*, when an R
@@ -468,7 +468,7 @@ you're writing the code for your website now, its *users* won't arrive
 until *later*. So, your code needs to let R know what it should do later
 on, when you're not around, but your users are.
 
-::: discussion
+:::: discussion
 **Check for understanding:** How does the code we've written so far in
 our `server.R` file execute differently than code we'd write in a
 traditional R script? How does the code inside of `renderTable({})`'s
@@ -494,7 +494,7 @@ However, the difference is that these contexts might contain reactive
 objects whose values might frequently change, so our code needs to be
 set up to accommodate any potential value they may take.
 :::
-:::
+::::
 
 ## Buttoning this up
 
@@ -721,7 +721,7 @@ here is awkward!), just like in a browser. The second and third tab
 panels are currently empty, but not for long! We'll add new features to
 them in the next lesson.
 
-::: discussion
+:::: discussion
 Imagine you have two **observers** that are watching the same **reactive
 object** such that, when that reactive object changes, both observers
 should begin to execute. What do you think will happen?
@@ -755,7 +755,7 @@ unavoidable. In those instances, `observeEvent({},{})`'s `priority`
 parameter can be used—R will use the values specified to `priority` to
 decide the order "racing" observers should execute in-.
 :::
-:::
+::::
 
 ::: keypoints
 -   Complex UI elements, like tables, first need to be **rendered**
