@@ -344,7 +344,7 @@
         
 <section id="aio-shiny_1"><p>Content from <a href="shiny_1.html">Welcome to the Web! Web Development with Shiny 101</a></p>
 <hr>
-<p>Last updated on 2024-09-04 |
+<p>Last updated on 2024-10-07 |
 
         <a href="https://github.com/umn-dash/r-shiny/edit/main/episodes/shiny_1.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -1260,7 +1260,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-shiny_2"><p>Content from <a href="shiny_2.html">Building the Ground Floor of a Shiny App</a></p>
 <hr>
-<p>Last updated on 2024-09-05 |
+<p>Last updated on 2024-10-07 |
 
         <a href="https://github.com/umn-dash/r-shiny/edit/main/episodes/shiny_2.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -1693,7 +1693,7 @@ the way it does so far.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>Besides our title we placed as contents inside our header, our app
 will actually look completely empty!</p>
@@ -1746,7 +1746,7 @@ working.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>Here’s what our CSS rule should look like:</p>
 <div class="codewrapper sourceCode" id="cb7">
@@ -1867,7 +1867,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-shiny_3"><p>Content from <a href="shiny_3.html">R Shiny's Core Concepts: Rendering and Outputting, Input Widgets, and Reactivity</a></p>
 <hr>
-<p>Last updated on 2024-09-05 |
+<p>Last updated on 2024-10-07 |
 
         <a href="https://github.com/umn-dash/r-shiny/edit/main/episodes/shiny_3.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -2262,7 +2262,7 @@ words.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>You’ll get an error that looks like this:<br><br><code>Error in $: Can't access reactive value 'sorted_column' outside of reactive consumer. ℹ Do you need to wrap inside reactive() or observe()?</code></p>
 <p>This error notes that <code>input$sorted_column</code> is a
@@ -2372,7 +2372,7 @@ we might write?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <p>Server-side R code is broken up into many commands that create
 reactive contexts, each of which is tasked with generating one or more
@@ -2630,7 +2630,7 @@ think will happen?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <p>In complex applications, the scenario described here is
 <em>surprisingly</em> common, and it can actually be a problem!</p>
@@ -2722,7 +2722,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-shiny_4"><p>Content from <a href="shiny_4.html">Shiny Showstoppers: DTs and Leaflets and Plotlys, Oh My!</a></p>
 <hr>
-<p>Last updated on 2024-09-06 |
+<p>Last updated on 2024-10-07 |
 
         <a href="https://github.com/umn-dash/r-shiny/edit/main/episodes/shiny_4.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -2773,6 +2773,92 @@ interactive graphics and how to watch for them.</li>
 <p><em>At a few point, this lesson’s code may produce
 <strong>warnings</strong> when executed. Ignore these—the code works as
 intended!</em></p>
+</div>
+<div class="section level3">
+<h3 id="catching-up">Catching up<a class="anchor" aria-label="anchor" href="#catching-up"></a>
+</h3>
+<p>In case you need it, here is the complete <code>ui.R</code>,
+<code>global.R</code>, and <code>server.R</code> code up to this
+point:</p>
+<div class="codewrapper sourceCode" id="cb1">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#ui.r</span></span>
+<span><span class="va">ui</span> <span class="op">=</span> <span class="fu">fluidPage</span><span class="op">(</span></span>
+<span></span>
+<span>  <span class="va">tags</span><span class="op">$</span><span class="fu">head</span><span class="op">(</span></span>
+<span>    <span class="va">tags</span><span class="op">$</span><span class="fu">link</span><span class="op">(</span>href <span class="op">=</span> <span class="st">"styles.css"</span>,</span>
+<span>              rel <span class="op">=</span> <span class="st">"stylesheet"</span><span class="op">)</span>,</span>
+<span>    <span class="va">tags</span><span class="op">$</span><span class="fu">title</span><span class="op">(</span><span class="st">"Check this out!"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span></span>
+<span>  <span class="fu">h1</span><span class="op">(</span><span class="st">"Our amazing Shiny app!"</span>,</span>
+<span>     id <span class="op">=</span> <span class="st">"header"</span><span class="op">)</span>,</span>
+<span></span>
+<span>  <span class="fu">fluidRow</span><span class="op">(</span></span>
+<span>    <span class="fu">column</span><span class="op">(</span>width <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>           <span class="fu">selectInput</span><span class="op">(</span></span>
+<span>             inputId <span class="op">=</span> <span class="st">"sorted_column"</span>,</span>
+<span>             label <span class="op">=</span> <span class="st">"Select a column to sort the table by."</span>,</span>
+<span>             choices <span class="op">=</span> <span class="fu">names</span><span class="op">(</span><span class="va">gap</span><span class="op">)</span></span>
+<span>           <span class="op">)</span>,</span>
+<span>           <span class="fu">actionButton</span><span class="op">(</span></span>
+<span>             inputId <span class="op">=</span> <span class="st">"go_button"</span>,</span>
+<span>             label <span class="op">=</span> <span class="st">"Go!"</span><span class="op">)</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    <span class="fu">column</span><span class="op">(</span>width <span class="op">=</span> <span class="fl">8</span>, <span class="fu">tabsetPanel</span><span class="op">(</span></span>
+<span>      <span class="fu">tabPanel</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Table"</span>, <span class="fu">tableOutput</span><span class="op">(</span><span class="st">"table1"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>      <span class="fu">tabPanel</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Map"</span><span class="op">)</span>,</span>
+<span>      <span class="fu">tabPanel</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Graph"</span><span class="op">)</span> </span>
+<span>    <span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span></span>
+<span>  <span class="va">tags</span><span class="op">$</span><span class="fu">footer</span><span class="op">(</span><span class="st">"This is my app"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb2">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#global.R</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">shiny</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">dplyr</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">ggplot2</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">plotly</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">DT</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">leaflet</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">gapminder</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">sf</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">gap</span> <span class="op">=</span> <span class="fu">as.data.frame</span><span class="op">(</span><span class="va">gapminder</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb3">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#server.R</span></span>
+<span><span class="va">server</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span></span>
+<span></span>
+<span>  <span class="co">#INITIAL TABLE</span></span>
+<span>  <span class="va">output</span><span class="op">$</span><span class="va">table1</span> <span class="op">=</span> <span class="fu">renderTable</span><span class="op">(</span><span class="op">{</span></span>
+<span>    <span class="va">gap</span> </span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co">#UPDATE UPON BUTTON PRESS USING PROXY</span></span>
+<span>  <span class="fu">observeEvent</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">go_button</span>,</span>
+<span>               ignoreInit <span class="op">=</span> <span class="cn">FALSE</span>, <span class="op">{</span></span>
+<span></span>
+<span>      <span class="va">output</span><span class="op">$</span><span class="va">table1</span> <span class="op">=</span> <span class="fu">renderTable</span><span class="op">(</span><span class="op">{</span></span>
+<span>      </span>
+<span>        <span class="va">gap</span> <span class="op">%&gt;%</span></span>
+<span>        <span class="fu">arrange</span><span class="op">(</span><span class="op">!</span><span class="op">!</span><span class="fu">sym</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">sorted_column</span><span class="op">)</span><span class="op">)</span> </span>
+<span>    </span>
+<span>    <span class="op">}</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span><span class="op">}</span></span></code></pre>
+</div>
 </div>
 <div class="section level3">
 <h3 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
@@ -2829,7 +2915,7 @@ loading <code>DT</code> by executing <code><a href="https://github.com/rstudio/D
 haven’t done so!) is to change our <code>renderTable({})</code> and
 <code>tableOutput()</code> calls to <code>renderDT({})</code> and
 <code>dataTableOutput()</code> calls:</p>
-<div class="codewrapper sourceCode" id="cb1">
+<div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2851,7 +2937,7 @@ haven’t done so!) is to change our <code>renderTable({})</code> and
 <span>   <span class="op">}</span><span class="op">)</span></span>
 <span>  <span class="op">}</span><span class="op">)</span></span></code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb2">
+<div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2930,14 +3016,14 @@ Others may find having a lot of features overwhelming, even if they do
 understand them all.</p>
 <p>The <code>datatable()</code> function’s <code>options</code>
 parameter allows us to reduce the features our table:</p>
-<div class="codewrapper sourceCode" id="cb3">
+<div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">##This code should **replace** ALL table-related code contained within your server.R file!</span></span>
 <span></span>
 <span><span class="co">#INITIAL TABLE</span></span>
-<span>  <span class="va">output</span><span class="op">$</span><span class="va">basic_table</span> <span class="op">=</span> <span class="fu">renderDT</span><span class="op">(</span><span class="op">{</span></span>
+<span>  <span class="va">output</span><span class="op">$</span><span class="va">table1</span> <span class="op">=</span> <span class="fu">renderDT</span><span class="op">(</span><span class="op">{</span></span>
 <span>    <span class="va">gap</span> <span class="op">%&gt;%</span> </span>
 <span>      <span class="fu">datatable</span><span class="op">(</span></span>
 <span>        selection <span class="op">=</span> <span class="st">"none"</span>, <span class="co">#&lt;--TURNS OFF ROW SELECTION</span></span>
@@ -2952,7 +3038,7 @@ parameter allows us to reduce the features our table:</p>
 <span><span class="co">#UPDATE UPON BUTTON PRESS</span></span>
 <span>  <span class="fu">observeEvent</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">go_button</span>, <span class="op">{</span> </span>
 <span>    </span>
-<span>    <span class="va">output</span><span class="op">$</span><span class="va">basic_table</span> <span class="op">=</span> <span class="fu">renderDT</span><span class="op">(</span><span class="op">{</span></span>
+<span>    <span class="va">output</span><span class="op">$</span><span class="va">table1</span> <span class="op">=</span> <span class="fu">renderDT</span><span class="op">(</span><span class="op">{</span></span>
 <span>      <span class="va">gap</span> <span class="op">%&gt;%</span> </span>
 <span>        <span class="fu">arrange</span><span class="op">(</span><span class="op">!</span><span class="op">!</span><span class="fu">sym</span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">sorted_column</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
 <span>        <span class="co">#SAME AS ABOVE</span></span>
@@ -2989,7 +3075,7 @@ center-aligned.</p></li>
 <p>We’ll use functions from the <code>format*()</code> and
 <code>style*()</code> families—specifically, <code>formatRound()</code>,
 <code>formatStyle()</code>, and <code>styleEqual()</code>:</p>
-<div class="codewrapper sourceCode" id="cb4">
+<div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3136,7 +3222,7 @@ data contained with the table’s cells, leaving all else unchanged.</p>
 <p>Up until now, we handled column re-sorting using
 <code>renderDT({})</code>. Let’s switch to using
 <code>dataTableProxy()</code> to handle these events instead:</p>
-<div class="codewrapper sourceCode" id="cb5">
+<div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3207,7 +3293,7 @@ trigger events by default. Let’s turn selection back on by changing the
 <code>"none"</code> to
 <code>list(mode = "single", target = "cell")</code>, which’ll enable
 users to select one cell at a time:</p>
-<div class="codewrapper sourceCode" id="cb6">
+<div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3249,7 +3335,7 @@ observer will watch. For now, we’ll make this observer’s only operation
 to print the value of <code>input$table1_cells_selected</code> to the R
 Console every time a new cell is clicked so we can see what this object
 looks like:</p>
-<div class="codewrapper sourceCode" id="cb7">
+<div class="codewrapper sourceCode" id="cb10">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3279,7 +3365,7 @@ events right now; the app doesn’t yet respond in any new way.</p>
 <p>Let’s change that. First, let’s add a <code>renderText({})</code>
 call inside our new observer and a <code>textOutput()</code> call to our
 UI, beneath our table:</p>
-<div class="codewrapper sourceCode" id="cb8">
+<div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3300,7 +3386,7 @@ UI, beneath our table:</p>
 <span>  </span>
 <span>  <span class="co">##... other server code...</span></span></code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb9">
+<div class="codewrapper sourceCode" id="cb12">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3330,7 +3416,7 @@ use these functions to generate text whenever a life expectancy, GDP per
 capita, or population value is selected. Let’s have that text reference
 the selected value as well as the associated country and year. This will
 require a <em>little</em> “R elbow grease,” but no new Shiny code:</p>
-<div class="codewrapper sourceCode" id="cb10">
+<div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3385,7 +3471,7 @@ require a <em>little</em> “R elbow grease,” but no new Shiny code:</p>
 </h3>
 <pre class="error" tabindex="0"><code>Error in observeEvent({: could not find function "observeEvent"</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb12">
+<div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3431,7 +3517,7 @@ function’s expression blank, an empty box will get rendered.</em></p>
 selected a cell at all and, if so, if that cell is appropriate. We can
 pair these two <code>if()</code>s with <code>else</code>s that eliminate
 the rendered text whenever no (appropriate) cell has been selected:</p>
-<div class="codewrapper sourceCode" id="cb13">
+<div class="codewrapper sourceCode" id="cb16">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3532,7 +3618,7 @@ sorted according to the current selection in our drop-down menu widget.
 If these two values <em>don’t</em> match, then the table is
 <em>probably</em> sorted by a different column than the original data
 set was:</p>
-<div class="codewrapper sourceCode" id="cb14">
+<div class="codewrapper sourceCode" id="cb17">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3668,7 +3754,7 @@ to the gapminder data set with attached spatial data.</a> If you haven’t
 downloaded that yet, do so now.</p>
 <p>Once you’ve downloaded it, move it to your R Project folder and then
 load it into R using the following command:</p>
-<div class="codewrapper sourceCode" id="cb15">
+<div class="codewrapper sourceCode" id="cb18">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3732,25 +3818,25 @@ country boundaries).</p></li>
 </li>
 </ol>
 <p>Here, we’ll use <code>addPolygons()</code>:</p>
-<div class="codewrapper sourceCode" id="cb16">
+<div class="codewrapper sourceCode" id="cb19">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="do">##This code should **swapped** for the the "main panel" content in the BODY section of your ui.R file!</span></span>
-<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a></span>
-<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="do">##... other UI code...</span></span>
-<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a></span>
-<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a><span class="do">###MAIN PANEL CELL</span></span>
-<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>    <span class="fu">column</span>(<span class="at">width =</span> <span class="dv">8</span>, <span class="fu">tabsetPanel</span>(</span>
-<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a>      <span class="do">###TABLE TAB</span></span>
-<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a>      <span class="fu">tabPanel</span>(<span class="at">title =</span> <span class="st">"Table"</span>, <span class="fu">dataTableOutput</span>(<span class="st">"table1"</span>)),</span>
-<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a>      <span class="do">###MAP TAB</span></span>
-<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a>      <span class="fu">tabPanel</span>(<span class="at">title =</span> <span class="st">"Map"</span>, <span class="fu">leafletOutput</span>(<span class="st">"basic_map"</span>)), <span class="co">#&lt;--OUTPUT NEW MAP.</span></span>
-<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a>      <span class="do">###GRAPH TAB</span></span>
-<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a>      <span class="fu">tabPanel</span>(<span class="at">title =</span> <span class="st">"Graph"</span>)</span>
-<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a>    )),</span>
-<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a>  <span class="do">##... other UI code...</span></span></code></pre>
+<pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="do">##This code should **swapped** for the the "main panel" content in the BODY section of your ui.R file!</span></span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a><span class="do">##... other UI code...</span></span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a><span class="do">###MAIN PANEL CELL</span></span>
+<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a>    <span class="fu">column</span>(<span class="at">width =</span> <span class="dv">8</span>, <span class="fu">tabsetPanel</span>(</span>
+<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a>      <span class="do">###TABLE TAB</span></span>
+<span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a>      <span class="fu">tabPanel</span>(<span class="at">title =</span> <span class="st">"Table"</span>, <span class="fu">dataTableOutput</span>(<span class="st">"table1"</span>)),</span>
+<span id="cb19-9"><a href="#cb19-9" tabindex="-1"></a>      <span class="do">###MAP TAB</span></span>
+<span id="cb19-10"><a href="#cb19-10" tabindex="-1"></a>      <span class="fu">tabPanel</span>(<span class="at">title =</span> <span class="st">"Map"</span>, <span class="fu">leafletOutput</span>(<span class="st">"basic_map"</span>)), <span class="co">#&lt;--OUTPUT NEW MAP.</span></span>
+<span id="cb19-11"><a href="#cb19-11" tabindex="-1"></a>      <span class="do">###GRAPH TAB</span></span>
+<span id="cb19-12"><a href="#cb19-12" tabindex="-1"></a>      <span class="fu">tabPanel</span>(<span class="at">title =</span> <span class="st">"Graph"</span>)</span>
+<span id="cb19-13"><a href="#cb19-13" tabindex="-1"></a>    )),</span>
+<span id="cb19-14"><a href="#cb19-14" tabindex="-1"></a>  <span class="do">##... other UI code...</span></span></code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb17">
+<div class="codewrapper sourceCode" id="cb20">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3796,7 +3882,7 @@ map around too much, and they can create weird visual quirks, such as
 making the world repeat.</p>
 <p>The <code>leaflet()</code> function can be used to set min and max
 zoom levels like so:</p>
-<div class="codewrapper sourceCode" id="cb18">
+<div class="codewrapper sourceCode" id="cb21">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3826,7 +3912,7 @@ users from zooming in or out more than makes sense for our data.</p>
 <p>We can also set <strong>maximum bounds</strong>—these are an
 invisible box that users cannot pan the map beyond. If they try, the map
 will snap the focus (center of the map) back inside the bounds:</p>
-<div class="codewrapper sourceCode" id="cb19">
+<div class="codewrapper sourceCode" id="cb22">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3875,7 +3961,7 @@ to your spatial data can be controlled with parameters of the specific
 values for <code>color</code>, <code>weight</code>, and
 <code>opacity</code> inside <code>addPolygons()</code> to change the
 color, thickness, and transparency of the strokes:</p>
-<div class="codewrapper sourceCode" id="cb20">
+<div class="codewrapper sourceCode" id="cb23">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3919,7 +4005,7 @@ itself). We can build this color palette function using the
 <code>palette</code>, the name of an R color palette we’d like to use,
 and a <code>domain</code>, the entire set of values we’ll need to assign
 colors to:</p>
-<div class="codewrapper sourceCode" id="cb21">
+<div class="codewrapper sourceCode" id="cb24">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3952,7 +4038,7 @@ colors to:</p>
 </div>
 <p>Then, we can add the polygon-coloring instructions and the life
 expectancy data to <code>addPolygons()</code>:</p>
-<div class="codewrapper sourceCode" id="cb22">
+<div class="codewrapper sourceCode" id="cb25">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3989,7 +4075,7 @@ life expectancy value to the fill color of that country’s polygon.</div>
 </figure><p>…But shouldn’t there be a <strong>legend</strong> that clarifies what
 colors go with what values? We can add one using
 <code>addLegend()</code>:</p>
-<div class="codewrapper sourceCode" id="cb23">
+<div class="codewrapper sourceCode" id="cb26">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4044,7 +4130,7 @@ or some other action.</p>
 <p>Using the <code>popup</code> parameter of <code>addPolygons()</code>,
 we can add tooltips that appear and disappear on mouse click. Inside
 them, we’ll put the name of the country being clicked:</p>
-<div class="codewrapper sourceCode" id="cb24">
+<div class="codewrapper sourceCode" id="cb27">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4090,7 +4176,7 @@ values too and also keep the result human-readable? There are many
 approaches we could take, but using R’s versatile <code>paste0()</code>
 function plus the HTML line break element (<code>&lt;br&gt;</code>)
 works pretty well:</p>
-<div class="codewrapper sourceCode" id="cb25">
+<div class="codewrapper sourceCode" id="cb28">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4149,7 +4235,7 @@ the result more human-readable.</div>
 tooltips. Try using the <code>label</code> parameter instead. For
 whatever reason, this requires more wrangling, so here’s the
 <em>exact</em> code you’ll need:</p>
-<div class="codewrapper sourceCode" id="cb26">
+<div class="codewrapper sourceCode" id="cb29">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4208,7 +4294,7 @@ needs, expectations, and workflows will be!</p>
 <p>At this stage, our users have <em>no</em> control over our map. Let’s
 adds a <strong>slider input widget</strong> that will let users select
 which year’s data get plotted:</p>
-<div class="codewrapper sourceCode" id="cb27">
+<div class="codewrapper sourceCode" id="cb30">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4250,7 +4336,7 @@ context</strong> in our server code somehow if we want to
 <p>In this case, that isn’t actually too hard; we already have code that
 filters the data set down to the year 2007; we can modify this code so
 it filters the data by whichever year has been chosen instead:</p>
-<div class="codewrapper sourceCode" id="cb28">
+<div class="codewrapper sourceCode" id="cb31">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4304,7 +4390,7 @@ similar change we should make: We should make our
 of it is used no matter which year is picked. Since the code to produce
 this function will then need to run only once ever, this is a good
 opportunity to relocate that code to <code>global.R</code>:</p>
-<div class="codewrapper sourceCode" id="cb29">
+<div class="codewrapper sourceCode" id="cb32">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4344,7 +4430,7 @@ relevant events (here, our slider changing).</p></li>
 <code>leafletProxy()</code>, to make only the updates that need
 making:</p></li>
 </ol>
-<div class="codewrapper sourceCode" id="cb30">
+<div class="codewrapper sourceCode" id="cb33">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4472,7 +4558,7 @@ specific location, such as where the user clicked.</p>
 <p>So, let’s create a new observer that watches for clicks, and, when
 one happens, a <code>leafletProxy()</code> will fly our map to that
 location:</p>
-<div class="codewrapper sourceCode" id="cb31">
+<div class="codewrapper sourceCode" id="cb34">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4548,7 +4634,7 @@ we’ll customize the appearance of the graph in several ways.</p>
 <p>This <em>probably</em> sounds like it’ll be a complicated graph, and
 that’s because it will be! I want you to see how <code>ggplotly()</code>
 performs on a graph with many components:</p>
-<div class="codewrapper sourceCode" id="cb32">
+<div class="codewrapper sourceCode" id="cb35">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4597,7 +4683,7 @@ above.</div>
 </figure><p>More importantly, though, it’s complex enough to be a good test for
 <code>ggplotly()</code>. Let’s see how it does at converting it to a
 <code>plotly</code> graph:</p>
-<div class="codewrapper sourceCode" id="cb33">
+<div class="codewrapper sourceCode" id="cb36">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4613,22 +4699,22 @@ there are some differences—we’ll talk about those in a moment.</p>
 hopefully won’t surprise you that there are
 <code>renderPlotly({})</code> and <code>plotlyOutput()</code> functions
 we can use:</p>
-<div class="codewrapper sourceCode" id="cb34">
+<div class="codewrapper sourceCode" id="cb37">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a><span class="do">##This code should **swapped** for the the "main panel" content in the BODY section of your ui.R file!</span></span>
-<span id="cb34-2"><a href="#cb34-2" tabindex="-1"></a></span>
-<span id="cb34-3"><a href="#cb34-3" tabindex="-1"></a><span class="do">##... other UI code...</span></span>
-<span id="cb34-4"><a href="#cb34-4" tabindex="-1"></a><span class="do">###MAIN PANEL CELL</span></span>
-<span id="cb34-5"><a href="#cb34-5" tabindex="-1"></a><span class="fu">column</span>(<span class="at">width =</span> <span class="dv">8</span>, <span class="fu">tabsetPanel</span>(</span>
-<span id="cb34-6"><a href="#cb34-6" tabindex="-1"></a>      <span class="fu">tabPanel</span>(<span class="at">title =</span> <span class="st">"Table"</span>, <span class="fu">dataTableOutput</span>(<span class="st">"table1"</span>)),</span>
-<span id="cb34-7"><a href="#cb34-7" tabindex="-1"></a>      <span class="fu">tabPanel</span>(<span class="at">title =</span> <span class="st">"Map"</span>, <span class="fu">leafletOutput</span>(<span class="st">"basic_map"</span>)),</span>
-<span id="cb34-8"><a href="#cb34-8" tabindex="-1"></a>      <span class="fu">tabPanel</span>(<span class="at">title =</span> <span class="st">"Graph"</span>, </span>
-<span id="cb34-9"><a href="#cb34-9" tabindex="-1"></a>               <span class="fu">plotlyOutput</span>(<span class="st">"basic_graph"</span>)) <span class="co">#&lt;--ADD THE RENDERED GRAPH HERE.</span></span>
-<span id="cb34-10"><a href="#cb34-10" tabindex="-1"></a>    )),</span>
-<span id="cb34-11"><a href="#cb34-11" tabindex="-1"></a><span class="do">##... other UI code...</span></span></code></pre>
+<pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" tabindex="-1"></a><span class="do">##This code should **swapped** for the the "main panel" content in the BODY section of your ui.R file!</span></span>
+<span id="cb37-2"><a href="#cb37-2" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="#cb37-3" tabindex="-1"></a><span class="do">##... other UI code...</span></span>
+<span id="cb37-4"><a href="#cb37-4" tabindex="-1"></a><span class="do">###MAIN PANEL CELL</span></span>
+<span id="cb37-5"><a href="#cb37-5" tabindex="-1"></a><span class="fu">column</span>(<span class="at">width =</span> <span class="dv">8</span>, <span class="fu">tabsetPanel</span>(</span>
+<span id="cb37-6"><a href="#cb37-6" tabindex="-1"></a>      <span class="fu">tabPanel</span>(<span class="at">title =</span> <span class="st">"Table"</span>, <span class="fu">dataTableOutput</span>(<span class="st">"table1"</span>)),</span>
+<span id="cb37-7"><a href="#cb37-7" tabindex="-1"></a>      <span class="fu">tabPanel</span>(<span class="at">title =</span> <span class="st">"Map"</span>, <span class="fu">leafletOutput</span>(<span class="st">"basic_map"</span>)),</span>
+<span id="cb37-8"><a href="#cb37-8" tabindex="-1"></a>      <span class="fu">tabPanel</span>(<span class="at">title =</span> <span class="st">"Graph"</span>, </span>
+<span id="cb37-9"><a href="#cb37-9" tabindex="-1"></a>               <span class="fu">plotlyOutput</span>(<span class="st">"basic_graph"</span>)) <span class="co">#&lt;--ADD THE RENDERED GRAPH HERE.</span></span>
+<span id="cb37-10"><a href="#cb37-10" tabindex="-1"></a>    )),</span>
+<span id="cb37-11"><a href="#cb37-11" tabindex="-1"></a><span class="do">##... other UI code...</span></span></code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb35">
+<div class="codewrapper sourceCode" id="cb38">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4692,7 +4778,7 @@ plot’s mapped aesthetics work. Inside <code>layout()</code> are
 <code>xaxis</code> and <code>yaxis</code> parameters; if we give both a
 list containing the instruction <code>fixedrange = TRUE</code>, this
 will disable zooming functionality:</p>
-<div class="codewrapper sourceCode" id="cb36">
+<div class="codewrapper sourceCode" id="cb39">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4717,7 +4803,7 @@ responds to clicks. For example, if we want to turn off the
 functionality that redacts a group when its legend key is clicked, we
 can set the <code>itemclick</code> instruction for the
 <code>legend</code> parameter to <code>FALSE</code>:</p>
-<div class="codewrapper sourceCode" id="cb37">
+<div class="codewrapper sourceCode" id="cb40">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4743,7 +4829,7 @@ feature I regularly disable.</p>
 <p>The <code>config()</code> function, meanwhile, can remove buttons
 from the modebar, although you may need to Google for the names of the
 specific buttons you want to remove:</p>
-<div class="codewrapper sourceCode" id="cb38">
+<div class="codewrapper sourceCode" id="cb41">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4785,7 +4871,7 @@ First, the legend isn’t centered vertically, like in our original graph
 and, second, the tooltip text could be easier to read.</p>
 <p>The first issue is solved using the <code>legend</code> parameter
 inside of <code>layout()</code>, which we’ve already dabbled with:</p>
-<div class="codewrapper sourceCode" id="cb39">
+<div class="codewrapper sourceCode" id="cb42">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4821,7 +4907,7 @@ passed to <code>ggplotly()</code>.</p></li>
 <li><p>Lastly, let’s use <code>style()</code> to make the contents of
 our tooltips <em>only</em> the custom text we’ve cooked up:</p></li>
 </ol>
-<div class="codewrapper sourceCode" id="cb40">
+<div class="codewrapper sourceCode" id="cb43">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4893,38 +4979,38 @@ it!</p>
 <p>That again first means giving users a fun way to affect the graph.
 Let’s create a drop-down widget that lets users pick a new color palette
 for the graph:</p>
-<div class="codewrapper sourceCode" id="cb41">
+<div class="codewrapper sourceCode" id="cb44">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" tabindex="-1"></a><span class="do">##This code should **replace** the "sidebar panel" cell's content within the BODY section of your ui.R file!</span></span>
-<span id="cb41-2"><a href="#cb41-2" tabindex="-1"></a></span>
-<span id="cb41-3"><a href="#cb41-3" tabindex="-1"></a><span class="do">##... other UI code...</span></span>
-<span id="cb41-4"><a href="#cb41-4" tabindex="-1"></a><span class="do">###SIDEBAR CELL</span></span>
-<span id="cb41-5"><a href="#cb41-5" tabindex="-1"></a>    <span class="fu">column</span>(<span class="at">width =</span> <span class="dv">4</span>,</span>
-<span id="cb41-6"><a href="#cb41-6" tabindex="-1"></a>           <span class="fu">selectInput</span>(</span>
-<span id="cb41-7"><a href="#cb41-7" tabindex="-1"></a>             <span class="at">inputId =</span> <span class="st">"sorted_column"</span>,</span>
-<span id="cb41-8"><a href="#cb41-8" tabindex="-1"></a>             <span class="at">label =</span> <span class="st">"Select a column to sort the table by."</span>,</span>
-<span id="cb41-9"><a href="#cb41-9" tabindex="-1"></a>             <span class="at">choices =</span> <span class="fu">names</span>(gap)</span>
-<span id="cb41-10"><a href="#cb41-10" tabindex="-1"></a>           ),</span>
-<span id="cb41-11"><a href="#cb41-11" tabindex="-1"></a>           <span class="fu">actionButton</span>(</span>
-<span id="cb41-12"><a href="#cb41-12" tabindex="-1"></a>             <span class="at">inputId =</span> <span class="st">"go_button"</span>,</span>
-<span id="cb41-13"><a href="#cb41-13" tabindex="-1"></a>             <span class="at">label =</span> <span class="st">"Go!"</span>),</span>
-<span id="cb41-14"><a href="#cb41-14" tabindex="-1"></a>           <span class="fu">sliderInput</span>(</span>
-<span id="cb41-15"><a href="#cb41-15" tabindex="-1"></a>             <span class="at">inputId =</span> <span class="st">"year_slider"</span>,</span>
-<span id="cb41-16"><a href="#cb41-16" tabindex="-1"></a>             <span class="at">label =</span> <span class="st">"Pick what year's data are shown in the map."</span>,</span>
-<span id="cb41-17"><a href="#cb41-17" tabindex="-1"></a>             <span class="at">value =</span> <span class="dv">2007</span>,</span>
-<span id="cb41-18"><a href="#cb41-18" tabindex="-1"></a>             <span class="at">min =</span> <span class="fu">min</span>(gap<span class="sc">$</span>year),</span>
-<span id="cb41-19"><a href="#cb41-19" tabindex="-1"></a>             <span class="at">max =</span> <span class="fu">max</span>(gap<span class="sc">$</span>year),</span>
-<span id="cb41-20"><a href="#cb41-20" tabindex="-1"></a>             <span class="at">step =</span> <span class="dv">5</span>,</span>
-<span id="cb41-21"><a href="#cb41-21" tabindex="-1"></a>             <span class="at">sep =</span> <span class="st">""</span></span>
-<span id="cb41-22"><a href="#cb41-22" tabindex="-1"></a>           ),</span>
-<span id="cb41-23"><a href="#cb41-23" tabindex="-1"></a>           <span class="fu">selectInput</span>( <span class="co">#ADD A COLOR PALETTE SELECTOR</span></span>
-<span id="cb41-24"><a href="#cb41-24" tabindex="-1"></a>             <span class="at">inputId =</span> <span class="st">"color_scheme"</span>,</span>
-<span id="cb41-25"><a href="#cb41-25" tabindex="-1"></a>             <span class="at">label =</span> <span class="st">"Pick a color palette for the graph."</span>,</span>
-<span id="cb41-26"><a href="#cb41-26" tabindex="-1"></a>             <span class="at">choices =</span> <span class="fu">c</span>(<span class="st">"viridis"</span>, <span class="st">"plasma"</span>, <span class="st">"Spectral"</span>, <span class="st">"Dark2"</span>)</span>
-<span id="cb41-27"><a href="#cb41-27" tabindex="-1"></a>           )</span>
-<span id="cb41-28"><a href="#cb41-28" tabindex="-1"></a>    ),</span>
-<span id="cb41-29"><a href="#cb41-29" tabindex="-1"></a><span class="do">##... other UI code...</span></span></code></pre>
+<pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" tabindex="-1"></a><span class="do">##This code should **replace** the "sidebar panel" cell's content within the BODY section of your ui.R file!</span></span>
+<span id="cb44-2"><a href="#cb44-2" tabindex="-1"></a></span>
+<span id="cb44-3"><a href="#cb44-3" tabindex="-1"></a><span class="do">##... other UI code...</span></span>
+<span id="cb44-4"><a href="#cb44-4" tabindex="-1"></a><span class="do">###SIDEBAR CELL</span></span>
+<span id="cb44-5"><a href="#cb44-5" tabindex="-1"></a>    <span class="fu">column</span>(<span class="at">width =</span> <span class="dv">4</span>,</span>
+<span id="cb44-6"><a href="#cb44-6" tabindex="-1"></a>           <span class="fu">selectInput</span>(</span>
+<span id="cb44-7"><a href="#cb44-7" tabindex="-1"></a>             <span class="at">inputId =</span> <span class="st">"sorted_column"</span>,</span>
+<span id="cb44-8"><a href="#cb44-8" tabindex="-1"></a>             <span class="at">label =</span> <span class="st">"Select a column to sort the table by."</span>,</span>
+<span id="cb44-9"><a href="#cb44-9" tabindex="-1"></a>             <span class="at">choices =</span> <span class="fu">names</span>(gap)</span>
+<span id="cb44-10"><a href="#cb44-10" tabindex="-1"></a>           ),</span>
+<span id="cb44-11"><a href="#cb44-11" tabindex="-1"></a>           <span class="fu">actionButton</span>(</span>
+<span id="cb44-12"><a href="#cb44-12" tabindex="-1"></a>             <span class="at">inputId =</span> <span class="st">"go_button"</span>,</span>
+<span id="cb44-13"><a href="#cb44-13" tabindex="-1"></a>             <span class="at">label =</span> <span class="st">"Go!"</span>),</span>
+<span id="cb44-14"><a href="#cb44-14" tabindex="-1"></a>           <span class="fu">sliderInput</span>(</span>
+<span id="cb44-15"><a href="#cb44-15" tabindex="-1"></a>             <span class="at">inputId =</span> <span class="st">"year_slider"</span>,</span>
+<span id="cb44-16"><a href="#cb44-16" tabindex="-1"></a>             <span class="at">label =</span> <span class="st">"Pick what year's data are shown in the map."</span>,</span>
+<span id="cb44-17"><a href="#cb44-17" tabindex="-1"></a>             <span class="at">value =</span> <span class="dv">2007</span>,</span>
+<span id="cb44-18"><a href="#cb44-18" tabindex="-1"></a>             <span class="at">min =</span> <span class="fu">min</span>(gap<span class="sc">$</span>year),</span>
+<span id="cb44-19"><a href="#cb44-19" tabindex="-1"></a>             <span class="at">max =</span> <span class="fu">max</span>(gap<span class="sc">$</span>year),</span>
+<span id="cb44-20"><a href="#cb44-20" tabindex="-1"></a>             <span class="at">step =</span> <span class="dv">5</span>,</span>
+<span id="cb44-21"><a href="#cb44-21" tabindex="-1"></a>             <span class="at">sep =</span> <span class="st">""</span></span>
+<span id="cb44-22"><a href="#cb44-22" tabindex="-1"></a>           ),</span>
+<span id="cb44-23"><a href="#cb44-23" tabindex="-1"></a>           <span class="fu">selectInput</span>( <span class="co">#ADD A COLOR PALETTE SELECTOR</span></span>
+<span id="cb44-24"><a href="#cb44-24" tabindex="-1"></a>             <span class="at">inputId =</span> <span class="st">"color_scheme"</span>,</span>
+<span id="cb44-25"><a href="#cb44-25" tabindex="-1"></a>             <span class="at">label =</span> <span class="st">"Pick a color palette for the graph."</span>,</span>
+<span id="cb44-26"><a href="#cb44-26" tabindex="-1"></a>             <span class="at">choices =</span> <span class="fu">c</span>(<span class="st">"viridis"</span>, <span class="st">"plasma"</span>, <span class="st">"Spectral"</span>, <span class="st">"Dark2"</span>)</span>
+<span id="cb44-27"><a href="#cb44-27" tabindex="-1"></a>           )</span>
+<span id="cb44-28"><a href="#cb44-28" tabindex="-1"></a>    ),</span>
+<span id="cb44-29"><a href="#cb44-29" tabindex="-1"></a><span class="do">##... other UI code...</span></span></code></pre>
 </div>
 <p>In <code>plotly</code>, color scheme is generally specified inside
 the <code>plot_ly()</code> call (the equivalent of <code>ggplot()</code>
@@ -4944,7 +5030,7 @@ trigger a re-styling of the graph.</p>
 <code>input$color_scheme</code> and triggers restyling using
 <code>plotlyProxy()</code>, leaving <code>renderPlotly({})</code> to
 produce only the version of the graph we see on start-up:</p>
-<div class="codewrapper sourceCode" id="cb42">
+<div class="codewrapper sourceCode" id="cb45">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5031,7 +5117,7 @@ really the same idea with differently named parts.</p>
 <p>First, let’s create a <code>textOutput()</code> in our UI, beneath
 our graph. We will report a message to the user there abiut the point
 they’ve clicked that we will build server-side:</p>
-<div class="codewrapper sourceCode" id="cb43">
+<div class="codewrapper sourceCode" id="cb46">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5053,7 +5139,7 @@ click events. At the same time, we’ll give our graph a special attribute
 (a <code>source</code>) that is used just to make this system work, sort
 of how an <code>inputId</code> is used for tracking event data
 normally:</p>
-<div class="codewrapper sourceCode" id="cb44">
+<div class="codewrapper sourceCode" id="cb47">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5073,7 +5159,7 @@ data we just established. When a user clicks a point in our graph, a
 text message will appear telling them the raw population count for that
 point, which might be helpful given that we are currently
 log-transforming those data:</p>
-<div class="codewrapper sourceCode" id="cb45">
+<div class="codewrapper sourceCode" id="cb48">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5199,8 +5285,8 @@ any links that you are not going to use.
   "url": "https://umn-dash.github.io/r-shiny/aio.html",
   "identifier": "https://umn-dash.github.io/r-shiny/aio.html",
   "dateCreated": "2024-07-10",
-  "dateModified": "2024-10-04",
-  "datePublished": "2024-10-04"
+  "dateModified": "2024-10-07",
+  "datePublished": "2024-10-07"
 }
 
   </script><script>
