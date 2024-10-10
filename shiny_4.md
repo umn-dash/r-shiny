@@ -1423,7 +1423,7 @@ plus the HTML line break element (`<br>`) works pretty well:
         fillColor = map_palette(gap_map2007$lifeExp),
         fillOpacity = 0.75,
         #EXPANDING THE INFO PRESENTED IN THE TOOLTIPS.
-        popup = paste0("County: ",
+        popup = paste0("Country: ",
                        gap_map2007$country,
                        "<br>Life expectancy: ",
                        gap_map2007$lifeExp)
@@ -1455,7 +1455,7 @@ more wrangling, so here's the *exact* code you'll need:
 
 ``` r
 label = lapply(1:nrow(gap_map2007), function(x){ 
-                    HTML(paste0("County: ",
+                    HTML(paste0("Country: ",
                                  gap_map2007$country[x], 
                                  "<br>Life Expectancy: ", 
                                 gap_map2007$lifeExp[x]))})
@@ -1575,7 +1575,7 @@ it filters the data by whichever year has been chosen instead:
         opacity = 1,
         fillColor = map_palette(gap_map2007$lifeExp),
         fillOpacity = 0.75,
-        popup = paste0("County: ",
+        popup = paste0("Country: ",
                        gap_map2007$country,
                        "<br>Life expectancy: ",
                        gap_map2007$lifeExp)
@@ -1669,7 +1669,7 @@ Let's switch to that system the same way we did with `DT`:
         opacity = 1,
         fillColor = map_palette(gap_map2007$lifeExp),
         fillOpacity = 0.75,
-        popup = paste0("County: ",
+        popup = paste0("Country: ",
                        gap_map2007$country,
                        "<br>Life expectancy: ",
                        gap_map2007$lifeExp)
@@ -1703,7 +1703,7 @@ Let's switch to that system the same way we did with `DT`:
         opacity = 1,
         fillColor = map_palette(gap_map2007$lifeExp),
         fillOpacity = 0.75,
-        popup = paste0("County: ",
+        popup = paste0("Country: ",
                        gap_map2007$country,
                        "<br>Life expectancy: ",
                        gap_map2007$lifeExp)
