@@ -1867,7 +1867,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-shiny_3"><p>Content from <a href="shiny_3.html">R Shiny's Core Concepts: Rendering and Outputting, Input Widgets, and Reactivity</a></p>
 <hr>
-<p>Last updated on 2024-10-07 |
+<p>Last updated on 2024-10-10 |
 
         <a href="https://github.com/umn-dash/r-shiny/edit/main/episodes/shiny_3.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -2006,7 +2006,7 @@ functions have camelCase names.]</p>
 <p>Above, we told R to <strong>render</strong> an “HTML-ized” version of
 the raw gapminder data frame. Because we wanted to render the raw data
 set with no modifications, we put just the data frame’s name inside
-<code>renderDT({})</code>’s braces. If we had wanted to do any
+<code>renderTable{})</code>’s braces. If we had wanted to do any
 operations on this data set first (such as filtering it or adding
 columns to it), though, we could have those operations using normal R
 code inside those braces. So long as it’s a table-like object, the last
@@ -2722,7 +2722,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-shiny_4"><p>Content from <a href="shiny_4.html">Shiny Showstoppers: DTs and Leaflets and Plotlys, Oh My!</a></p>
 <hr>
-<p>Last updated on 2024-10-07 |
+<p>Last updated on 2024-10-10 |
 
         <a href="https://github.com/umn-dash/r-shiny/edit/main/episodes/shiny_4.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -3511,7 +3511,7 @@ function’s expression blank, an empty box will get rendered.</em></p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>Our current code uses <code>if()</code>s to determine if a user has
 selected a cell at all and, if so, if that cell is appropriate. We can
@@ -3601,7 +3601,7 @@ reference the <em>sorted</em> data set instead?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <p>This question is a purposeful trap; it doesn’t actually have a simple
 solution you’re intended to know yet!</p>
@@ -4203,7 +4203,7 @@ works pretty well:</p>
 <span>        fillColor <span class="op">=</span> <span class="fu">map_palette</span><span class="op">(</span><span class="va">gap_map2007</span><span class="op">$</span><span class="va">lifeExp</span><span class="op">)</span>,</span>
 <span>        fillOpacity <span class="op">=</span> <span class="fl">0.75</span>,</span>
 <span>        <span class="co">#EXPANDING THE INFO PRESENTED IN THE TOOLTIPS.</span></span>
-<span>        popup <span class="op">=</span> <span class="fu">paste0</span><span class="op">(</span><span class="st">"County: "</span>,</span>
+<span>        popup <span class="op">=</span> <span class="fu">paste0</span><span class="op">(</span><span class="st">"Country: "</span>,</span>
 <span>                       <span class="va">gap_map2007</span><span class="op">$</span><span class="va">country</span>,</span>
 <span>                       <span class="st">"&lt;br&gt;Life expectancy: "</span>,</span>
 <span>                       <span class="va">gap_map2007</span><span class="op">$</span><span class="va">lifeExp</span><span class="op">)</span></span>
@@ -4240,7 +4240,7 @@ whatever reason, this requires more wrangling, so here’s the
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">label</span> <span class="op">=</span> <span class="fu">lapply</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu">nrow</span><span class="op">(</span><span class="va">gap_map2007</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">{</span> </span>
-<span>                    <span class="fu">HTML</span><span class="op">(</span><span class="fu">paste0</span><span class="op">(</span><span class="st">"County: "</span>,</span>
+<span>                    <span class="fu">HTML</span><span class="op">(</span><span class="fu">paste0</span><span class="op">(</span><span class="st">"Country: "</span>,</span>
 <span>                                 <span class="va">gap_map2007</span><span class="op">$</span><span class="va">country</span><span class="op">[</span><span class="va">x</span><span class="op">]</span>, </span>
 <span>                                 <span class="st">"&lt;br&gt;Life Expectancy: "</span>, </span>
 <span>                                <span class="va">gap_map2007</span><span class="op">$</span><span class="va">lifeExp</span><span class="op">[</span><span class="va">x</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">}</span><span class="op">)</span></span></code></pre>
@@ -4255,7 +4255,7 @@ lot of users will use mobile devices, do you think?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <p>If we use <code>label</code>, we get tooltips that appears on mouse
 hover instead of on mouse click.</p>
@@ -4363,7 +4363,7 @@ it filters the data by whichever year has been chosen instead:</p>
 <span>        opacity <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>        fillColor <span class="op">=</span> <span class="fu">map_palette</span><span class="op">(</span><span class="va">gap_map2007</span><span class="op">$</span><span class="va">lifeExp</span><span class="op">)</span>,</span>
 <span>        fillOpacity <span class="op">=</span> <span class="fl">0.75</span>,</span>
-<span>        popup <span class="op">=</span> <span class="fu">paste0</span><span class="op">(</span><span class="st">"County: "</span>,</span>
+<span>        popup <span class="op">=</span> <span class="fu">paste0</span><span class="op">(</span><span class="st">"Country: "</span>,</span>
 <span>                       <span class="va">gap_map2007</span><span class="op">$</span><span class="va">country</span>,</span>
 <span>                       <span class="st">"&lt;br&gt;Life expectancy: "</span>,</span>
 <span>                       <span class="va">gap_map2007</span><span class="op">$</span><span class="va">lifeExp</span><span class="op">)</span></span>
@@ -4456,7 +4456,7 @@ making:</p></li>
 <span>        opacity <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>        fillColor <span class="op">=</span> <span class="fu">map_palette</span><span class="op">(</span><span class="va">gap_map2007</span><span class="op">$</span><span class="va">lifeExp</span><span class="op">)</span>,</span>
 <span>        fillOpacity <span class="op">=</span> <span class="fl">0.75</span>,</span>
-<span>        popup <span class="op">=</span> <span class="fu">paste0</span><span class="op">(</span><span class="st">"County: "</span>,</span>
+<span>        popup <span class="op">=</span> <span class="fu">paste0</span><span class="op">(</span><span class="st">"Country: "</span>,</span>
 <span>                       <span class="va">gap_map2007</span><span class="op">$</span><span class="va">country</span>,</span>
 <span>                       <span class="st">"&lt;br&gt;Life expectancy: "</span>,</span>
 <span>                       <span class="va">gap_map2007</span><span class="op">$</span><span class="va">lifeExp</span><span class="op">)</span></span>
@@ -4490,7 +4490,7 @@ making:</p></li>
 <span>        opacity <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>        fillColor <span class="op">=</span> <span class="fu">map_palette</span><span class="op">(</span><span class="va">gap_map2007</span><span class="op">$</span><span class="va">lifeExp</span><span class="op">)</span>,</span>
 <span>        fillOpacity <span class="op">=</span> <span class="fl">0.75</span>,</span>
-<span>        popup <span class="op">=</span> <span class="fu">paste0</span><span class="op">(</span><span class="st">"County: "</span>,</span>
+<span>        popup <span class="op">=</span> <span class="fu">paste0</span><span class="op">(</span><span class="st">"Country: "</span>,</span>
 <span>                       <span class="va">gap_map2007</span><span class="op">$</span><span class="va">country</span>,</span>
 <span>                       <span class="st">"&lt;br&gt;Life expectancy: "</span>,</span>
 <span>                       <span class="va">gap_map2007</span><span class="op">$</span><span class="va">lifeExp</span><span class="op">)</span></span>
@@ -5285,8 +5285,8 @@ any links that you are not going to use.
   "url": "https://umn-dash.github.io/r-shiny/aio.html",
   "identifier": "https://umn-dash.github.io/r-shiny/aio.html",
   "dateCreated": "2024-07-10",
-  "dateModified": "2024-10-08",
-  "datePublished": "2024-10-08"
+  "dateModified": "2024-10-10",
+  "datePublished": "2024-10-10"
 }
 
   </script><script>
