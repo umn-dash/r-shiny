@@ -107,7 +107,7 @@ output$basic_table = renderTable({
 Above, we told R to **render** an "HTML-ized" version of the raw
 gapminder data frame. Because we wanted to render the raw data set with
 no modifications, we put just the data frame's name inside
-`renderDT({})`'s braces. If we had wanted to do any operations on this
+`renderTable{})`'s braces. If we had wanted to do any operations on this
 data set first (such as filtering it or adding columns to it), though,
 we could have those operations using normal R code inside those braces.
 So long as it's a table-like object, the last thing produced inside the
