@@ -313,7 +313,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>R Shiny's Core Concepts: Rendering and Outputting, Input Widgets, and Reactivity</h1>
-        <p>Last updated on 2024-10-14 |
+        <p>Last updated on 2024-10-15 |
 
         <a href="https://github.com/umn-dash/r-shiny/edit/main/episodes/shiny_3.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -698,7 +698,7 @@ words.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>You’ll get an error that looks like this:<br><br><code>Error in $: Can't access reactive value 'sorted_column' outside of reactive consumer. ℹ Do you need to wrap inside reactive() or observe()?</code></p>
 <p>This error notes that <code>input$sorted_column</code> is a
@@ -806,7 +806,7 @@ we might write?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>Server-side R code is broken up into many commands that create
 reactive contexts, each of which is tasked with generating one or more
@@ -1052,7 +1052,7 @@ think will happen?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
 <div class="accordion-body">
 <p>In complex applications, the scenario described here is
 <em>surprisingly</em> common, and it can actually be a problem!</p>
@@ -1198,8 +1198,8 @@ any links that you are not going to use.
   "url": "https://umn-dash.github.io/r-shiny/shiny_3.html",
   "identifier": "https://umn-dash.github.io/r-shiny/shiny_3.html",
   "dateCreated": "2024-07-10",
-  "dateModified": "2024-10-14",
-  "datePublished": "2024-10-14"
+  "dateModified": "2024-10-15",
+  "datePublished": "2024-10-15"
 }
 
   </script><script>
